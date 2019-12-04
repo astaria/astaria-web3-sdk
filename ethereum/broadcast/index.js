@@ -64,7 +64,7 @@ EthereumBroadcast.__send_transaction = function(from, transaction, key) {
 EthereumBroadcast.__prepare_transaction = function(from, transaction) {
     return new Promise(function(resolve, reject) {
         Ethereum.api.get_transaction_count(from, "latest").then(function(response) {
-            transaction["chainId"] = 3; // EIP 155 chainId - mainnet: 1, ropsten: 3
+            transaction["chainId"] = Ethereum.net.chain_id;
             transaction["nonce"] = EthereumUtils.value_to_number(response);
             transaction["v"] = EthereumUtils.value_to_number(transaction["chainId"]);
             transaction["r"] = EthereumUtils.value_to_number(0);

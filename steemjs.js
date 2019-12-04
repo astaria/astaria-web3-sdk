@@ -241,10 +241,9 @@ SteemJS.get_state = function(path) {
 SteemJS.__request_rpc = function(method, params, handler) {
     return new Promise(function(resolve, reject) {
         var request = SteemJS.__build_request(method, params);
-        var url = "https://api.steemit.com";
         var headers = SteemJS.__rpc_headers();
 
-        fetch(url, {
+        fetch(Steem.net.rpc_url, {
             method:"POST", header:headers, body:JSON.stringify(request)
         }).then(function(response) {
             response.json().then(function(data) {

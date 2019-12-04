@@ -11,7 +11,7 @@ SteemAuth.generate_keys = function(name, password, roles) {
         var seed = name + role + password;
         var brain_key = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
         var secret = Steem.crypto.number_from_bits(
-            Steem.crypto.sha256.hash(Steem.crypto.string_to_bits(brain_key))
+            Steem.crypto.sha256.digest(Steem.crypto.string_to_bits(brain_key))
         );
         var curve = Steem.crypto.ecdsa.curve_from_name("k256");
         var pair = Steem.crypto.ecdsa.generate_keys(curve, secret);
@@ -62,23 +62,18 @@ SteemAuth.sign_message = function(message, keys) {
 }
 
 SteemAuth.__build_public_key = function(key) {
-    var header = Steem.net.pub_header;
-    var point = key.get();
-
-    if (Steem.crypto.number_from_bits(point.y).limbs[0] & 0x1) {
-        header |= 0x3;
-    } else {
-        header |= 0x2;
-    }
+    var version = Steem.crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
 
     return Steem.net.pub_prefix + Steem.crypto.base58.check.encode(
-        header, point.x, SteemAuth.__checksum_for_key
+        version, key.get().x, SteemAuth.__checksum_for_key
     );
 }
 
 SteemAuth.__build_private_key = function(key) {
+    var version = 0x80; // version for bitcoin mainnet
+
     return Steem.crypto.base58.check.encode(
-        Steem.net.priv_header, key.get()
+        version, key.get()
     );
 }
 
@@ -93,7 +88,7 @@ SteemAuth.__strip_private_key = function(key) {
 
 SteemAuth.__checksum_for_key = function(bits) {
     return Steem.crypto.bits_slice(
-        Steem.crypto.ripemd160.hash(bits), 0, 32
+        Steem.crypto.ripemd160.digest(bits), 0, 32
     );
 }
 

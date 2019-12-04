@@ -103,14 +103,12 @@ EthereumAPI.call = function(object, block) {
 EthereumAPI.__request_rpc = function(method, params) {
     return new Promise(function(resolve, reject) {
         var request = EthereumAPI.__build_request(method, params);
-        var url = "https://ropsten.infura.io";
         var headers = EthereumAPI.__rpc_headers();
 
-        fetch(url, {
+        fetch(Ethereum.net.rpc_url, {
             method:"POST", header:headers, body:JSON.stringify(request)
         }).then(function(response) {
             response.json().then(function(json) {
-                console.log(JSON.stringify(json));
                 resolve(json);
             }, function(reason) {
                 reject(reason);

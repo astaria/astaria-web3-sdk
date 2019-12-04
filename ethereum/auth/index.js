@@ -13,12 +13,6 @@ EthereumAuth.generate_public_key = function(key) {
     return EthereumAuth.__build_public_key(pair.pub);
 }
 
-EthereumAuth.generate_private_key = function(seed) {
-    var key = Ethereum.crypto.sha256.hash(Ethereum.crypto.hex_to_bits(seed));
-
-    return Ethereum.crypto.hex_from_bits(key);
-}
-
 EthereumAuth.sign_message = function(message, key) {
     var private_key = EthereumAuth.__strip_private_key(key);
     var signature = EthereumAuth.signature.sign_message(message, private_key);
@@ -30,10 +24,8 @@ EthereumAuth.sign_message = function(message, key) {
 }
 
 EthereumAuth.__build_public_key = function(key) {
-    var x = Ethereum.crypto.hex_from_bits(key.get().x);
-    var y = Ethereum.crypto.hex_from_bits(key.get().y);
-    var public_key = Ethereum.crypto.hex_to_bits(x + y);
-    var hash = Ethereum.crypto.keccak256.hash(public_key);
+    var bits = Ethereum.crypto.bits_concat(key.get().x, key.get().y);
+    var hash = Ethereum.crypto.keccak256.digest(bits);
     
     return '0x' + Ethereum.crypto.hex_from_bits(Ethereum.crypto.bits_slice(hash, 96, 256));
 }
