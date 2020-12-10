@@ -5,22 +5,31 @@ EOS = (function() {
 EOS.crypto    = require('crypto');
 EOS.struct    = require('struct');
 EOS.auth      = include('./auth/index.js');
-EOS.broadcast = include('./broadcast/index.js');
 EOS.api       = include('./api/index.js');
+EOS.broadcast = include('./broadcast/index.js');
 EOS.networks  = include('./networks.js');
 
-EOS.net = EOS.networks.MainNet;
+var module = (function() {
+    const networks = include('./networks.js');
 
-EOS.select_network = function(name) {
-    EOS.net = EOS.networks[name] || EOS.networks.TestNet;
-}
+    return Object.assign(Ethereum, {
+        net: networks.MainNet,
 
-EOS.configure_network = function() {
-    EOS.net = {}
-}
+        configure_network: function(chain_id, rpc_url) {
+            this.net = { 
+                chain_id: chain_id, 
+                rpc_url: rpc_url 
+            }
+        },
 
-EOS.version = function() {
-    return "1.0";
-}
+        select_network: function(name) {
+            this.net = networks[name] || networks.Ropsten;
+        },
+        
+        version: function() {
+            return "1.0";
+        },
+    });
+})();
 
-__MODULE__ = EOS;
+__MODULE__ = module;

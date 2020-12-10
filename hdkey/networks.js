@@ -1,26 +1,26 @@
-HDKeyNetworks = (function() {
+var module = (function() {
     return {
-        MainNet:{
-            private:{
-                version:0x0488ADE4,
-                prefix:"xprv"
+        MainNet: {
+            private: {
+                version: 0x0488ADE4,
+                prefix: "xprv"
             },
-            public:{
-                version:0x0488B21E,
-                prefix:"xpub"
+            public: {
+                version: 0x0488B21E,
+                prefix: "xpub"
             }
         },
-        TestNet:{ 
-            private:{
-                version:0x04358394,
-                prefix:"tprv"
+        TestNet: { 
+            private: {
+                version: 0x04358394,
+                prefix: "tprv"
             },
-            public:{
-                version:0x043587CF,
-                prefix:"tpub"
+            public: {
+                version: 0x043587CF,
+                prefix: "tpub"
             }
-        }
-    };
+        },
+    }
 })();
 
-__MODULE__ = HDKeyNetworks;
+__MODULE__ = module;

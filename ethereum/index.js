@@ -3,26 +3,33 @@ Ethereum = (function() {
 })();
 
 Ethereum.crypto    = require('crypto');
-Ethereum.struct    = require('struct');
+Ethereum.utils     = include('./utils/index.js');
 Ethereum.auth      = include('./auth/index.js');
-Ethereum.broadcast = include('./broadcast/index.js');
 Ethereum.api       = include('./api/index.js');
-Ethereum.networks  = include('./networks.js')
+Ethereum.broadcast = include('./broadcast/index.js');
 Ethereum.erc20     = include('./erc20.js');
-Ethereum.utils     = include('./utils.js');
 
-Ethereum.net = Ethereum.networks.MainNet;
+var module = (function() {
+    const networks = include('./networks.js');
 
-Ethereum.select_network = function(name) {
-    Ethereum.net = Ethereum.networks[name] || Ethereum.networks.Ropsten;
-}
+    return Object.assign(Ethereum, {
+        net: networks.MainNet,
 
-Ethereum.configure_network = function(chain_id, rpc_url) {
-    Ethereum.net = { chain_id:chain_id, rpc_url:rpc_url }
-}
+        configure_network: function(chain_id, rpc_url) {
+            this.net = { 
+                chain_id: chain_id, 
+                rpc_url: rpc_url 
+            }
+        },
 
-Ethereum.version = function() {
-    return "1.0";
-}
+        select_network: function(name) {
+            this.net = networks[name] || networks.Ropsten;
+        },
+        
+        version: function() {
+            return "1.0";
+        },
+    });
+})();
 
-__MODULE__ = Ethereum;
+__MODULE__ = module;

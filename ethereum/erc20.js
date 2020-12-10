@@ -1,37 +1,49 @@
-ERC20 = (function() {
-    return {}
+var module = (function() {
+    const api       = Ethereum.api,
+          broadcast = Ethereum.broadcast,
+          utils     = Ethereum.utils;
+
+    function _to_query_string(params) {
+        return Object.keys(params).map(function(k) {
+            return k + "=" + params[k];
+        }).join('&')
+    }
+    
+    return {
+        get_balance: function(contract, address) {
+            return new Promise(function(resolve, reject) {
+                var object = {
+                    "data":"0x70a08231" + "000000000000000000000000" + address.replace("0x", ""),
+                    "to":contract
+                };
+        
+                api.call(object, "latest")
+                    .then(function(result) {
+                        var wei = utils.value_to_number(result);
+        
+                        resolve(utils.wei_to_number(wei, "ether"));
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+        
+        transfer: function(contract, from, to, amount, fee, key) {
+            return new Promise(function(resolve, reject) {
+                var amount_wei = utils.value_to_wei(amount, "ether");
+                var data = "0xa9059cbb"
+                         + "000000000000000000000000" + to.replace("0x", "")
+                         + utils.number_to_hex(amount_wei, 64).replace("0x", "")
+        
+                broadcast.call(from, contract, data, fee, key)
+                    .then(function(result) {
+                        resolve(result);
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+    }
 })();
 
-ERC20.get_balance = function(contract, address) {
-    return new Promise(function(resolve, reject) {
-        var object = {
-            "data":"0x70a08231" + "000000000000000000000000" + address.replace("0x", ""),
-            "to":contract
-        };
-
-        Ethereum.api.call(object, "latest").then(function(response) {
-            var wei = EthereumUtils.value_to_number(response);
-
-            resolve(EthereumUtils.wei_to_number(wei, "ether"));
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-ERC20.transfer = function(contract, from, to, amount, fee, key) {
-    return new Promise(function(resolve, reject) {
-        var amount_wei = EthereumUtils.value_to_wei(amount, "ether");
-        var data = "0xa9059cbb"
-                 + "000000000000000000000000" + to.replace("0x", "")
-                 + EthereumUtils.number_to_hex(amount_wei, 64).replace("0x", "")
-
-        Ethereum.broadcast.call(from, contract, data, fee, key).then(function(response) {
-            resolve(response);
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-__MODULE__ = ERC20;
+__MODULE__ = module;

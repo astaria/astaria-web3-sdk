@@ -1,143 +1,127 @@
-EthereumAPI = (function() {
+var module = (function() {
+    const utils = Ethereum.utils;
+
+    function _request_rpc(method, params) {
+        return new Promise(function(resolve, reject) {
+            var request = _build_request(method, params);
+            var headers = _rpc_headers();
+    
+            fetch(Ethereum.net.rpc_url, {
+                method:"POST", 
+                header:headers, 
+                body:JSON.stringify(request)
+            })
+                .then(function(response) {
+                    response.json()
+                        .then(function(data) {
+                            if (data["result"]) {
+                                resolve(data["result"]);
+                            } else {
+                                reject(data["error"]);
+                            }
+                        }, function(error) {
+                            reject(error);
+                        });
+                }, function(error) {
+                    reject(error);
+                });
+        });
+    }
+    
+    function _build_request(method, params) {
+        var request = {};
+    
+        request["jsonrpc"] = "2.0";
+        request["method"]  = method;
+        request["params"]  = params;
+        request["id"]      = _tx_number;
+    
+        _tx_number += 1;
+    
+        return request;
+    }
+    
+    function _rpc_headers() {
+        var headers = {};
+    
+        headers["Content-Type"] = "application/json-rpc";
+    
+        return headers;
+    }
+    
     return {
-        _tx_number:1
-    };
+        get_balance: function(address, block) {
+            return new Promise(function(resolve, reject) {
+                var method = "eth_getBalance";
+                var params = [ address, block ];
+        
+                _request_rpc(method, params)
+                    .then(function(result) {
+                        var wei = utils.value_to_number(result);
+        
+                        resolve(utils.wei_to_number(wei, "ether"));
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+        
+        get_transaction_count: function(address, block) {
+            return new Promise(function(resolve, reject) {
+                var method = "eth_getTransactionCount";
+                var params = [ address, block ];
+        
+                _request_rpc(method, params)
+                    .then(function(result) {
+                        resolve(result);
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+        
+        get_gas_price: function(address, block) {
+            return new Promise(function(resolve, reject) {
+                var method = "eth_gasPrice";
+                var params = [];
+        
+                _request_rpc(method, params)
+                    .then(function(result) {
+                        resolve(result);
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        }, 
+        
+        send_raw_transaction: function(transaction) {
+            return new Promise(function(resolve, reject) {
+                var method = "eth_sendRawTransaction";
+                var params = [ transaction ];
+        
+                _request_rpc(method, params)
+                    .then(function(result) {
+                        resolve(result);
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+        
+        call: function(object, block) {
+            return new Promise(function(resolve, reject) {
+                var method = "eth_call";
+                var params = [ object, block ];
+        
+                _request_rpc(method, params)
+                    .then(function(result) {
+                        resolve(result);
+                    }, function(error) {
+                        reject(error);
+                    });
+            });
+        },
+    }
 })();
 
-EthereumAPI.get_balance = function(address, block) {
-    return new Promise(function(resolve, reject) {
-        var method = "eth_getBalance";
-        var params = [ address, block ];
-
-        EthereumAPI.__request_rpc(method, params).then(function(response) {
-            if (!response["result"]) {
-                reject(response["error"]);
-
-                return;
-            }
-            var wei = EthereumUtils.value_to_number(response["result"]);
-
-            resolve(EthereumUtils.wei_to_number(wei, "ether"));
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.get_transaction_count = function(address, block) {
-    return new Promise(function(resolve, reject) {
-        var method = "eth_getTransactionCount";
-        var params = [ address, block ];
-
-        EthereumAPI.__request_rpc(method, params).then(function(response) {
-            if (!response["result"]) {
-                reject(response["error"]);
-
-                return;
-            }
-
-            resolve(response["result"]);
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.get_gas_price = function(address, block) {
-    return new Promise(function(resolve, reject) {
-        var method = "eth_gasPrice";
-        var params = [];
-
-        EthereumAPI.__request_rpc(method, params).then(function(response) {
-            if (!response["result"]) {
-                reject(response["error"]);
-
-                return;
-            }
-
-            resolve(response["result"]);
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.send_raw_transaction = function(transaction) {
-    return new Promise(function(resolve, reject) {
-        var method = "eth_sendRawTransaction";
-        var params = [ transaction ];
-
-        EthereumAPI.__request_rpc(method, params).then(function(response) {
-            if (!response["result"]) {
-                reject(response["error"]);
-
-                return;
-            }
-
-            resolve(response["result"]);
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.call = function(object, block) {
-    return new Promise(function(resolve, reject) {
-        var method = "eth_call";
-        var params = [ object, block ];
-
-        EthereumAPI.__request_rpc(method, params).then(function(response) {
-            if (!response["result"]) {
-                reject(response["error"]);
-
-                return;
-            }
-
-            resolve(response["result"]);
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.__request_rpc = function(method, params) {
-    return new Promise(function(resolve, reject) {
-        var request = EthereumAPI.__build_request(method, params);
-        var headers = EthereumAPI.__rpc_headers();
-
-        fetch(Ethereum.net.rpc_url, {
-            method:"POST", header:headers, body:JSON.stringify(request)
-        }).then(function(response) {
-            response.json().then(function(json) {
-                resolve(json);
-            }, function(reason) {
-                reject(reason);
-            });
-        }, function(reason) {
-            reject(reason);
-        });
-    });
-}
-
-EthereumAPI.__build_request = function(method, params) {
-    var request = {};
-
-    request["jsonrpc"] = "2.0";
-    request["method"]  = method;
-    request["params"]  = params;
-    request["id"]      = EthereumAPI._tx_number;
-
-    EthereumAPI._tx_number += 1;
-
-    return request;
-}
-
-EthereumAPI.__rpc_headers = function() {
-    var headers = {};
-
-    headers["Content-Type"] = "application/json-rpc";
-
-    return headers;
-}
-
-__MODULE__ = EthereumAPI;
+__MODULE__ = module;

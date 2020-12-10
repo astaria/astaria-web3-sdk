@@ -1,5 +1,6 @@
-EOSBroadcast = (function() {
-    return {};
+var module = (function() {
+    return {
+    }
 })();
 
-__MODULE__ = EOSBroadcast;
+__MODULE__ = module;

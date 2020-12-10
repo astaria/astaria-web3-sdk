@@ -1,9 +1,9 @@
-EOSAuth = (function() {
-    return {};
+var module = (function() {
+    return {
+        generate_public_key: function(key) {
+            // TODO: implement
+        }
+    }
 })();
 
-EOSAuth.generate_public_key = function(key) {
-    // TODO: implement
-}
-
-__MODULE__ = EOSAuth;
+__MODULE__ = module;

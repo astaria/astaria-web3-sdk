@@ -1,9 +1,9 @@
-Bitcoin = (function() {
-    return {};
+var module = (function() {
+    return {
+        version: function() {
+            return "1.0";
+        },
+    }
 })();
 
-Bitcoin.version = function() {
-    return "1.0";
-}
-
-__MODULE__ = Bitcoin;
+__MODULE__ = module;
