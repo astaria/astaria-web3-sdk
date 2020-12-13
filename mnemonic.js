@@ -2,7 +2,7 @@ var module = (function() {
     const crypto = require('crypto');
 
     return {
-        generate_words: function(lang, length) {
+        generate_words: function(length, lang) {
             var catalog = controller.catalog("Wallet");
             var entropy = crypto.bytes_to_bits(random((length*11 - length/3)/8));
             var checksum = crypto.bits_slice(crypto.sha256.digest(entropy), 0, length/3);

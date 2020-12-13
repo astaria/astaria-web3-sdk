@@ -20,8 +20,12 @@ var module = (function() {
     include("./sjcl/pbkdf2.js");
     include("./sjcl/scrypt.js");
     include("./sjcl/hmac.js");
-    include("./sha3.js");    
-     
+
+    if (!global["__sha3_defined__"]) {
+        include("./sha3.js");
+        global["__sha3_defined__"] = true;
+    }
+
     var _encrypt_params = {
         "iv": "tjp81jkAzUpW1bI9gLDDpg==", // iv Base64 encoded
         "v": 1,                           // version
@@ -74,14 +78,14 @@ var module = (function() {
         
         hmac: {
             digest: function(hash, key, data) {
-                return new sjcl.misc.hmac(key, Crypto.__hash[hash]).encrypt(data);
+                return new sjcl.misc.hmac(key, _hash[hash]).encrypt(data);
             }
         },
         
         pbkdf2: {
             digest: function(hash, password, salt, count, length) {
                 return sjcl.misc.pbkdf2(password, salt, count, length, function(key) {
-                    return new sjcl.misc.hmac(key, Crypto.__hash[hash]);
+                    return new sjcl.misc.hmac(key, _hash[hash]);
                 });
             }
         },
@@ -120,7 +124,7 @@ var module = (function() {
         },
         
         encrypt: function(password, plaintext) {
-            return sjcl.encrypt(password, plaintext, Crypto.__encrypt_params);
+            return sjcl.encrypt(password, plaintext, _encrypt_params);
         },
         
         decrypt: function(password, ciphertext) {

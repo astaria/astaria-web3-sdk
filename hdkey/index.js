@@ -63,7 +63,7 @@ var module = (function() {
                 crypto.hex_to_bits(
                     'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141'
                 )
-            )
+            );
         }
     
         return _modulus;
