@@ -9,10 +9,6 @@ var module = (function() {
         unpack: function(format, bytes, offset) {
             return jspack.Unpack(format, bytes, offset);
         },
-        
-        version: function() {
-            return "1.0";
-        },
     }
 })();
 

@@ -1,28 +1,26 @@
 var module = (function() {
-    const utils = Ethereum.utils;
+    const net = __ETHEREUM__.net, 
+          utils = __ETHEREUM__.utils;
+
+    var _tx_number = 1;
 
     function _request_rpc(method, params) {
         return new Promise(function(resolve, reject) {
             var request = _build_request(method, params);
             var headers = _rpc_headers();
     
-            fetch(Ethereum.net.rpc_url, {
-                method:"POST", 
-                header:headers, 
-                body:JSON.stringify(request)
+            fetch(net.rpc_url, {
+                method: "POST", 
+                header: headers, 
+                body: JSON.stringify(request)
             })
                 .then(function(response) {
-                    response.json()
-                        .then(function(data) {
-                            if (data["result"]) {
-                                resolve(data["result"]);
-                            } else {
-                                reject(data["error"]);
-                            }
-                        }, function(error) {
-                            reject(error);
-                        });
-                }, function(error) {
+                    return response.json()
+                })
+                .then(function(data) {
+                    resolve(data);
+                })
+                .catch(function(error) {
                     reject(error);
                 });
         });
@@ -48,7 +46,7 @@ var module = (function() {
     
         return headers;
     }
-    
+
     return {
         get_balance: function(address, block) {
             return new Promise(function(resolve, reject) {
@@ -56,11 +54,16 @@ var module = (function() {
                 var params = [ address, block ];
         
                 _request_rpc(method, params)
-                    .then(function(result) {
-                        var wei = utils.value_to_number(result);
+                    .then(function(response) {
+                        if (response["result"]) {
+                            var wei = utils.value_to_number(response["result"]);
         
-                        resolve(utils.wei_to_number(wei, "ether"));
-                    }, function(error) {
+                            resolve(utils.wei_to_number(wei, "ether"));
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
@@ -72,9 +75,14 @@ var module = (function() {
                 var params = [ address, block ];
         
                 _request_rpc(method, params)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
+                    .then(function(response) {
+                        if (response["result"]) {
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
@@ -86,13 +94,18 @@ var module = (function() {
                 var params = [];
         
                 _request_rpc(method, params)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
+                    .then(function(response) {
+                        if (response["result"]) {
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
-        }, 
+        },
         
         send_raw_transaction: function(transaction) {
             return new Promise(function(resolve, reject) {
@@ -100,9 +113,14 @@ var module = (function() {
                 var params = [ transaction ];
         
                 _request_rpc(method, params)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
+                    .then(function(response) {
+                        if (response["result"]) {
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
@@ -114,13 +132,18 @@ var module = (function() {
                 var params = [ object, block ];
         
                 _request_rpc(method, params)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
+                    .then(function(response) {
+                        if (response["result"]) {
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
-        },
+        },            
     }
 })();
 

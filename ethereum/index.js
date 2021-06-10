@@ -1,35 +1,26 @@
-Ethereum = (function() {
-    return {};
-})();
-
-Ethereum.crypto    = require('crypto');
-Ethereum.utils     = include('./utils/index.js');
-Ethereum.auth      = include('./auth/index.js');
-Ethereum.api       = include('./api/index.js');
-Ethereum.broadcast = include('./broadcast/index.js');
-Ethereum.erc20     = include('./erc20.js');
-
 var module = (function() {
-    const networks = include('./networks.js');
+    const network = include('./networks.js');
 
-    return Object.assign(Ethereum, {
-        net: networks.MainNet,
+    global["__ETHEREUM__"] = global["__ETHEREUM__"] || {
+        net: networks.MainNet
+    };
 
-        configure_network: function(chain_id, rpc_url) {
-            this.net = { 
-                chain_id: chain_id, 
-                rpc_url: rpc_url 
-            }
-        },
+    global["__ETHEREUM__"].crypto    = require("crypto");
+    global["__ETHEREUM__"].auth      = include("./auth/index.js");
+    global["__ETHEREUM__"].broadcast = include("./broadcast/index.js");
+    global["__ETHEREUM__"].api       = include("./api/index.js");
+    global["__ETHEREUM__"].erc20     = include("./erc20.js");
+    global["__ETHEREUM__"].utils     = include("./utils.js");
 
+    return Object.assign({
         select_network: function(name) {
-            this.net = networks[name] || networks.Ropsten;
+            __ETHEREUM__.net = networks[name] || networks.Ropsten;
         },
         
-        version: function() {
-            return "1.0";
+        configure_network: function(chain_id, rpc_url) {
+            __ETHEREUM__.net = { chain_id: chain_id, rpc_url: rpc_url }
         },
-    });
+    }, global["__ETHEREUM__"]);
 })();
 
 __MODULE__ = module;

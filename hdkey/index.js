@@ -1,5 +1,5 @@
 var module = (function() {
-    const crypto   = require('crypto'),
+    const crypto = require('crypto'),
           networks = include('./networks.js');
 
     var _net = networks.MainNet;
@@ -55,6 +55,7 @@ var module = (function() {
         var IL = crypto.bits_slice(hash, 0, 256);
         var Kpar = crypto.number_from_bits(hdkey.pub);
 
+
     }
     
     function _modulus_for_child_key() {
@@ -89,8 +90,16 @@ var module = (function() {
     
         return bits;
     }
-    
+
     return {
+        select_network: function(name) {
+            _net = networks[name] || networks.TestNet;
+        },
+        
+        configure_network: function(private, public) {
+            _net = { private: private, public: public }
+        },
+
         from_root_seed: function(seed) {
             var secret = crypto.string_to_bits("Bitcoin seed");
             var hash = crypto.hmac.digest("sha512", secret, seed);
@@ -98,25 +107,16 @@ var module = (function() {
             var public_key = _generate_public_key(private_key, true);
             var chain_code = crypto.bits_slice(hash, 256, 512);
         
-            return { 
-                priv: private_key, 
-                pub: public_key, 
-                chain: chain_code, 
-                depth: 0, 
-                index: 0 
-            }
+            return { priv: private_key, pub: public_key, chain: chain_code, depth: 0, index: 0 }
         },
-        
+
         from_extended_key: function(key) {
-            return {
-                
-            };
+            return {}
         },
         
         derive_key_with_path: function(hdkey, path) {
             var elements = path.split('/');
             var root = elements[0];
-            var self = this;
         
             if ((root === 'm' && hdkey.priv) || (root === 'M' && hdkey.pub)) {
                 elements.slice(1).forEach(function (e) {
@@ -124,14 +124,14 @@ var module = (function() {
                     var index = parseInt(e, 10);
                     
                     if (hdkey) {
-                        hdkey = self.derive_child_key(hdkey, index, hardened);
+                        hdkey = this.derive_child_key(hdkey, index, hardened);
                     }
                 });
         
                 return hdkey;
             }
         },
-        
+
         derive_child_key: function(hdkey, index, hardened) {
             if (!isNaN(index) && index < 0x80000000) {
                 var bits = _make_bits_for_child_key(hdkey, index, hardened);
@@ -145,41 +145,15 @@ var module = (function() {
                         var public_key = _generate_public_key(private_key, true);
                         var chain_code = crypto.bits_slice(hash, 256, 512);
                     
-                        return { 
-                            priv: private_key, 
-                            pub: public_key, 
-                            chain: chain_code, 
-                            depth: depth, 
-                            index: index 
-                        }    
+                        return { priv: private_key, pub: public_key, chain: chain_code, depth: depth, index: index }    
                     } else {
                         var public_key = _build_child_public_key(hdkey, hash);
                         var chain_code = crypto.bits_slice(hash, 256, 512);
         
-                        return { 
-                            pub: public_key, 
-                            chain: chain_code, 
-                            depth: depth, 
-                            index: index 
-                        }    
+                        return { pub: public_key, chain: chain_code, depth: depth, index: index }    
                     }
                 }
             }
-        },
-        
-        select_network: function(name) {
-            _net = networks[name] || networks.TestNet;
-        },
-        
-        configure_network: function(private, public) {
-            _net = { 
-                private: private, 
-                public: public 
-            }
-        },
-        
-        version: function() {
-            return "1.0";
         },
     }
 })();

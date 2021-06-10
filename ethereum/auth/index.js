@@ -1,6 +1,6 @@
 var module = (function() {
-    const crypto = Ethereum.crypto, 
-          signer = include("./signer.js");
+    const crypto = __ETHEREUM__.crypto,
+          signature = include("./signature.js");
 
     function _build_public_key(key) {
         var bits = crypto.bits_concat(key.get().x, key.get().y);
@@ -15,7 +15,7 @@ var module = (function() {
     
         return crypto.ecdsa.secret_key(curve, bits);
     }
-
+    
     return {
         generate_public_key: function(key) {
             var private_key = _strip_private_key(key);
@@ -25,7 +25,7 @@ var module = (function() {
         
             return _build_public_key(pair.pub);
         },
-        
+
         generate_private_key: function(seed) {
             var bits = crypto.sha256.digest(seed);
 
@@ -34,10 +34,10 @@ var module = (function() {
 
         sign_message: function(message, key) {
             var private_key = _strip_private_key(key);
-            var signature = signer.sign_message(message, private_key);
-            var r = crypto.hex_from_bits(crypto.bits_slice(signature[0],   0, 256));
-            var s = crypto.hex_from_bits(crypto.bits_slice(signature[0], 256, 512));
-            var v = signature[1];
+            var signed = signature.sign_message(message, private_key);
+            var r = crypto.hex_from_bits(crypto.bits_slice(signed[0],   0, 256));
+            var s = crypto.hex_from_bits(crypto.bits_slice(signed[0], 256, 512));
+            var v = signed[1];
         
             return { "r": r, "s": s, "v": v };
         },

@@ -96,11 +96,13 @@ var module = (function() {
                     curve, 0, secret
                 );
             },
+
             secret_key: function(curve, secret) {
                 return new sjcl.ecc.ecdsa.secretKey(
                     curve, sjcl.bn.fromBits(secret)
                 );
             },
+
             curve_from_name: function(name) {
                 return sjcl.ecc.curves[name];
             }
@@ -110,13 +112,16 @@ var module = (function() {
             encode: function(bits) {
                 return sjcl.codec.base58.fromBits(bits);
             },
+
             decode: function(string) {
                 return sjcl.codec.base58.toBits(string);
             },
+
             check: {
                 encode: function(version, bits, checksum_fn) {
                     return sjcl.codec.base58Check.fromBits(version, bits, checksum_fn);
                 },
+                
                 decode: function(string, checksum_fn) {
                     return sjcl.codec.base58Check.toBits(string, checksum_fn)
                 }
@@ -197,10 +202,6 @@ var module = (function() {
         
         is_odd_bits: function(bits) {
             return sjcl.bn.fromBits(bits).limbs[0] & 0x1;
-        },
-        
-        version: function() {
-            return "1.0";
         },
     }
 })();

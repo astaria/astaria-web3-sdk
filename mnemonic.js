@@ -55,7 +55,7 @@ var module = (function() {
         
         verify_words: function(words) {
             // TODO: implement
-    
+
             return false;
         },
     }

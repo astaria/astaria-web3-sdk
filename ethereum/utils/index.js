@@ -1,6 +1,6 @@
 var module = (function() {
     include("./bignumber.js");
-    
+
     const _max_digits = "0000000000000000000000000000000000000000000000000000000000000000";
     const _unit_map = {
         'noether':      '0',
@@ -30,15 +30,15 @@ var module = (function() {
         'mether':       '1000000000000000000000000',
         'gether':       '1000000000000000000000000000',
         'tether':       '1000000000000000000000000000000',
-    }
+    };
 
     function _get_value_of_unit(unit) {
         return new BigNumber(_unit_map[unit], 10);
     }
-    
+
     return {
         value_to_wei: function(value, unit) {
-            var number = utils.value_to_number(value);
+            var number = this.value_to_number(value);
             var value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
@@ -70,11 +70,7 @@ var module = (function() {
             }
         
             return new BigNumber(value, 10);
-        },
-        
-        version: function() {
-            return "1.0";
-        },
+        },        
     }
 })();
 

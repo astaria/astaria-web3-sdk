@@ -1,9 +1,13 @@
 var module = (function() {
-    function _query_for_candles(currency, coin, count) {
+    function _query_for_tickers(currency, coins) {
+        var markets = [];
         var params = {};
+
+        coins.forEach(function(coin) {
+            markets.push(currency.toUpperCase() + "-" + coin.toUpperCase());
+        });
         
-        params["code"] = "CRIX.UPBIT." + currency.toUpperCase() + "-" + coin.toUpperCase();
-        params["count"] = count;
+        params["markets"] = encodeURIComponent(markets.join(","));
      
         return _to_query_string(params);
     }
@@ -11,38 +15,85 @@ var module = (function() {
     function _to_query_string(params) {
         return Object.keys(params).map(function(k) {
             return k + "=" + params[k];
-        }).join('&')
+        }).join('&');
     }
-    
+
     return {
-        get_candles: function(currency, coin, count) {
+        get_coins: function() {
             return new Promise(function(resolve, reject) {
-                var url = "https://crix-api-endpoint.upbit.com/v1/crix/candles/days";
-                var query = _query_for_candles(currency, coin, count);
+                var url = "https://api.upbit.com/v1/market/all";
                 
-                fetch(url+ "?" + query)
+                fetch(url)
                     .then(function(response) {
                         if (response.ok) {
-                            response.json()
-                                .then(function(candles) {
-                                    handler(candles);
-                                }, function(error) {
-                                    reject(error);
-                                });
+                            return response.json();
                         } else {
-                            reject({ 
+                            return Promise.reject({ 
                                 status: response.status,
                                 message: response.statusText
                             });
                         }
-                    }, function(error) {
+                    })
+                    .then(function(data) {
+                        var result = {};
+
+                        data.forEach(function(entry) {
+                            [ currency, coin ] = entry["market"].split("-");
+
+                            if (!result.hasOwnProperty(currency)) {
+                                result[currency] = [];
+                            }
+
+                            result[currency].push({
+                                "coin": coin,
+                                "name": {
+                                    "ko": entry["korean_name"],
+                                    "en": entry["english_name"]
+                                }
+                            });
+                        });
+
+                        resolve(result);
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });    
             });
         },
-        
-        version: function() {
-            return "1.0";
+
+        get_tickers: function(currency, coins) {
+            return new Promise(function(resolve, reject) {
+                var url = "https://api.upbit.com/v1/ticker";
+                var query = _query_for_tickers(currency, coins);
+
+                fetch(url + "?" + query)
+                    .then(function(response) {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            return Promise.reject({ 
+                                status: response.status,
+                                message: response.statusText
+                            });
+                        }
+                    })
+                    .then(function(data) {
+                        var result = [];
+
+                        data.forEach(function(entry) {
+                            [ currency, coin ] = entry["market"].split("-");
+
+                            result.push(Object.assign(entry, {
+                                "coin": coin
+                            }));
+                        });
+
+                        resolve(result);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
         },
     }
 })();

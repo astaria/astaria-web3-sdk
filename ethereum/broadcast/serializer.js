@@ -1,7 +1,7 @@
 var module = (function() {
     const rlp = include("./rlp.js");
 
-    function _number_to_data (number) {
+    function _number_to_data(number) {
         if (number && !number.isZero()) {
             return _hex_to_data(number.toString(16));
         }
@@ -34,7 +34,7 @@ var module = (function() {
     
         return "0x" + hex;
     }
-    
+        
     return {
         serialize_transaction: function(transaction, format) {
             var buffer = [];
@@ -56,7 +56,7 @@ var module = (function() {
             }
         
             return transaction;
-        },        
+        },
     }
 })();
 

@@ -1,34 +1,27 @@
-Steem = (function() {
-    return {};
-})();
-
-Steem.crypto    = require('crypto');
-Steem.struct    = require('struct');
-Steem.auth      = include('./auth/index.js');
-Steem.api       = include('./api/index.js');
-Steem.broadcast = include('./broadcast/index.js');
-
 var module = (function() {
     const networks = include('./networks.js');
 
-    return Object.assign(Ethereum, {
-        net: networks.MainNet,
-
-        configure_network: function(chain_id, rpc_url) {
-            this.net = { 
-                chain_id: chain_id, 
-                rpc_url: rpc_url 
-            }
-        },
-
+    global["__STEEM__"] = global["__STEEM__"] || {
+        net: networks.MainNet
+    };
+    
+    global["__STEEM__"].crypto    = require("crypto");
+    global["__STEEM__"].struct    = require("struct");
+    global["__STEEM__"].utxf      = require("utfx");
+    global["__STEEM__"].auth      = include("./auth/index.js");
+    global["__STEEM__"].broadcast = include("./broadcast/index.js");
+    global["__STEEM__"].api       = include("./api/index.js");
+    global["__STEEM__"].utils     = include("./utils.js");
+    
+    return Object.assign({
         select_network: function(name) {
-            this.net = networks[name] || networks.Ropsten;
+            __STEEM__.net = networks[name] || networks.TestNet;
         },
         
-        version: function() {
-            return "1.0";
+        configure_network: function(chain_id, pub_prefix, rpc_url) {
+            __STEEM__.net = { chain_id: chain_id, pub_prefix: pub_prefix, rpc_url: rpc_url }
         },
-    });
+    }, global["__STEEM__"]);
 })();
 
 __MODULE__ = module;

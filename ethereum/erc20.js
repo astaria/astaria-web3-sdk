@@ -1,28 +1,23 @@
 var module = (function() {
-    const api       = Ethereum.api,
-          broadcast = Ethereum.broadcast,
-          utils     = Ethereum.utils;
+    const api = __ETHEREUM__.api,
+          broadcast = __ETHEREUM__.broadcast,
+          utils = __ETHEREUM__.utils;
 
-    function _to_query_string(params) {
-        return Object.keys(params).map(function(k) {
-            return k + "=" + params[k];
-        }).join('&')
-    }
-    
     return {
         get_balance: function(contract, address) {
             return new Promise(function(resolve, reject) {
                 var object = {
-                    "data":"0x70a08231" + "000000000000000000000000" + address.replace("0x", ""),
-                    "to":contract
+                    "data": "0x70a08231" + "000000000000000000000000" + address.replace("0x", ""),
+                    "to": contract
                 };
         
                 api.call(object, "latest")
-                    .then(function(result) {
-                        var wei = utils.value_to_number(result);
+                    .then(function(response) {
+                        var wei = utils.value_to_number(response);
         
                         resolve(utils.wei_to_number(wei, "ether"));
-                    }, function(error) {
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
@@ -36,13 +31,14 @@ var module = (function() {
                          + utils.number_to_hex(amount_wei, 64).replace("0x", "")
         
                 broadcast.call(from, contract, data, fee, key)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
                         reject(error);
                     });
             });
-        },
+        },        
     }
 })();
 

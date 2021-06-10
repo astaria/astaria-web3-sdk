@@ -20,11 +20,11 @@ var module = (function() {
             rpc_url: "https://goerli.infura.io"
         },
 
-        Kovan:{ 
+        Kovan: { 
             chain_id: 42, 
             rpc_url: "https://kovan.infura.io"
         },
-    }
+    };
 })();
 
 __MODULE__ = module;

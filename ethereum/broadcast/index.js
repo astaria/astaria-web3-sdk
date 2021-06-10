@@ -1,7 +1,8 @@
 var module = (function() {
-    const auth       = Ethereum.auth,
-          api        = Ethereum.api,
-          utils      = Ethereum.utils,
+    const net = __ETHEREUM__.net,
+          auth = __ETHEREUM__.auth,
+          api = __ETHEREUM__.api,
+          utils = __ETHEREUM__.utils,
           serializer = include("./serializer.js");
 
     function _send_transaction(from, transaction, key) {
@@ -17,15 +18,15 @@ var module = (function() {
                             transaction = serializer.serialize_transaction(transaction, "hex");
     
                             api.send_raw_transaction(transaction)
-                                .then(function(result) {
-                                    resolve(result);
-                                }, function(error) {
+                                .then(function(response) {
+                                    resolve(response);
+                                })
+                                .catch(function(error) {
                                     reject(error);
                                 });
-                        }, function(error) {
-                            reject(error);
                         });
-                }, function(error) {
+                })
+                .catch(function(error) {
                     reject(error);
                 });
         });
@@ -35,15 +36,16 @@ var module = (function() {
         return new Promise(function(resolve, reject) {
             api.get_transaction_count(from, "latest")
                 .then(function(response) {
-                    transaction["chainId"] = Ethereum.net.chain_id;
+                    transaction["chainId"] = net.chain_id;
                     transaction["nonce"] = utils.value_to_number(response);
                     transaction["v"] = utils.value_to_number(transaction["chainId"]);
                     transaction["r"] = utils.value_to_number(0);
                     transaction["s"] = utils.value_to_number(0);
     
                     resolve(transaction);
-                }, function(error) {
-                    reject(error)
+                })
+                .catch(function(error) {
+                    reject(error);
                 });
         });
     }
@@ -58,7 +60,7 @@ var module = (function() {
             resolve(signature);
         });
     }
-    
+                  
     return {
         transfer: function(from, to, amount, fee, key) {
             return new Promise(function(resolve, reject) {
@@ -70,10 +72,11 @@ var module = (function() {
                 transaction["gasLimit"] = utils.value_to_number(100000);
         
                 _send_transaction(from, transaction, key)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
-                        reject(error)
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        reject(error);
                     });
             });
         },
@@ -88,13 +91,14 @@ var module = (function() {
                 transaction["gasLimit"] = utils.value_to_number(100000);
         
                 _send_transaction(from, transaction, key)
-                    .then(function(result) {
-                        resolve(result);
-                    }, function(error) {
-                        reject(error)
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        reject(error);
                     });
             });
-        },
+        },        
     }
 })();
 

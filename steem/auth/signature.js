@@ -1,5 +1,5 @@
-var module = (function() {
-    const crypto = Steem.crypto;
+var mobile = (function() {
+    const crypto = __STEEM__.crypto;
 
     return {
         sign_message: function(message, key) {
@@ -41,7 +41,7 @@ var module = (function() {
                     );
                 }
             }
-        },
+        },        
     }
 })();
 

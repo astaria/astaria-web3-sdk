@@ -1,5 +1,5 @@
 var module = (function() {
-    const crypto = Ethereum.crypto;
+    const crypto = __ETHEREUM__.crypto;
 
     function _message_to_bits(message) {
         var bytes = [];
@@ -49,8 +49,8 @@ var module = (function() {
                     return [ rawSig, recoveryParam ];
                 }
             }
-        },
-    }
+        },        
+    };
 })();
 
 __MODULE__ = module;

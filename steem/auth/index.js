@@ -1,11 +1,12 @@
 var module = (function() {
-    const crypto = Steem.crypto,
-          signer = include("./signer.js");
+    const net = __STEEM__.net,
+          crypto = __STEEM__.crypto, 
+          signature = require("./signature");
 
     function _build_public_key(key) {
         var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
     
-        return Steem.net.pub_prefix + crypto.base58.check.encode(
+        return net.pub_prefix + crypto.base58.check.encode(
             version, key.get().x, _checksum_for_key
         );
     }
@@ -48,14 +49,11 @@ var module = (function() {
                 var public_key  = _build_public_key (pair.pub);
                 var private_key = _build_private_key(pair.sec);
         
-                keys[role] = { 
-                    pub: public_key, 
-                    priv: private_key 
-                };
+                keys[role] = { pub: public_key, priv: private_key };
             });
             
             return keys;
-        }, 
+        },
         
         generate_public_key: function(key) {
             var private_key = _strip_private_key(key);
@@ -64,35 +62,35 @@ var module = (function() {
             var pair = crypto.ecdsa.generate_keys(curve, secret);
         
             return _build_public_key(pair.pub);
-        }, 
+        },
         
-        decode_public_key = function(key) {
-            var stripped_key = key.replace(new RegExp("^" + Steem.net.pub_prefix), "");
+        decode_public_key: function(key) {
+            var stripped_key = key.replace(new RegExp("^" + net.pub_prefix), "");
         
             return crypto.bytes_from_bits(
                 crypto.base58.check.decode(
                     stripped_key, _checksum_for_key
                 )
             );
-        }, 
+        },
         
-        sign_message = function(message, keys) {
+        sign_message: function(message, keys) {
             var signatures = [];
         
-            message = decode("hex", Steem.net.chain_id).concat(message);
+            message = decode("hex", net.chain_id).concat(message);
         
             for (var key in keys) {
                 var private_key = _strip_private_key(keys[key]);
         
                 signatures.push(
                     crypto.hex_from_bits(
-                        signer.sign_message(message, private_key)
+                        signature.sign_message(message, private_key)
                     )
                 );
             };
         
             return signatures;
-        },        
+        }, 
     }
 })();
 
