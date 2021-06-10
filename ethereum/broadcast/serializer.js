@@ -34,7 +34,7 @@ var module = (function() {
     
         return "0x" + hex;
     }
-        
+
     return {
         serialize_transaction: function(transaction, format) {
             var buffer = [];

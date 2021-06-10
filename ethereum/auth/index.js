@@ -15,7 +15,7 @@ var module = (function() {
     
         return crypto.ecdsa.secret_key(curve, bits);
     }
-    
+
     return {
         generate_public_key: function(key) {
             var private_key = _strip_private_key(key);
