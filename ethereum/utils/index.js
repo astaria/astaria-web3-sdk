@@ -1,5 +1,5 @@
 var module = (function() {
-    include("./bignumber.js");
+    include("utils/bignumber.js");
 
     const _max_digits = "0000000000000000000000000000000000000000000000000000000000000000";
     const _unit_map = {

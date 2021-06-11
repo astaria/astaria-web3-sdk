@@ -1,5 +1,5 @@
 var module = (function() {
-    const rlp = include("./rlp.js");
+    const rlp = require("utils/rlp.js");
 
     function _number_to_data(number) {
         if (number && !number.isZero()) {

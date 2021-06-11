@@ -13,15 +13,15 @@ var module = (function() {
                 header: headers, 
                 body: JSON.stringify(request)
             })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                resolve(data);
-            })
-            .catch(function(error) {
-                reject(error);
-            });
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    resolve(data);
+                })
+                .catch(function(error) {
+                    reject(error);
+                });
         });
     }
     

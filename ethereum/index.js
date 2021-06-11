@@ -1,5 +1,5 @@
 var module = (function() {
-    const network = include('./networks.js');
+    const networks = include('./networks.js');
 
     global["__ETHEREUM__"] = global["__ETHEREUM__"] || {
         net: networks.MainNet
@@ -10,7 +10,7 @@ var module = (function() {
     global["__ETHEREUM__"].broadcast = include("./broadcast/index.js");
     global["__ETHEREUM__"].api       = include("./api/index.js");
     global["__ETHEREUM__"].erc20     = include("./erc20.js");
-    global["__ETHEREUM__"].utils     = include("./utils.js");
+    global["__ETHEREUM__"].utils     = include("./utils/index.js");
 
     return Object.assign({
         select_network: function(name) {

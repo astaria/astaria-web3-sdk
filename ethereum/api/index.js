@@ -88,7 +88,7 @@ var module = (function() {
             });
         },
         
-        get_gas_price: function(address, block) {
+        get_gas_price: function() {
             return new Promise(function(resolve, reject) {
                 var method = "eth_gasPrice";
                 var params = [];

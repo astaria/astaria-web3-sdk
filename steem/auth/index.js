@@ -1,7 +1,7 @@
 var module = (function() {
     const net = __STEEM__.net,
           crypto = __STEEM__.crypto, 
-          signature = require("./signature");
+          signature = include("./signature.js");
 
     function _build_public_key(key) {
         var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
