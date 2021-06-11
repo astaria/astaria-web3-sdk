@@ -14,11 +14,11 @@ var module = (function() {
 
     return Object.assign({
         select_network: function(name) {
-            __ETHEREUM__.net = networks[name] || networks.Ropsten;
+            __BINANCE_SMART_CHAIN__.net = networks[name] || networks.Ropsten;
         },
         
         configure_network: function(chain_id, rpc_url) {
-            __ETHEREUM__.net = { chain_id: chain_id, rpc_url: rpc_url }
+            __BINANCE_SMART_CHAIN__.net = { chain_id: chain_id, rpc_url: rpc_url }
         },
     }, global["__BINANCE_SMART_CHAIN__"]);
 })();
