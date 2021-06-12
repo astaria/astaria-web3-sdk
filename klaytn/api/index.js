@@ -50,7 +50,7 @@ var module = (function() {
     return {
         get_balance: function(address, block) {
             return new Promise(function(resolve, reject) {
-                var method = "eth_getBalance";
+                var method = "klay_getBalance";
                 var params = [ address, block ];
         
                 _request_rpc(method, params)
@@ -71,7 +71,7 @@ var module = (function() {
         
         get_transaction_count: function(address, block) {
             return new Promise(function(resolve, reject) {
-                var method = "eth_getTransactionCount";
+                var method = "klay_getTransactionCount";
                 var params = [ address, block ];
         
                 _request_rpc(method, params)
@@ -90,7 +90,7 @@ var module = (function() {
         
         get_gas_price: function() {
             return new Promise(function(resolve, reject) {
-                var method = "eth_gasPrice";
+                var method = "klay_gasPrice";
                 var params = [];
         
                 _request_rpc(method, params)
@@ -109,7 +109,7 @@ var module = (function() {
         
         send_raw_transaction: function(transaction) {
             return new Promise(function(resolve, reject) {
-                var method = "eth_sendRawTransaction";
+                var method = "klay_sendRawTransaction";
                 var params = [ transaction ];
         
                 _request_rpc(method, params)
@@ -128,7 +128,7 @@ var module = (function() {
         
         call: function(object, block) {
             return new Promise(function(resolve, reject) {
-                var method = "eth_call";
+                var method = "klay_call";
                 var params = [ object, block ];
         
                 _request_rpc(method, params)
