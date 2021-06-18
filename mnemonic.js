@@ -1,6 +1,10 @@
 var module = (function() {
     const crypto = require('crypto');
 
+    function _is_valid_words(words) {
+        return true;
+    }
+
     return {
         generate_words: function(length, lang) {
             var catalog = controller.catalog("Wallet");
@@ -24,16 +28,16 @@ var module = (function() {
             var catalog = controller.catalog("Wallet");
             var words = [];
 
-            text.split(seperator).forEach(function(word) {
-                var identifier = "S_" + word.toUpperCase() + "." + (lang || "en").toUpperCase();
+            text.trim().split(seperator || " ").forEach(function(word) {
+                var identifier = "S_" + (lang || "en").toUpperCase() + "_" + word.toUpperCase();
                 var value = catalog.value("showcase", "bip39.words", identifier);
-
+                
                 if (value) {
                     words.push([ parseInt(value["number"]), value["word"] ]);
                 }
             });
 
-            return words;
+            return _is_valid_words(words) ? words : [];
         },
 
         words_to_seed: function(words, passphrase) {
@@ -42,7 +46,7 @@ var module = (function() {
 
             return crypto.pbkdf2.digest("sha512", password, salt, 2048, 512);
         },
-        
+
         words_to_text: function(words, seperator) {
             var values = [];
 
@@ -50,7 +54,7 @@ var module = (function() {
                 values.push(word[1]);
             });
 
-            return values.join(seperator);
+            return values.join(seperator || " ");
         },
         
         verify_words: function(words) {

@@ -5,6 +5,28 @@ var module = (function() {
     var _net = networks.MainNet;
     var _modulus;
 
+    function _derive_child_key(hdkey, index, hardened) {
+        var bits = _make_bits_for_child_key(hdkey, index, hardened);
+    
+        if (bits) {
+            var hash = crypto.hmac.digest("sha512", hdkey.chain, bits);
+            var depth = hdkey.depth + 1;
+
+            if (hdkey.priv) {
+                var private_key = _build_child_private_key(hdkey, hash);
+                var public_key = _generate_public_key(private_key, true);
+                var chain_code = crypto.bits_slice(hash, 256, 512);
+            
+                return { priv: private_key, pub: public_key, chain: chain_code, depth: depth, index: index }    
+            } else {
+                var public_key = _build_child_public_key(hdkey, hash);
+                var chain_code = crypto.bits_slice(hash, 256, 512);
+
+                return { pub: public_key, chain: chain_code, depth: depth, index: index }    
+            }
+        }
+    }
+
     function _generate_public_key(private_key, compressed) {
         var curve = crypto.ecdsa.curve_from_name("k256");
         var secret_key = crypto.ecdsa.secret_key(curve, private_key);
@@ -117,42 +139,18 @@ var module = (function() {
         derive_key_with_path: function(hdkey, path) {
             var elements = path.split('/');
             var root = elements[0];
-        
+            
             if ((root === 'm' && hdkey.priv) || (root === 'M' && hdkey.pub)) {
                 elements.slice(1).forEach(function (e) {
                     var hardened = (e.length > 1) && (e[e.length - 1] === "'")
                     var index = parseInt(e, 10);
                     
-                    if (hdkey) {
-                        hdkey = this.derive_child_key(hdkey, index, hardened);
+                    if (hdkey && !isNaN(index) && index < 0x80000000) {
+                        hdkey = _derive_child_key(hdkey, index, hardened);
                     }
                 });
         
                 return hdkey;
-            }
-        },
-
-        derive_child_key: function(hdkey, index, hardened) {
-            if (!isNaN(index) && index < 0x80000000) {
-                var bits = _make_bits_for_child_key(hdkey, index, hardened);
-        
-                if (bits) {
-                    var hash = crypto.hmac.digest("sha512", hdkey.chain, bits);
-                    var depth = hdkey.depth + 1;
-        
-                    if (hdkey.priv) {
-                        var private_key = _build_child_private_key(hdkey, hash);
-                        var public_key = _generate_public_key(private_key, true);
-                        var chain_code = crypto.bits_slice(hash, 256, 512);
-                    
-                        return { priv: private_key, pub: public_key, chain: chain_code, depth: depth, index: index }    
-                    } else {
-                        var public_key = _build_child_public_key(hdkey, hash);
-                        var chain_code = crypto.bits_slice(hash, 256, 512);
-        
-                        return { pub: public_key, chain: chain_code, depth: depth, index: index }    
-                    }
-                }
             }
         },
     }

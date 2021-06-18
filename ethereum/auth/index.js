@@ -26,12 +26,6 @@ var module = (function() {
             return _build_public_key(pair.pub);
         },
 
-        generate_private_key: function(seed) {
-            var bits = crypto.sha256.digest(seed);
-
-            return crypto.hex_from_bits(bits);
-        },
-
         sign_message: function(message, key) {
             var private_key = _strip_private_key(key);
             var signed = signature.sign_message(message, private_key);
