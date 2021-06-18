@@ -40,13 +40,6 @@ var module = (function() {
             return _is_valid_words(words) ? words : [];
         },
 
-        words_to_seed: function(words, passphrase) {
-            var password = this.words_to_text(words, " ");
-            var salt = "mnemonic" + (passphrase || "");
-
-            return crypto.pbkdf2.digest("sha512", password, salt, 2048, 512);
-        },
-
         words_to_text: function(words, seperator) {
             var values = [];
 
@@ -57,6 +50,13 @@ var module = (function() {
             return values.join(seperator || " ");
         },
         
+        words_to_seed: function(words, passphrase) {
+            var password = this.words_to_text(words, " ");
+            var salt = "mnemonic" + (passphrase || "");
+
+            return crypto.pbkdf2.digest("sha512", password, salt, 2048, 512);
+        },
+
         verify_words: function(words) {
             // TODO: implement
 
