@@ -5,7 +5,7 @@ var module = (function() {
             rpc_url: "https://api.cypress.klaytn.net:8651" 
         },
 
-        Boobap: { 
+        Baobap: { 
             chain_id: 1001,
             rpc_url: "https://api.baobab.klaytn.net:8651" 
         },
