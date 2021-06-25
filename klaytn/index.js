@@ -14,7 +14,7 @@ var module = (function() {
 
     return Object.assign({
         select_network: function(name) {
-            __KLAYTN__.net = networks[name] || networks.Ropsten;
+            __KLAYTN__.net = networks[name] || networks.Baobap;
         },
         
         configure_network: function(chain_id, rpc_url) {
