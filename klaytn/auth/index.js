@@ -2,7 +2,7 @@ var module = (function() {
     const crypto = __KLAYTN__.crypto,
           signature = include("./signature.js");
 
-    function _build_public_key(key) {
+    function _build_address(key) {
         var bits = crypto.bits_concat(key.get().x, key.get().y);
         var hash = crypto.keccak256.digest(bits);
         
@@ -17,13 +17,13 @@ var module = (function() {
     }
 
     return {
-        generate_public_key: function(key) {
+        generate_address: function(key) {
             var private_key = _strip_private_key(key);
             var curve = crypto.ecdsa.curve_from_name("k256");
             var secret = crypto.number_from_bits(private_key.get());
             var pair = crypto.ecdsa.generate_keys(curve, secret);
         
-            return _build_public_key(pair.pub);
+            return _build_address(pair.pub);
         },
 
         sign_message: function(message, key) {

@@ -3,7 +3,7 @@ var module = (function() {
           crypto = __STEEM__.crypto, 
           signature = include("./signature.js");
 
-    function _build_public_key(key) {
+    function _build_address(key) {
         var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
     
         return net.pub_prefix + crypto.base58.check.encode(
@@ -55,16 +55,16 @@ var module = (function() {
             return keys;
         },
         
-        generate_public_key: function(key) {
+        generate_address: function(key) {
             var private_key = _strip_private_key(key);
             var curve = crypto.ecdsa.curve_from_name("k256");
             var secret = crypto.number_from_bits(private_key.get());
             var pair = crypto.ecdsa.generate_keys(curve, secret);
         
-            return _build_public_key(pair.pub);
+            return _build_address(pair.pub);
         },
         
-        decode_public_key: function(key) {
+        decode_address: function(key) {
             var stripped_key = key.replace(new RegExp("^" + net.pub_prefix), "");
         
             return crypto.bytes_from_bits(

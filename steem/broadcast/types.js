@@ -89,7 +89,7 @@ var module = (function() {
     
         "public_key": {
             pack: function(buffer, value) {
-                auth.decode_public_key(value).forEach(function(byte) {
+                auth.decode_address(value).forEach(function(byte) {
                     serializer.pack_buffer(buffer, "B", [ byte ]);
                 });
             },
@@ -135,7 +135,7 @@ var module = (function() {
     
                 serializer.pack_buffer(buffer, "B", [ value["key_auths"].length ]);
                 value["key_auths"].forEach(function(auth) {
-                    auth.decode_public_key(auth[0]).forEach(function(byte) {
+                    auth.decode_address(auth[0]).forEach(function(byte) {
                         serializer.pack_buffer(buffer, "B", [ byte ]);
                     });
                     serializer.pack_buffer(buffer, "<H", [ auth[1] ]);
