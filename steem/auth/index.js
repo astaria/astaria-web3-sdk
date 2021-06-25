@@ -65,11 +65,11 @@ var module = (function() {
         },
         
         decode_address: function(key) {
-            var stripped_key = key.replace(new RegExp("^" + net.pub_prefix), "");
+            var encoded_key = key.replace(new RegExp("^" + net.pub_prefix), "");
         
             return crypto.bytes_from_bits(
                 crypto.base58.check.decode(
-                    stripped_key, _checksum_for_key
+                    encoded_key, _checksum_for_key
                 )
             );
         },
