@@ -1,6 +1,6 @@
 var module = (function() {
     return {
-        MainNet: { 
+        Cypress: { 
             chain_id: 8217,
             rpc_url: "https://api.cypress.klaytn.net:8651" 
         },

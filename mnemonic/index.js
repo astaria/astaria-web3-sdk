@@ -1,8 +1,20 @@
 var module = (function() {
-    const crypto = require('crypto');
+    const crypto = require("crypto");
+
+    var _words_map = {};
 
     function _is_valid_words(words) {
         return true;
+    }
+
+    function _get_words_map(dir_path, lang) {
+        if (!_words_map[lang || "en"]) {
+            _words_map[lang || "en"] = include(
+                dir_path + "/words/" + (lang || "en") + ".json"
+            );
+        }
+
+        return _words_map[lang || "en"];
     }
 
     return {
@@ -50,6 +62,16 @@ var module = (function() {
             return values.join(seperator || " ");
         },
         
+        words_to_list: function(words, seperator) {
+            var values = [];
+
+            words.forEach(function(word) {
+                values.push(word[1]);
+            });
+
+            return values;
+        },
+        
         words_to_seed: function(words, passphrase) {
             var password = this.words_to_text(words, " ");
             var salt = "mnemonic" + (passphrase || "");
@@ -62,6 +84,22 @@ var module = (function() {
 
             return false;
         },
+
+        find_words: function(keyword, lang) {
+            var words = _words_map[lang || "en"];
+
+            if (!words) {
+                words = _words_map[lang || "en"] = include(
+                    this.__ENV__["dir-path"] + "/words/" + (lang || "en") + ".json"
+                );
+            }
+
+            if (words) {
+                return words.filter(function(word) {
+                    return word.startsWith(keyword);
+                });
+            }
+        }
     }
 })();
 

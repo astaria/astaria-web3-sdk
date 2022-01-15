@@ -2,7 +2,7 @@ var module = (function() {
     include("utils/bignumber.js");
 
     const _max_digits = "0000000000000000000000000000000000000000000000000000000000000000";
-    const _unit_map = {
+    const _UNIT_MAP = {
         'noether':    '0',
         'wei':        '1',
         'kwei':       '1000',
@@ -33,7 +33,7 @@ var module = (function() {
     };
 
     function _get_value_of_unit(unit) {
-        return new BigNumber(_unit_map[unit], 10);
+        return new BigNumber(_UNIT_MAP[unit], 10);
     }
 
     return {
@@ -47,7 +47,7 @@ var module = (function() {
         wei_to_number: function(wei, unit) {
             var value_of_unit = _get_value_of_unit(unit);
         
-            return wei.dividedBy(value_of_unit);
+            return wei.div(value_of_unit);
         },
         
         number_to_hex: function(number, digits) {

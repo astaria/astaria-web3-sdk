@@ -1,6 +1,6 @@
 var module = (function() {
     return {
-        MainNet: {
+        Mainnet: {
             private: {
                 version: 0x0488ADE4,
                 prefix: "xprv"
@@ -12,7 +12,7 @@ var module = (function() {
             }
         },
 
-        TestNet: { 
+        Testnet: { 
             private: {
                 version: 0x04358394,
                 prefix: "tprv"

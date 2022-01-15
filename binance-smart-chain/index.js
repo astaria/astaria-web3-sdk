@@ -2,7 +2,7 @@ var module = (function() {
     const networks = include('./networks.js');
 
     global["__BINANCE_SMART_CHAIN__"] = global["__BINANCE_SMART_CHAIN__"] || {
-        net: networks.MainNet
+        net: networks.Mainnet
     };
 
     global["__BINANCE_SMART_CHAIN__"].crypto    = require("crypto");

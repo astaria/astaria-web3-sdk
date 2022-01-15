@@ -2,7 +2,7 @@ var module = (function() {
     const networks = include('./networks.js');
 
     global["__STEEM__"] = global["__STEEM__"] || {
-        net: networks.MainNet
+        net: networks.Mainnet
     };
     
     global["__STEEM__"].crypto    = require("crypto");
@@ -15,7 +15,7 @@ var module = (function() {
     
     return Object.assign({
         select_network: function(name) {
-            __STEEM__.net = networks[name] || networks.TestNet;
+            __STEEM__.net = networks[name] || networks.Testnet;
         },
         
         configure_network: function(chain_id, pub_prefix, rpc_url) {

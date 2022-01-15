@@ -14,12 +14,11 @@ var module = (function() {
     return {
         sign_message: function(message, key) {
             var digest = crypto.keccak256.digest(_message_to_bits(message));
-            var paranoia = 0;
             
             while (true) {
                 var n = key._curve.r,
                     l = n.bitLength(),
-                    k = crypto.random_number(n.sub(1), paranoia).add(1),
+                    k = crypto.random_number(n.sub(1)).add(1),
                     R = key._curve.G.mult(k);
         
                 if (R.isIdentity) {
@@ -29,8 +28,7 @@ var module = (function() {
                 var r = R.x.mod(n),
                     ss = crypto.number_from_bits(digest).add(r.mul(key._exponent)),
                     s = ss.mul(k.inverseMod(n)).mod(n),
-                    isOdd = crypto.is_odd_bits(R.y),
-                    recoveryParam = isOdd ? 1 : 0;
+                    recoveryParam = crypto.is_odd_number(R.y) ? 1 : 0;
                 
                 var rBits = r.toBits(l);
                 var sBits = s.toBits(l);

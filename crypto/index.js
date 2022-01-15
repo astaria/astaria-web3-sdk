@@ -68,9 +68,9 @@ var module = (function() {
             digest: function(data) {
                 return sjcl.codec.hex.toBits(
                     Sha3.hash256(sjcl.codec.hex.fromBits(data), {
-                        "msgFormat":"hex-bytes",
-                        "padding":"keccak",
-                        "outFormat":"hex"
+                        "msgFormat": "hex-bytes",
+                        "padding": "keccak",
+                        "outFormat": "hex"
                     })
                 );
             }
@@ -140,8 +140,8 @@ var module = (function() {
             return sjcl.bn.fromBits(bits);
         },
         
-        number_to_bits: function(number) {
-            return number.toBits();
+        number_to_bits: function(number, length) {
+            return number.toBits(length);
         },
         
         number_from_hex: function(hex) {
@@ -151,11 +151,19 @@ var module = (function() {
         number_from_value: function(value) {
             return new sjcl.bn(value);
         },
-        
+
+        is_number_zero: function(number) {
+            return number.equals(0);    
+        },
+
+        is_odd_number: function(number) {
+            return number.limbs[0] & 0x1;
+        },
+    
         random_number: function(modulus, paranoia) {
             return new sjcl.bn.random(modulus, paranoia);
         },
-        
+
         string_to_bits: function(string) {
             return sjcl.codec.utf8String.toBits(string);
         },

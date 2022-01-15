@@ -2,7 +2,7 @@ var module = (function() {
     const crypto = require('crypto'),
           networks = include('./networks.js');
 
-    var _net = networks.MainNet;
+    var _net = networks.Mainnet;
     var _modulus;
 
     function _derive_child_key(hdkey, index, hardened) {
@@ -115,14 +115,14 @@ var module = (function() {
 
     return {
         select_network: function(name) {
-            _net = networks[name] || networks.TestNet;
+            _net = networks[name] || networks.Testnet;
         },
         
         configure_network: function(private, public) {
             _net = { private: private, public: public }
         },
 
-        from_root_seed: function(seed) {
+        from_master_seed: function(seed) {
             var secret = crypto.string_to_bits("Bitcoin seed");
             var hash = crypto.hmac.digest("sha512", secret, seed);
             var private_key = crypto.bits_slice(hash, 0, 256);

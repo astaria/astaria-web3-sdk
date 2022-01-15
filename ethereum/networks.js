@@ -1,6 +1,6 @@
 var module = (function() {
     return {
-        MainNet: { 
+        Mainnet: { 
             chain_id: 1,
             rpc_url: "https://mainnet.infura.io" 
         },

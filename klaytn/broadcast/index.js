@@ -1,104 +1,128 @@
-var module = (function() {
-    const net = __KLAYTN__.net,
-          auth = __KLAYTN__.auth,
-          api = __KLAYTN__.api,
-          utils = __KLAYTN__.utils,
-          serializer = include("./serializer.js");
+var module = (function () {
+    const auth = __KLAYTN__.auth,
+        api = __KLAYTN__.api,
+        utils = __KLAYTN__.utils,
+        serializer = include("./serializer.js");
+
+    var _key_offeror;
 
     function _send_transaction(from, transaction, key) {
-        return new Promise(function(resolve, reject) {
-            _prepare_transaction(from, transaction)
-                .then(function(transaction) {
-                    _sign_transaction(transaction, key)
-                        .then(function(signature) {
-                            transaction["v"] = utils.value_to_number(signature["v"]);
-                            transaction["r"] = utils.value_to_number(signature["r"]);
-                            transaction["s"] = utils.value_to_number(signature["s"]);
-    
-                            transaction = serializer.serialize_transaction(transaction, "hex");
-    
-                            api.send_raw_transaction(transaction)
-                                .then(function(response) {
-                                    resolve(response);
-                                })
-                                .catch(function(error) {
-                                    reject(error);
-                                });
+        return _prepare_transaction(from, transaction)
+            .then(function (transaction) {
+                if (!key && _key_offeror) {
+                    return _key_offeror(transaction)
+                        .then(function (key) {
+                            return Promise.resolve([transaction, key]);
                         });
-                })
-                .catch(function(error) {
-                    reject(error);
-                });
-        });
+                }
+
+                return Promise.resolve([ transaction, key ]);
+            })
+            .then(function ([ transaction, key ]) {
+                var signature = _sign_transaction(transaction, key);
+
+                if (transaction["type"] !== "LEGACY") {
+                    transaction["signatures"] = [
+                        [
+                            signature["v"],
+                            signature["r"],
+                            signature["s"]
+                        ]
+                    ];
+                } else {
+                    transaction["v"] = signature["v"];
+                    transaction["r"] = signature["r"];
+                    transaction["s"] = signature["s"];
+                }
+
+                transaction = serializer.serialize_transaction(transaction);
+
+                return api.send_raw_transaction(transaction);
+            });
     }
-    
+
     function _prepare_transaction(from, transaction) {
-        return new Promise(function(resolve, reject) {
-            api.get_transaction_count(from, "latest")
-                .then(function(response) {
-                    transaction["chainId"] = net.chain_id;
-                    transaction["nonce"] = utils.value_to_number(response);
-                    transaction["v"] = utils.value_to_number(transaction["chainId"]);
-                    transaction["r"] = utils.value_to_number(0);
-                    transaction["s"] = utils.value_to_number(0);
-    
-                    resolve(transaction);
-                })
-                .catch(function(error) {
-                    reject(error);
-                });
-        });
+        return api.get_transaction_count(from, "latest")
+            .then(function (count) {
+                transaction["chainId"] = __KLAYTN__.net.chain_id;
+                transaction["nonce"]   = utils.value_to_number(count);
+
+                return Promise.resolve(transaction);
+            });
     }
-    
+
     function _sign_transaction(transaction, key) {
-        return new Promise(function(resolve, reject) {
-            var message = serializer.serialize_transaction(transaction);
-            var signature = auth.sign_message(message, key);
-    
-            signature["v"] += transaction["chainId"] * 2 + 35;
-    
-            resolve(signature);
-        });
+        var message = serializer.serialize_transaction(transaction, true);
+        var signature = auth.sign_message(message, key);
+
+        signature["v"] += transaction["chainId"] * 2 + 35; // EIP-155
+
+        return signature;
     }
-                  
+
     return {
-        transfer: function(from, to, amount, fee, key) {
-            return new Promise(function(resolve, reject) {
-                var transaction = {};
-        
-                transaction["to"] = utils.value_to_number(to);
-                transaction["value"] = utils.value_to_wei(amount, "ether");
-                transaction["gasPrice"] = utils.value_to_wei(fee, "Gwei");
-                transaction["gasLimit"] = utils.value_to_number(100000);
-        
+        transfer: function (from, to, value, key) {
+            return new Promise(function (resolve, reject) {
+                var transaction = {
+                    "type": "VALUE_TRANSFER",
+                    "from": from,
+                    "to": to,
+                    "value": value,
+                    "gasPrice": parseInt("25000000000"),
+                    "gas": parseInt("20000000")
+                };
+
                 _send_transaction(from, transaction, key)
-                    .then(function(response) {
+                    .then(function (response) {
                         resolve(response);
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         reject(error);
                     });
             });
         },
-        
-        call: function(from, to, data, fee, key) {
-            return new Promise(function(resolve, reject) {
-                var transaction = {};
-        
-                transaction["to"] = utils.value_to_number(to);
-                transaction["data"] = utils.value_to_number(data);
-                transaction["gasPrice"] = utils.value_to_wei(fee, "Gwei");
-                transaction["gasLimit"] = utils.value_to_number(100000);
-        
+
+        call: function (from, to, data, value, key) {
+            return new Promise(function (resolve, reject) {
+                var transaction = {
+                    "type": "SMART_CONTRACT_EXECUTION",
+                    "from": from,
+                    "to": to,
+                    "data": data,
+                    "value": value,
+                    "gasPrice": parseInt("25000000000"),
+                    "gas": parseInt("20000000")
+                };
+
+                console.log(JSON.stringify(transaction));
+
                 _send_transaction(from, transaction, key)
-                    .then(function(response) {
+                    .then(function (response) {
                         resolve(response);
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         reject(error);
                     });
             });
-        },        
+        },
+
+        send: function (transaction, key) {
+            return new Promise(function (resolve, reject) {
+                var { from } = transaction;
+
+                _send_transaction(from, transaction, key)
+                    .then(function (response) {
+                        resolve(response);
+                    })
+                    .catch(function (error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        set_key_offeror: function (offeror) {
+            _key_offeror = offeror;
+        },
     }
 })();
 

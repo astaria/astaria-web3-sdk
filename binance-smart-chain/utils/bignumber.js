@@ -1608,7 +1608,7 @@
      * Return a new BigNumber whose value is the value of this BigNumber divided by the value of
      * BigNumber(y, b), rounded according to DECIMAL_PLACES and ROUNDING_MODE.
      */
-    P.dividedBy = P.div = function (y, b) {
+    P.div = P.div = function (y, b) {
       return div(this, new BigNumber(y, b), DECIMAL_PLACES, ROUNDING_MODE);
     };
 

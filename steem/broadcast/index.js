@@ -15,17 +15,16 @@ var module = (function() {
     
             _prepare_transaction(transaction)
                 .then(function(transaction) {
-                    _sign_transaction(transaction, keys)
-                        .then(function(signatures) {
-                            transaction["signatures"] = signatures;
+                    var signatures = _sign_transaction(transaction, keys);
+                    
+                    transaction["signatures"] = signatures;
     
-                            api.broadcast_transaction_synchronous(transaction)
-                                .then(function(response) {
-                                    resolve(response);
-                                })
-                                .catch(function(error) {
-                                    reject(error);
-                                });
+                    api.broadcast_transaction_synchronous(transaction)
+                        .then(function(response) {
+                            resolve(response);
+                        })
+                        .catch(function(error) {
+                            reject(error);
                         });
                 })
                 .catch(function(error) {
@@ -35,42 +34,32 @@ var module = (function() {
     }
         
     function _prepare_transaction(transaction) {
-        return new Promise(function(resolve, reject) {
-            api.get_dynamic_global_properties()
-                .then(function(properties) {
-                    var ref_block_num = (properties.last_irreversible_block_num - 1) & 0xFFFF;
-                    var current_date = new Date(properties.time + 'Z');
-                    var expired_date = new Date(current_date.getTime() + 600 * 1000);
-                    var expiration = expired_date.toISOString().substring(0, 19);
+        return api.get_dynamic_global_properties()
+            .then(function(properties) {
+                var ref_block_num = (properties.last_irreversible_block_num - 1) & 0xFFFF;
+                var current_date = new Date(properties.time + 'Z');
+                var expired_date = new Date(current_date.getTime() + 600 * 1000);
+                var expiration = expired_date.toISOString().substring(0, 19);
     
-                    api.get_block(properties.last_irreversible_block_num)
-                        .then(function(block) {
-                            var head_block_id = decode("hex", block.previous);
-                            var ref_block_prefix = struct.unpack("<I", head_block_id, 4)[0];
+                return api.get_block(properties.last_irreversible_block_num)
+                    .then(function(block) {
+                        var head_block_id = decode("hex", block.previous);
+                        var ref_block_prefix = struct.unpack("<I", head_block_id, 4)[0];
     
-                            transaction["ref_block_num"]    = ref_block_num;
-                            transaction["ref_block_prefix"] = ref_block_prefix;
-                            transaction["expiration"]       = expiration;
+                        transaction["ref_block_num"]    = ref_block_num;
+                        transaction["ref_block_prefix"] = ref_block_prefix;
+                        transaction["expiration"]       = expiration;
     
-                            resolve(transaction);
-                        })
-                        .catch(function(error) {
-                            reject(error)
-                        });
-                })
-                .catch(function(error) {
-                    reject(error)
+                        return Promise.resolve(transaction);
+                    });
                 });
-        });
     }
     
     function _sign_transaction(transaction, keys) {
-        return new Promise(function(resolve, reject) {
-            var message = serializer.serialize_transaction(transaction);
-            var signatures = auth.sign_message(message, keys);
+        var message = serializer.serialize_transaction(transaction);
+        var signatures = auth.sign_message(message, keys);
     
-            resolve(signatures);
-        });
+        return signatures;
     }
 
     return {

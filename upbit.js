@@ -1,9 +1,9 @@
 var module = (function() {
-    function _query_for_tickers(currency, coins) {
+    function _query_for_tickers(currency, tokens) {
         var markets = [];
         var params = {};
 
-        coins.forEach(function(coin) {
+        tokens.forEach(function(coin) {
             markets.push(currency.toUpperCase() + "-" + coin.toUpperCase());
         });
         
@@ -19,7 +19,7 @@ var module = (function() {
     }
 
     return {
-        get_coins: function() {
+        get_tokens: function() {
             return new Promise(function(resolve, reject) {
                 var url = "https://api.upbit.com/v1/market/all";
                 
@@ -61,10 +61,10 @@ var module = (function() {
             });
         },
 
-        get_tickers: function(currency, coins) {
+        get_tickers: function(currency, tokens) {
             return new Promise(function(resolve, reject) {
                 var url = "https://api.upbit.com/v1/ticker";
-                var query = _query_for_tickers(currency, coins);
+                var query = _query_for_tickers(currency, tokens);
 
                 fetch(url + "?" + query)
                     .then(function(response) {

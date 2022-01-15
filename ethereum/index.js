@@ -2,7 +2,8 @@ var module = (function() {
     const networks = include('./networks.js');
 
     global["__ETHEREUM__"] = global["__ETHEREUM__"] || {
-        net: networks.MainNet
+        name: "Ethereum",
+        net: networks.Mainnet
     };
 
     global["__ETHEREUM__"].crypto    = require("crypto");

@@ -1,21 +1,22 @@
 var module = (function() {
     const api = __KLAYTN__.api,
           broadcast = __KLAYTN__.broadcast,
-          utils = __KLAYTN__.utils;
+          abi = __KLAYTN__.abi;
 
     return {
-        get_balance: function(contract, address) {
+        name: function(token) {
             return new Promise(function(resolve, reject) {
-                var object = {
-                    "data": "0x70a08231" + "000000000000000000000000" + address.replace("0x", ""),
-                    "to": contract
-                };
-        
-                api.call(object, "latest")
+                var data = abi.encode("name()");
+
+                api.call(token, data)
                     .then(function(response) {
-                        var wei = utils.value_to_number(response);
-        
-                        resolve(utils.wei_to_number(wei, "ether"));
+                        var [ name ] = abi.decode("(string)", response);
+
+                        if (name) {
+                            resolve(name);
+                        } else {
+                            reject({ "status": 404 });
+                        }
                     })
                     .catch(function(error) {
                         reject(error);
@@ -23,14 +24,83 @@ var module = (function() {
             });
         },
 
-        transfer: function(contract, from, to, amount, fee, key) {
+        symbol: function(token) {
             return new Promise(function(resolve, reject) {
-                var amount_wei = utils.value_to_wei(amount, "ether");
-                var data = "0xa9059cbb"
-                         + "000000000000000000000000" + to.replace("0x", "")
-                         + utils.number_to_hex(amount_wei, 64).replace("0x", "")
+                var data = abi.encode("symbol()");
+
+                api.call(token, data)
+                    .then(function(response) {
+                        var [ symbol ] = abi.decode("(string)", response);
+
+                        if (symbol) {
+                            resolve(symbol);
+                        } else {
+                            reject({ "status": 404 });
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        decimals: function(token) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("decimals()");
+
+                api.call(token, data)
+                    .then(function(response) {
+                        var [ decimals ] = abi.decode("(uint8)", response);
         
-                broadcast.call(from, contract, data, fee, key)
+                        if (decimals) {
+                            resolve(decimals);
+                        } else {
+                            reject({ "status": 404 });
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        total_supply: function(token) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("totalSupply()");
+
+                api.call(token, data)
+                    .then(function(response) {
+                        var [ supply ] = abi.decode("(uint256)", response);
+        
+                        resolve(supply);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        balance_of: function(token, account) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("balanceOf(address)", [ account ]);
+
+                api.call(token, data)
+                    .then(function(response) {
+                        var [ balance ] = abi.decode("(uint256)", response);
+        
+                        resolve(balance);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        transfer: function(token, from, to, amount, key) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("transfer(address,uint256)", [ to, amount ]);
+        
+                broadcast.call(from, token, data, 0, key)
                     .then(function(response) {
                         resolve(response);
                     })
@@ -38,7 +108,37 @@ var module = (function() {
                         reject(error);
                     });
             });
-        },        
+        },
+
+        approve: function(token, account, spender, amount, key) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("approve(address,uint256)", [ spender, amount ]);
+        
+                broadcast.call(account, token, data, 0, key)
+                    .then(function(response) {
+                        resolve(response);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        allowance: function(token, owner, spender) {
+            return new Promise(function(resolve, reject) {
+                var data = abi.encode("allowance(address,address)", [ owner, spender ]);
+
+                api.call(token, data)
+                    .then(function(response) {
+                        var [ allowance ] = abi.decode("(uint256)", response);
+        
+                        resolve(allowance);
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
     }
 })();
 

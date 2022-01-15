@@ -1,5 +1,6 @@
 var module = (function() {
-    const rlp = require("utils/rlp.js");
+    const utils = __KLAYTN__.utils,
+          rlp = require("./rlp.js");
 
     function _number_to_data(number) {
         if (number && !number.isZero()) {
@@ -36,26 +37,32 @@ var module = (function() {
     }
 
     return {
-        serialize_transaction: function(transaction, format) {
-            var buffer = [];
-        
-            buffer.push(_number_to_data(transaction["nonce"]));
-            buffer.push(_number_to_data(transaction["gasPrice"]));
-            buffer.push(_number_to_data(transaction["gasLimit"]));
-            buffer.push(_number_to_data(transaction["to"]));
-            buffer.push(_number_to_data(transaction["value"] || ""));
-            buffer.push(_number_to_data(transaction["data"] || ""));
-            buffer.push(_number_to_data(transaction["v"]));
-            buffer.push(_number_to_data(transaction["r"]));
-            buffer.push(_number_to_data(transaction["s"]));
-        
-            transaction = rlp.encode(buffer);
-            
-            if (format === "hex") {
-                transaction = _data_to_hex(transaction);
+        serialize_transaction: function(transaction, for_signature) {
+            if (for_signature) {
+                return rlp.encode([
+                    _number_to_data(transaction["nonce"]),
+                    _number_to_data(transaction["gasPrice"]),
+                    _number_to_data(transaction["gasLimit"]),
+                    _number_to_data(transaction["to"]),
+                    _number_to_data(transaction["value"]),
+                    _number_to_data(transaction["data"]),
+                    _number_to_data(transaction["chainId"]),
+                    _number_to_data(utils.value_to_number(0)),
+                    _number_to_data(utils.value_to_number(0))
+                ]);
+            } else {
+                return _data_to_hex(rlp.encode([
+                    _number_to_data(transaction["nonce"]),
+                    _number_to_data(transaction["gasPrice"]),
+                    _number_to_data(transaction["gasLimit"]),
+                    _number_to_data(transaction["to"]),
+                    _number_to_data(transaction["value"]),
+                    _number_to_data(transaction["data"]),
+                    _number_to_data(transaction["v"]),
+                    _number_to_data(transaction["r"]),
+                    _number_to_data(transaction["s"])
+                ]));
             }
-        
-            return transaction;
         },
     }
 })();

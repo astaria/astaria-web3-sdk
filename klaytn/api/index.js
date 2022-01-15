@@ -1,29 +1,27 @@
 var module = (function() {
-    const net = __KLAYTN__.net, 
-          utils = __KLAYTN__.utils;
+    const utils = __KLAYTN__.utils;
 
     var _tx_number = 1;
 
     function _request_rpc(method, params) {
-        return new Promise(function(resolve, reject) {
-            var request = _build_request(method, params);
-            var headers = _rpc_headers();
-    
-            fetch(net.rpc_url, {
-                method: "POST", 
-                header: headers, 
-                body: JSON.stringify(request)
-            })
-                .then(function(response) {
-                    return response.json()
-                })
-                .then(function(data) {
-                    resolve(data);
-                })
-                .catch(function(error) {
-                    reject(error);
-                });
-        });
+        var request = _build_request(method, params);
+        var headers = _rpc_headers();
+
+        return fetch(__KLAYTN__.net.rpc_url, {
+            method: "POST", 
+            headers: headers, 
+            body: JSON.stringify(request)
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return Promise.reject({ 
+                        status: response.status,
+                        message: response.statusText
+                    });
+                }
+            });
     }
 
     function _build_request(method, params) {
@@ -48,17 +46,15 @@ var module = (function() {
     }
 
     return {
-        get_balance: function(address, block) {
+        get_balance: function(account, block="latest") {
             return new Promise(function(resolve, reject) {
                 var method = "klay_getBalance";
-                var params = [ address, block ];
+                var params = [ account, block ];
         
                 _request_rpc(method, params)
                     .then(function(response) {
                         if (response["result"]) {
-                            var wei = utils.value_to_number(response["result"]);
-        
-                            resolve(utils.wei_to_number(wei, "ether"));
+                            resolve(utils.value_to_number(response["result"]));
                         } else {
                             reject(response["error"]);
                         }
@@ -69,10 +65,10 @@ var module = (function() {
             });
         },
         
-        get_transaction_count: function(address, block) {
+        get_transaction_count: function(account, block="latest") {
             return new Promise(function(resolve, reject) {
                 var method = "klay_getTransactionCount";
-                var params = [ address, block ];
+                var params = [ account, block ];
         
                 _request_rpc(method, params)
                     .then(function(response) {
@@ -87,7 +83,27 @@ var module = (function() {
                     });
             });
         },
+
+        get_transaction_receipt: function(tx_hash) {
+            return new Promise(function(resolve, reject) {
+                var method = "klay_getTransactionReceipt";
+                var params = [ tx_hash ];
         
+                _request_rpc(method, params)
+                    .then(function(response) {
+                        if (response["result"]) {
+                            console.log("receipt: " + JSON.stringify(response["result"]))
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
         get_gas_price: function() {
             return new Promise(function(resolve, reject) {
                 var method = "klay_gasPrice";
@@ -107,10 +123,10 @@ var module = (function() {
             });
         },
         
-        send_raw_transaction: function(transaction) {
+        call: function(to, data, block="latest") {
             return new Promise(function(resolve, reject) {
-                var method = "klay_sendRawTransaction";
-                var params = [ transaction ];
+                var method = "klay_call";
+                var params = [ { to: to, data: data }, block ];
         
                 _request_rpc(method, params)
                     .then(function(response) {
@@ -125,25 +141,34 @@ var module = (function() {
                     });
             });
         },
-        
-        call: function(object, block) {
+
+        send_raw_transaction: function(transaction) {
             return new Promise(function(resolve, reject) {
-                var method = "klay_call";
-                var params = [ object, block ];
-        
+                var method = "klay_sendRawTransaction";
+                var params = [ transaction ];
+
+                console.log("transaction: " + transaction);
                 _request_rpc(method, params)
                     .then(function(response) {
-                        if (response["result"]) {
-                            resolve(response["result"]);
-                        } else {
-                            reject(response["error"]);
-                        }
+                        console.log("responce: " + JSON.stringify(response));
+                        resolve(response); // Do not return response["result"]
                     })
                     .catch(function(error) {
                         reject(error);
                     });
             });
-        },            
+        },
+
+        request: function(method, params) {
+            console.log(JSON.stringify([method, params]))
+            return new Promise(function(resolve, reject) {
+                _request_rpc(method, params)
+                    .then(function(response) {
+                        console.log(JSON.stringify(response))
+                        resolve(response); // Do not return response["result"]
+                    }); 
+            });
+        },
     }
 })();
 

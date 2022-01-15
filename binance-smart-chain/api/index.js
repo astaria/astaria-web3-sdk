@@ -1,29 +1,27 @@
 var module = (function() {
-    const net = __BINANCE_SMART_CHAIN__.net, 
-          utils = __BINANCE_SMART_CHAIN__.utils;
+    const utils = __BINANCE_SMART_CHAIN__.utils;
 
     var _tx_number = 1;
 
     function _request_rpc(method, params) {
-        return new Promise(function(resolve, reject) {
-            var request = _build_request(method, params);
+        var request = _build_request(method, params);
             var headers = _rpc_headers();
     
-            fetch(net.rpc_url, {
+            fetch(__BINANCE_SMART_CHAIN__.net.rpc_url, {
                 method: "POST", 
-                header: headers, 
+                headers: headers, 
                 body: JSON.stringify(request)
             })
                 .then(function(response) {
-                    return response.json()
-                })
-                .then(function(data) {
-                    resolve(data);
-                })
-                .catch(function(error) {
-                    reject(error);
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return Promise.reject({ 
+                            status: response.status,
+                            message: response.statusText
+                        });
+                    }
                 });
-        });
     }
     
     function _build_request(method, params) {
@@ -143,7 +141,7 @@ var module = (function() {
                         reject(error);
                     });
             });
-        },            
+        },
     }
 })();
 

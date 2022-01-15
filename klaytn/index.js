@@ -2,15 +2,17 @@ var module = (function() {
     const networks = include('./networks.js');
 
     global["__KLAYTN__"] = global["__KLAYTN__"] || {
-        net: networks.MainNet
+        name: "Klaytn",
+        net: networks.Cypress
     };
 
     global["__KLAYTN__"].crypto    = require("crypto");
+    global["__KLAYTN__"].utils     = include("./utils/index.js");
     global["__KLAYTN__"].auth      = include("./auth/index.js");
-    global["__KLAYTN__"].broadcast = include("./broadcast/index.js");
     global["__KLAYTN__"].api       = include("./api/index.js");
+    global["__KLAYTN__"].broadcast = include("./broadcast/index.js");
+    global["__KLAYTN__"].abi       = include("./abi/index.js");
     global["__KLAYTN__"].kip7      = include("./kip7.js");
-    global["__KLAYTN__"].utils     = include("./utils.js");
 
     return Object.assign({
         select_network: function(name) {

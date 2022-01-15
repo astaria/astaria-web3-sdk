@@ -1,8 +1,8 @@
-var module = (function() {
-    include("utils/bignumber.js");
+include("./bignumber.js");
 
-    const _max_digits = "0000000000000000000000000000000000000000000000000000000000000000";
-    const _unit_map = {
+var module = (function() {
+    const _KLAY_TOKEN = '0x0000000000000000000000000000000000000000'; // Cypress and Baobab
+    const _UNIT_MAP = {
         'peb':   '1',
         'kpeb':  '1000',
         'Mpeb':  '1000000',
@@ -18,44 +18,50 @@ var module = (function() {
     };
 
     function _get_value_of_unit(unit) {
-        return new BigNumber(_unit_map[unit], 10);
+        return new BigNumber(_UNIT_MAP[unit], 10);
     }
 
     return {
-        value_to_wei: function(value, unit) {
+        value_to_peb: function(value, unit) {
             var number = this.value_to_number(value);
             var value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
         },
         
-        wei_to_number: function(wei, unit) {
+        peb_to_number: function(peb, unit) {
             var value_of_unit = _get_value_of_unit(unit);
         
-            return wei.dividedBy(value_of_unit);
-        },
-        
-        number_to_hex: function(number, digits) {
-            var hex = number.toString(16);
-        
-            if (digits) {
-                hex = _max_digits.substring(0, digits - hex.length) + hex;
-            }
-        
-            return '0x' + hex;
+            return peb.div(value_of_unit);
         },
         
         value_to_number: function(value) {
+            if (typeof value === 'string' && value.startsWith('0x')) {
+                return new BigNumber(value.replace(/^0x/, ''), 16);
+            }
+
             if (value instanceof BigNumber) {
-                return value;
+                return new BigNumber(value);
             }
-        
-            if (typeof value === 'string') {
-                return new BigNumber(value.replace('0x', ''), 16);
-            }
-        
+
             return new BigNumber(value, 10);
-        },        
+        },
+        
+        encode_checksum_address: function(address) {
+            return address;
+        },
+
+        verify_checksum_address: function(address) {
+            return true;
+        },
+
+        is_klay_address: function(address) {
+            return address === _KLAY_TOKEN;
+        },
+
+        is_same_address: function(address1, address2) {
+            return address1.toLowerCase() === address2.toLowerCase();
+        }
     }
 })();
 

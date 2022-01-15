@@ -1,12 +1,11 @@
 var module = (function() {
-    const net = __STEEM__.net,
-          crypto = __STEEM__.crypto, 
+    const crypto = __STEEM__.crypto, 
           signature = include("./signature.js");
 
     function _build_address(key) {
         var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
     
-        return net.pub_prefix + crypto.base58.check.encode(
+        return __STEEM_.net.pub_prefix + crypto.base58.check.encode(
             version, key.get().x, _checksum_for_key
         );
     }
@@ -64,8 +63,8 @@ var module = (function() {
             return _build_address(pair.pub);
         },
         
-        decode_address: function(key) {
-            var encoded_key = key.replace(new RegExp("^" + net.pub_prefix), "");
+        decode_address: function(address) {
+            var encoded_key = address.replace(new RegExp("^" +  __STEEM_.net.pub_prefix), "");
         
             return crypto.bytes_from_bits(
                 crypto.base58.check.decode(
@@ -77,7 +76,7 @@ var module = (function() {
         sign_message: function(message, keys) {
             var signatures = [];
         
-            message = decode("hex", net.chain_id).concat(message);
+            message = decode("hex", __STEEM_.net.chain_id).concat(message);
         
             for (var key in keys) {
                 var private_key = _strip_private_key(keys[key]);
