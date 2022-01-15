@@ -2,8 +2,8 @@ var module = (function() {
     const networks = include('./networks.js');
 
     global["__TERRA__"] = global["__TERRA__"] || {
-        name: "Klaytn",
-        net: networks.Cypress
+        name: "Terra",
+        net: networks.Mainnet
     };
 
     global["__TERRA__"].crypto    = require("crypto");
@@ -16,13 +16,13 @@ var module = (function() {
 
     return Object.assign({
         select_network: function(name) {
-            __KLAYTN__.net = networks[name] || networks.Baobap;
+            __TERRA__.net = networks[name] || networks.Baobap;
         },
         
         configure_network: function(chain_id, rpc_url) {
-            __KLAYTN__.net = { chain_id: chain_id, rpc_url: rpc_url }
+            __TERRA__.net = { chain_id: chain_id, rpc_url: rpc_url }
         },
-    }, global["__KLAYTN__"]);
+    }, global["__TERRA__"]);
 })();
 
 __MODULE__ = module;
