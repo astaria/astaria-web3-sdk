@@ -10,13 +10,10 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ name ] = abi.decode("(string)", response);
-
-                        if (name) {
-                            resolve(name);
-                        } else {
-                            reject({ "status": 404 });
-                        }
+                        return abi.decode("(string)", response);
+                    })
+                    .then(function([ name ]) {
+                        resolve(name);
                     })
                     .catch(function(error) {
                         reject(error);
@@ -30,13 +27,10 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ symbol ] = abi.decode("(string)", response);
-
-                        if (symbol) {
-                            resolve(symbol);
-                        } else {
-                            reject({ "status": 404 });
-                        }
+                       return abi.decode("(string)", response);
+                    })
+                    .then(function([ symbol ]) {
+                        resolve(symbol);
                     })
                     .catch(function(error) {
                         reject(error);
@@ -50,13 +44,10 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ decimals ] = abi.decode("(uint8)", response);
-        
-                        if (decimals) {
-                            resolve(decimals);
-                        } else {
-                            reject({ "status": 404 });
-                        }
+                        return abi.decode("(uint8)", response);
+                    })
+                    .then(function([ decimals ]) {
+                        resolve(decimals);
                     })
                     .catch(function(error) {
                         reject(error);
@@ -70,8 +61,9 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ supply ] = abi.decode("(uint256)", response);
-        
+                        return abi.decode("(uint256)", response);
+                    })
+                    .then(function([ supply ]) {
                         resolve(supply);
                     })
                     .catch(function(error) {
@@ -86,8 +78,9 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ balance ] = abi.decode("(uint256)", response);
-        
+                        return abi.decode("(uint256)", response);
+                    })
+                    .then(function([ balance ]) {
                         resolve(balance);
                     })
                     .catch(function(error) {
@@ -96,11 +89,11 @@ var module = (function() {
             });
         },
 
-        transfer: function(token, from, to, amount, key) {
+        transfer: function(account, token, recipient, amount, gasPrice, key) {
             return new Promise(function(resolve, reject) {
-                var data = abi.encode("transfer(address,uint256)", [ to, amount ]);
+                var data = abi.encode("transfer(address,uint256)", [ recipient, amount ]);
         
-                broadcast.call(from, token, data, 0, key)
+                broadcast.call(account, token, data, 0, gasPrice, key)
                     .then(function(response) {
                         resolve(response);
                     })
@@ -110,11 +103,11 @@ var module = (function() {
             });
         },
 
-        approve: function(token, account, spender, amount, key) {
+        approve: function(account, token, spender, amount, gasPrice, key) {
             return new Promise(function(resolve, reject) {
                 var data = abi.encode("approve(address,uint256)", [ spender, amount ]);
         
-                broadcast.call(account, token, data, 0, key)
+                broadcast.call(account, token, data, 0, gasPrice, key)
                     .then(function(response) {
                         resolve(response);
                     })
@@ -130,8 +123,9 @@ var module = (function() {
 
                 api.call(token, data)
                     .then(function(response) {
-                        var [ allowance ] = abi.decode("(uint256)", response);
-        
+                        return abi.decode("(uint256)", response);
+                    })
+                    .then(function([ allowance ]) {
                         resolve(allowance);
                     })
                     .catch(function(error) {

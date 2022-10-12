@@ -7,21 +7,30 @@ var module = (function() {
         var request = _build_request(method, params);
         var headers = _rpc_headers();
 
+        console.log(__KLAYTN__.net.rpc_url)
+        console.log(JSON.stringify(headers))
+        console.log(JSON.stringify(request))
         return fetch(__KLAYTN__.net.rpc_url, {
             method: "POST", 
             headers: headers, 
             body: JSON.stringify(request)
         })
             .then(function(response) {
+                console.log(JSON.stringify(response));
                 if (response.ok) {
                     return response.json();
                 } else {
+                    console.log(response.statusText);
                     return Promise.reject({ 
                         status: response.status,
                         message: response.statusText
                     });
                 }
-            });
+            })
+            .then(function(json) {
+                console.log(JSON.stringify(json));
+                return json;
+            })
     }
 
     function _build_request(method, params) {
@@ -54,7 +63,7 @@ var module = (function() {
                 _request_rpc(method, params)
                     .then(function(response) {
                         if (response["result"]) {
-                            resolve(utils.value_to_number(response["result"]));
+                            resolve(utils.value_to_bignum(response["result"]));
                         } else {
                             reject(response["error"]);
                         }
@@ -92,7 +101,25 @@ var module = (function() {
                 _request_rpc(method, params)
                     .then(function(response) {
                         if (response["result"]) {
-                            console.log("receipt: " + JSON.stringify(response["result"]))
+                            resolve(response["result"]);
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
+
+        get_logs: function(filter) {
+            return new Promise(function(resolve, reject) {
+                var method = "klay_getLogs";
+                var params = [ filter ];
+        
+                _request_rpc(method, params)
+                    .then(function(response) {
+                        if (response["result"]) {
                             resolve(response["result"]);
                         } else {
                             reject(response["error"]);
@@ -122,12 +149,32 @@ var module = (function() {
                     });
             });
         },
+
+        estimate_gas: function(from, to, data, value) {
+            return new Promise(function(resolve, reject) {
+                var method = "klay_estimateGas";
+                var params = [ { from: from, to: to, data: data, value: value } ];
+
+                _request_rpc(method, params)
+                    .then(function(response) {
+                        console.log(JSON.stringify(response))
+                        if (response["result"]) {
+                            resolve(utils.value_to_bignum(response["result"]));
+                        } else {
+                            reject(response["error"]);
+                        }
+                    })
+                    .catch(function(error) {
+                        reject(error);
+                    });
+            });
+        },
         
         call: function(to, data, block="latest") {
             return new Promise(function(resolve, reject) {
                 var method = "klay_call";
                 var params = [ { to: to, data: data }, block ];
-        
+
                 _request_rpc(method, params)
                     .then(function(response) {
                         if (response["result"]) {
@@ -147,10 +194,8 @@ var module = (function() {
                 var method = "klay_sendRawTransaction";
                 var params = [ transaction ];
 
-                console.log("transaction: " + transaction);
                 _request_rpc(method, params)
                     .then(function(response) {
-                        console.log("responce: " + JSON.stringify(response));
                         resolve(response); // Do not return response["result"]
                     })
                     .catch(function(error) {
@@ -160,11 +205,9 @@ var module = (function() {
         },
 
         request: function(method, params) {
-            console.log(JSON.stringify([method, params]))
             return new Promise(function(resolve, reject) {
                 _request_rpc(method, params)
                     .then(function(response) {
-                        console.log(JSON.stringify(response))
                         resolve(response); // Do not return response["result"]
                     }); 
             });

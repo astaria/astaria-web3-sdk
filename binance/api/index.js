@@ -1,5 +1,5 @@
 var module = (function() {
-    const utils = __ETHEREUM__.utils;
+    const utils = __BINANCE__.utils;
 
     var _tx_number = 1;
 
@@ -7,7 +7,7 @@ var module = (function() {
         var request = _build_request(method, params);
         var headers = _rpc_headers();
 
-        return fetch(__ETHEREUM__.net.rpc_url, {
+        return fetch(__BINANCE__.net.rpc_url, {
             method: "POST", 
             headers: headers, 
             body: JSON.stringify(request)
@@ -168,6 +168,7 @@ var module = (function() {
 
                 _request_rpc(method, params)
                     .then(function(response) {
+                        console.log(JSON.stringify(response))
                         resolve(response); // Do not return response["result"]
                     })
                     .catch(function(error) {
@@ -177,17 +178,15 @@ var module = (function() {
         },
 
         request: function(method, params) {
-            //console.log(method)
+            console.log(JSON.stringify([ method, params ]))
             return new Promise(function(resolve, reject) {
                 _request_rpc(method, params)
                     .then(function(response) {
-                        //if (method === "eth_estimateGas")
-                        //console.log(JSON.stringify(response))
-            
+                        console.log(JSON.stringify(response))
                         resolve(response); // Do not return response["result"]
                     }); 
             });
-        }
+        },
     }
 })();
 

@@ -1,5 +1,5 @@
 var module = (function() {
-    const crypto = __ETHEREUM__.crypto;
+    const crypto = __POLYGON__.crypto;
 
     function _message_to_bits(message) {
         var bytes = [];

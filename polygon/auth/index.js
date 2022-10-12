@@ -1,6 +1,6 @@
 var module = (function() {
-    const crypto = __ETHEREUM__.crypto,
-          utils = __ETHEREUM__.utils,
+    const crypto = __POLYGON__.crypto,
+          utils = __POLYGON__.utils,
           signature = include("./signature.js");
 
     function _build_address(key) {

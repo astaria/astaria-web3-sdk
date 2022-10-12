@@ -18,8 +18,13 @@ var module = (function() {
             __STEEM__.net = networks[name] || networks.Testnet;
         },
         
-        configure_network: function(chain_id, pub_prefix, rpc_url) {
-            __STEEM__.net = { chain_id: chain_id, pub_prefix: pub_prefix, rpc_url: rpc_url }
+        configure_network: function(name, chain_id, pub_prefix, rpc_url) {
+            __STEEM__.net = { 
+                name: name, 
+                chain_id: chain_id, 
+                pub_prefix: pub_prefix, 
+                rpc_url: rpc_url 
+            }
         },
     }, global["__STEEM__"]);
 })();

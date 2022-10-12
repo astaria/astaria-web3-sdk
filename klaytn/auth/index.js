@@ -23,9 +23,8 @@ var module = (function() {
             var curve = crypto.ecdsa.curve_from_name("k256");
             var secret = crypto.number_from_bits(private_key.get());
             var pair = crypto.ecdsa.generate_keys(curve, secret);
-            var address = _build_address(pair.pub);
-
-            return utils.encode_checksum_address(address);
+            
+            return _build_address(pair.pub);
         },
 
         sign_message: function(message, key) {

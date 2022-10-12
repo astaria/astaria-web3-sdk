@@ -168,6 +168,10 @@ var module = (function() {
             return sjcl.codec.utf8String.toBits(string);
         },
         
+        string_from_bits: function(bits) {
+            return sjcl.codec.utf8String.fromBits(bits);
+        },
+        
         bytes_from_bits: function(bits) {
             return sjcl.codec.bytes.fromBits(bits);
         },

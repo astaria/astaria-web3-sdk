@@ -19,8 +19,12 @@ var module = (function() {
             __TERRA__.net = networks[name] || networks.Baobap;
         },
         
-        configure_network: function(chain_id, rpc_url) {
-            __TERRA__.net = { chain_id: chain_id, rpc_url: rpc_url }
+        configure_network: function(name, chain_id, rpc_url) {
+            __TERRA__.net = { 
+                name: name, 
+                chain_id: chain_id, 
+                rpc_url: rpc_url 
+            }
         },
     }, global["__TERRA__"]);
 })();

@@ -1,7 +1,7 @@
 var module = (function() {
-    const api = __ETHEREUM__.api,
-          broadcast = __ETHEREUM__.broadcast,
-          abi = __ETHEREUM__.abi;
+    const api = __BINANCE__.api,
+          broadcast = __BINANCE__.broadcast,
+          abi = __BINANCE__.abi;
 
     return {
         name: function(token) {

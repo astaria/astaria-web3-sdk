@@ -1,5 +1,5 @@
 var module = (function() {
-    const utils = __ETHEREUM__.utils,
+    const utils = __BINANCE__.utils,
           rlp = include("./rlp.js");
 
     function _value_to_data(value) {

@@ -26,6 +26,10 @@ var module = (function() {
         return "";
     }
     
+    function _string_to_data(value) {
+        return _hex_to_data(value.replace(/^0x/, ''));
+    }
+
     function _hex_to_data(hex) {
         var data = "";
     
@@ -75,9 +79,9 @@ var module = (function() {
                         _value_to_data(transaction["nonce"]),
                         _value_to_data(transaction["gasPrice"]),
                         _value_to_data(transaction["gas"]),
-                        _value_to_data(transaction["to"]),
+                        _string_to_data(transaction["to"]),
                         _value_to_data(transaction["value"]),
-                        _value_to_data(transaction["from"])
+                        _string_to_data(transaction["from"])
                     ]),
                     _value_to_data(transaction["chainId"]),
                     _value_to_data(0),
@@ -88,9 +92,9 @@ var module = (function() {
                     _value_to_data(transaction["nonce"]),
                     _value_to_data(transaction["gasPrice"]),
                     _value_to_data(transaction["gas"]),
-                    _value_to_data(transaction["to"]),
+                    _string_to_data(transaction["to"]),
                     _value_to_data(transaction["value"]),
-                    _value_to_data(transaction["from"]),
+                    _string_to_data(transaction["from"]),
                     _signatures_to_data(transaction["signatures"])
                 ]));
             }
@@ -138,10 +142,10 @@ var module = (function() {
                         _value_to_data(transaction["nonce"]),
                         _value_to_data(transaction["gasPrice"]),
                         _value_to_data(transaction["gas"]),
-                        _value_to_data(transaction["to"]),
+                        _string_to_data(transaction["to"]),
                         _value_to_data(transaction["value"] || 0),
-                        _value_to_data(transaction["from"]),
-                        _value_to_data(transaction["data"])
+                        _string_to_data(transaction["from"]),
+                        _string_to_data(transaction["data"])
                     ]),
                     _value_to_data(transaction["chainId"]),
                     _value_to_data(0),
@@ -152,10 +156,10 @@ var module = (function() {
                     _value_to_data(transaction["nonce"]),
                     _value_to_data(transaction["gasPrice"]),
                     _value_to_data(transaction["gas"]),
-                    _value_to_data(transaction["to"]),
+                    _string_to_data(transaction["to"]),
                     _value_to_data(transaction["value"] || 0),
-                    _value_to_data(transaction["from"]),
-                    _value_to_data(transaction["data"]),
+                    _string_to_data(transaction["from"]),
+                    _string_to_data(transaction["data"]),
                     _signatures_to_data(transaction["signatures"])
                 ]));
             }
@@ -191,9 +195,9 @@ var module = (function() {
                     _value_to_data(transaction["nonce"]),
                     _value_to_data(transaction["gasPrice"]),
                     _value_to_data(transaction["gas"]),
-                    _value_to_data(transaction["to"]),
+                    _string_to_data(transaction["to"]),
                     _value_to_data(transaction["value"] || 0),
-                    _value_to_data(transaction["data"] || ""),
+                    _string_to_data(transaction["data"] || ""),
                     _value_to_data(transaction["chainId"]),
                     _value_to_data(0),
                     _value_to_data(0)
@@ -203,9 +207,9 @@ var module = (function() {
                     _value_to_data(transaction["nonce"]),
                     _value_to_data(transaction["gasPrice"]),
                     _value_to_data(transaction["gas"]),
-                    _value_to_data(transaction["to"]),
+                    _string_to_data(transaction["to"]),
                     _value_to_data(transaction["value"] || 0),
-                    _value_to_data(transaction["data"] || ""),
+                    _string_to_data(transaction["data"] || ""),
                     _value_to_data(transaction["v"]),
                     _value_to_data(transaction["r"]),
                     _value_to_data(transaction["s"])
