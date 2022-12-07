@@ -4,11 +4,10 @@ var module = (function() {
     include("./sjcl/bitArray.js");
     include("./sjcl/codecString.js");
     include("./sjcl/codecBytes.js");
+    include("./sjcl/codecHex.js");
     include("./sjcl/codecBase64.js");
     include("./sjcl/codecBase58.js");
     include("./sjcl/codecBase58Check.js");
-    include("./sjcl/codecBytes.js");
-    include("./sjcl/codecHex.js");
     include("./sjcl/sha256.js");
     include("./sjcl/sha512.js");
     include("./sjcl/ripemd160.js");

@@ -7,30 +7,21 @@ var module = (function() {
         var request = _build_request(method, params);
         var headers = _rpc_headers();
 
-        console.log(__KLAYTN__.net.rpc_url)
-        console.log(JSON.stringify(headers))
-        console.log(JSON.stringify(request))
         return fetch(__KLAYTN__.net.rpc_url, {
             method: "POST", 
             headers: headers, 
             body: JSON.stringify(request)
         })
             .then(function(response) {
-                console.log(JSON.stringify(response));
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log(response.statusText);
                     return Promise.reject({ 
                         status: response.status,
                         message: response.statusText
                     });
                 }
-            })
-            .then(function(json) {
-                console.log(JSON.stringify(json));
-                return json;
-            })
+            });
     }
 
     function _build_request(method, params) {

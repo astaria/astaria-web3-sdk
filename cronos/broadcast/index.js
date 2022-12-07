@@ -1,7 +1,7 @@
 var module = (function() {
-    const auth = __KLAYTN__.auth,
-          api = __KLAYTN__.api,
-          utils = __KLAYTN__.utils,
+    const auth = __CRONOS__.auth,
+          api = __CRONOS__.api,
+          utils = __CRONOS__.utils,
           serializer = include("./serializer.js");
 
     var _key_offeror;
@@ -33,31 +33,20 @@ var module = (function() {
                         return Promise.resolve([ key, gasPrice ]);
                     })
                     .then(function([ key, gasPrice ]) {
-                        console.log("gasPrice: " + gasPrice)
                         transaction = Object.assign(transaction, {
                             "gasPrice": gasPrice,
                             "gas": fee.times(3)
                         });
 
                         return Promise.resolve([ transaction, key ]);
-                    });
+                    })
             })
             .then(function([ transaction, key ]) {
                 var signature = _sign_transaction(transaction, key);
-
-                if (transaction["type"] && transaction["type"] !== "LEGACY") {
-                    transaction["signatures"] = [
-                        [
-                            signature["v"],
-                            signature["r"],
-                            signature["s"]
-                        ]
-                    ];
-                } else {
-                    transaction["v"] = signature["v"];
-                    transaction["r"] = signature["r"];
-                    transaction["s"] = signature["s"];
-                }
+            
+                transaction["v"] = signature["v"];
+                transaction["r"] = signature["r"];
+                transaction["s"] = signature["s"];
 
                 transaction = serializer.serialize_transaction(transaction);
 
@@ -75,7 +64,7 @@ var module = (function() {
             api.get_balance(from)
         ])
             .then(function([ count, balance ]) {
-                transaction["chainId"] = __KLAYTN__.net.chain_id;
+                transaction["chainId"] = __CRONOS__.net.chain_id;
                 transaction["nonce"]   = utils.value_to_bignum(count);
 
                 return Promise.resolve([ transaction, balance ]);
@@ -107,13 +96,13 @@ var module = (function() {
             })
             .then(function(key) {
                 var signature = _sign_message(message, password, key);
-
+            
                 return Promise.resolve(signature);
             });
     }
 
     function _sign_message(message, password, key) {
-        var prefix = "\x19Klaytn Signed Message:\n" + message.length;
+        var prefix = "\x19Ethereum Signed Message:\n" + message.length;
         var signature = auth.sign_message(prefix + message, key);
         var r = signature["r"].replace(/^0x/, "");
         var s = signature["s"].replace(/^0x/, "");
@@ -121,7 +110,7 @@ var module = (function() {
 
         return "0x" + r + s + v;
     }
-    
+
     function _get_gas_price(gasPrice) {
         if (!gasPrice) {
             return api.get_gas_price();
@@ -134,7 +123,6 @@ var module = (function() {
         transfer: function(from, to, value, gasPrice, key) {
             return new Promise(function(resolve, reject) {
                 var transaction = {
-                    "type": "VALUE_TRANSFER",
                     "from": from,
                     "to": to,
                     "value": value = utils.value_to_hex(value)
@@ -156,7 +144,6 @@ var module = (function() {
         call: function(from, to, data, value, gasPrice, key) {
             return new Promise(function(resolve, reject) {
                 var transaction = {
-                    "type": "SMART_CONTRACT_EXECUTION",
                     "from": from,
                     "to": to,
                     "data": data,
@@ -179,7 +166,6 @@ var module = (function() {
         create: function(from, to, data, value, gasPrice, key) {
             return new Promise(function(resolve, reject) {
                 var transaction = {
-                    "type": "SMART_CONTRACT_EXECUTION",
                     "from": from,
                     "to": to,
                     "data": data,

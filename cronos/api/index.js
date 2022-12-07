@@ -1,5 +1,5 @@
 var module = (function() {
-    const utils = __POLYGON__.utils;
+    const utils = __CRONOS__.utils;
 
     var _tx_number = 1;
 
@@ -7,7 +7,7 @@ var module = (function() {
         var request = _build_request(method, params);
         var headers = _rpc_headers();
 
-        return fetch(__POLYGON__.net.rpc_url, {
+        return fetch(__CRONOS__.net.rpc_url, {
             method: "POST", 
             headers: headers, 
             body: JSON.stringify(request)
@@ -178,9 +178,11 @@ var module = (function() {
         },
 
         request: function(method, params) {
+            console.log(JSON.stringify([ method, params ]))
             return new Promise(function(resolve, reject) {
                 _request_rpc(method, params)
                     .then(function(response) {
+                        console.log(JSON.stringify(response))
                         resolve(response); // Do not return response["result"]
                     }); 
             });
