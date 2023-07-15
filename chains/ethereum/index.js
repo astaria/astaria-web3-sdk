@@ -28,7 +28,7 @@ var module = (function() {
             }
         },
 
-        get_network_name: function(network_id) {
+        get_network_name: function() {
             return __ETHEREUM__.net.name;
         },
 
