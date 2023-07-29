@@ -1,50 +1,30 @@
 var module = (function() {
-    const networks = include('./networks.js');
+    const ethereum = require('chains/ethereum');
 
-    global["__KLAYTN__"] = global["__KLAYTN__"] || {
-        name: "Klaytn",
-        net: networks.Cypress
-    };
+    global["__KLAYTN__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__KLAYTN__"].crypto    = require("crypto");
-    global["__KLAYTN__"].utils     = include("./utils/index.js");
-    global["__KLAYTN__"].auth      = include("./auth/index.js");
+    global["__KLAYTN__"].utils    = include("./utils.js");
     global["__KLAYTN__"].api       = include("./api/index.js");
     global["__KLAYTN__"].broadcast = include("./broadcast/index.js");
-    global["__KLAYTN__"].abi       = include("./abi/index.js");
-    global["__KLAYTN__"].kip7      = include("./kip7.js");
-    global["__KLAYTN__"].token     = global["__KLAYTN__"].kip7;
+    global["__KLAYTN__"].networks = include("./networks.js");
+    global["__KLAYTN__"].currency = include("./currency.js");
 
-    return Object.assign(global["__KLAYTN__"], {
-        select_network: function(name) {
-            __KLAYTN__.net = networks[name] || networks.Baobap;
-        },
-        
-        configure_network: function(name, chain_id, rpc_url) {
-            __KLAYTN__.net = { 
-                name: name, 
-                chain_id: chain_id, 
-                rpc_url: rpc_url 
-            }
+    return {
+        create: function(network=__KLAYTN__.networks.Cypress) {
+            const klaytn = Object.assign({}, __KLAYTN__);
+
+            klaytn.network   = network;
+            klaytn.api       = __KLAYTN__.api.create(klaytn.network);
+            klaytn.broadcast = __KLAYTN__.broadcast.create(klaytn.api);
+            klaytn.token     = __KLAYTN__.token.create(klaytn.api, klaytn.broadcast);
+
+            return klaytn;
         },
 
-        get_network_name: function() {
-            return __KLAYTN__.net.name;
-        },
-
-        get_network_id: function() {
-            return __KLAYTN__.net.chain_id;
-        },
-
-        get_native_token() {
-            return {
-                "address": __KLAYTN__.utils.get_native_address(),
-                "name": "Klaytn",
-                "symbol": "KLAY",
-                "decimals": 18
-            }
+        get_network_by_name(name) {
+            return __KLAYTN__.networks[name];
         }
-    });
+    }
 })();
 
 __MODULE__ = module;

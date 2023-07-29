@@ -128,9 +128,7 @@ var module = (function() {
         },
 
         verify_checksum_address: function(address, chain_id) {
-            var checksumAddress = _encode_checksum_address(address, chain_id);
-
-            return address === checksumAddress;
+            return address === _encode_checksum_address(address, chain_id);
         },
 
         get_native_address: function() {

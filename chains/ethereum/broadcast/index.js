@@ -1,13 +1,10 @@
 var module = (function() {
     const auth = __ETHEREUM__.auth,
-          api = __ETHEREUM__.api,
           utils = __ETHEREUM__.utils,
           serializer = include("./serializer.js");
 
-    var _key_offeror;
-
-    function _send_transaction(from, transaction, createOnly, fee, gasPrice, key) {
-        return _prepare_transaction(from, transaction)
+    function _send_transaction(api, from, transaction, createOnly, fee, gasPrice, key_or_offerer) {
+        return _prepare_transaction(api, from, transaction)
             .then(function([ transaction, balance ]) {
                 return _get_gas_price(gasPrice)
                     .then(function(gasPrice) {
@@ -21,8 +18,8 @@ var module = (function() {
                         return gasPrice;
                     })
                     .then(function(gasPrice) {
-                        if (!key && _key_offeror) {
-                            return _key_offeror({
+                        if (key_or_offerer instanceof Function) {
+                            return key_or_offerer({
                                 type: "transaction",
                                 transaction: transaction, 
                                 fee: fee, 
@@ -30,7 +27,7 @@ var module = (function() {
                             });
                         }
                         
-                        return Promise.resolve([ key, gasPrice ]);
+                        return Promise.resolve([ key_or_offerer, gasPrice ]);
                     })
                     .then(function([ key, gasPrice ]) {
                         transaction = Object.assign(transaction, {
@@ -58,13 +55,13 @@ var module = (function() {
             });
     }
 
-    function _prepare_transaction(from, transaction) {
+    function _prepare_transaction(api, from, transaction) {
         return Promise.all([
             api.get_transaction_count(from),
             api.get_balance(from)
         ])
             .then(function([ count, balance ]) {
-                transaction["chainId"] = __ETHEREUM__.net.chain_id;
+                transaction["chainId"] = api.get_chain_id();
                 transaction["nonce"]   = utils.value_to_bignum(count);
 
                 return Promise.resolve([ transaction, balance ]);
@@ -80,11 +77,11 @@ var module = (function() {
         return signature;
     }
 
-    function _request_sign(message, account, password, key) {
+    function _request_sign(message, account, password, key_or_offerer) {
         return Promise.resolve()
             .then(function() {
-                if (!key && _key_offeror) {
-                    return _key_offeror({
+                if (key_or_offerer instanceof Function) {
+                    return key_or_offerer({
                         type: "sign",
                         message: message, 
                         account: account,
@@ -92,12 +89,10 @@ var module = (function() {
                     });
                 }
                 
-                return Promise.resolve(key);
+                return key_or_offerer;
             })
             .then(function(key) {
-                var signature = _sign_message(message, password, key);
-            
-                return Promise.resolve(signature);
+                return _sign_message(message, password, key);
             });
     }
 
@@ -120,103 +115,109 @@ var module = (function() {
     }
 
     return {
-        transfer: function(from, to, value, gasPrice, key) {
-            return new Promise(function(resolve, reject) {
-                var transaction = {
-                    "from": from,
-                    "to": to,
-                    "value": value = utils.value_to_hex(value)
-                };
+        create: function(network, api) {
+            var _key_offeror;
 
-                api.estimate_gas(from, to, "", value)
-                    .then(function(fee) {
-                        return _send_transaction(from, transaction, false, fee, gasPrice, key)
-                    })
-                    .then(function(response) {
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        reject(error);
+            return {
+                transfer: function(from, to, value, gasPrice, key) {
+                    return new Promise(function(resolve, reject) {
+                        var transaction = {
+                            "from": from,
+                            "to": to,
+                            "value": value = utils.value_to_hex(value)
+                        };
+        
+                        api.estimate_gas(from, to, "", value)
+                            .then(function(fee) {
+                                return _send_transaction(api, from, transaction, false, fee, gasPrice, key || _key_offeror)
+                            })
+                            .then(function(response) {
+                                resolve(response);
+                            })
+                            .catch(function(error) {
+                                reject(error);
+                            });
                     });
-            });
-        },
-
-        call: function(from, to, data, value, gasPrice, key) {
-            return new Promise(function(resolve, reject) {
-                var transaction = {
-                    "from": from,
-                    "to": to,
-                    "data": data,
-                    "value": value = utils.value_to_hex(value)
-                };
-
-                api.estimate_gas(from, to, data, value)
-                    .then(function(fee) {
-                        return _send_transaction(from, transaction, false, fee, gasPrice, key)
-                    })
-                    .then(function(response) {
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        reject(error);
+                },
+        
+                call: function(from, to, data, value, gasPrice, key) {
+                    return new Promise(function(resolve, reject) {
+                        var transaction = {
+                            "from": from,
+                            "to": to,
+                            "data": data,
+                            "value": value = utils.value_to_hex(value)
+                        };
+        
+                        api.estimate_gas(from, to, data, value)
+                            .then(function(fee) {
+                                return _send_transaction(api, from, transaction, false, fee, gasPrice, key || _key_offeror)
+                            })
+                            .then(function(response) {
+                                resolve(response);
+                            })
+                            .catch(function(error) {
+                                reject(error);
+                            });
                     });
-            });
-        },
-
-        create: function(from, to, data, value, gasPrice, key) {
-            return new Promise(function(resolve, reject) {
-                var transaction = {
-                    "from": from,
-                    "to": to,
-                    "data": data,
-                    "value": value = utils.value_to_hex(value)
-                };
-
-                api.estimate_gas(from, to, data, value)
-                    .then(function(fee) {
-                        return _send_transaction(from, transaction, true, fee, gasPrice, key)
-                    })
-                    .then(function(response) {
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        reject(error);
+                },
+        
+                create: function(from, to, data, value, gasPrice, key) {
+                    return new Promise(function(resolve, reject) {
+                        var transaction = {
+                            "from": from,
+                            "to": to,
+                            "data": data,
+                            "value": value = utils.value_to_hex(value)
+                        };
+        
+                        api.estimate_gas(from, to, data, value)
+                            .then(function(fee) {
+                                return _send_transaction(api, from, transaction, true, fee, gasPrice, key || _key_offeror)
+                            })
+                            .then(function(response) {
+                                resolve(response);
+                            })
+                            .catch(function(error) {
+                                reject(error);
+                            });
                     });
-            });
-        },
-
-        send: function(transaction, gasPrice, key) {
-            return new Promise(function(resolve, reject) {
-                var { from, to, data, value } = transaction;
-
-                api.estimate_gas(from, to, data, value)
-                    .then(function(fee) {
-                        return _send_transaction(from, transaction, false, fee, gasPrice, key)
-                    })
-                    .then(function(response) {
-                        resolve(response);
-                    })
-                    .catch(function(error) {
-                        reject(error);
+                },
+        
+                send: function(transaction, gasPrice, key) {
+                    return new Promise(function(resolve, reject) {
+                        var { from, to, data, value } = transaction;
+        
+                        api.estimate_gas(from, to, data, value)
+                            .then(function(fee) {
+                                return _send_transaction(api, from, transaction, false, fee, gasPrice, key || _key_offeror)
+                            })
+                            .then(function(response) {
+                                resolve(response);
+                            })
+                            .catch(function(error) {
+                                reject(error);
+                            });
                     });
-            });
-        },
-
-        sign: function(message, account, password, key) {
-            return new Promise(function(resolve, reject) {
-                _request_sign(message, account, password, key)
-                    .then(function(signature) {
-                        resolve(signature);
-                    })
-                    .catch(function(error) {
-                        reject(error);
+                },
+        
+                sign: function(message, account, password, key) {
+                    return new Promise(function(resolve, reject) {
+                        _request_sign(message, account, password, key || _key_offeror)
+                            .then(function(signature) {
+                                resolve(signature);
+                            })
+                            .catch(function(error) {
+                                reject(error);
+                            });
                     });
-            });
-        },
-
-        set_key_offeror: function(offeror) {
-            _key_offeror = offeror;
-        },
+                },
+        
+                set_key_offeror: function(offeror) {
+                    _key_offeror = offeror;
+                },
+            }
+        }
     }
 })();
 

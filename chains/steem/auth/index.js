@@ -5,7 +5,7 @@ var module = (function() {
     function _build_address(key) {
         var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
     
-        return __STEEM_.net.pub_prefix + crypto.base58.check.encode(
+        return crypto.base58.check.encode(
             version, key.get().x, _checksum_for_key
         );
     }
@@ -54,17 +54,17 @@ var module = (function() {
             return keys;
         },
         
-        generate_address: function(key) {
+        generate_address: function(prefix, key) {
             var private_key = _strip_private_key(key);
             var curve = crypto.ecdsa.curve_from_name("k256");
             var secret = crypto.number_from_bits(private_key.get());
             var pair = crypto.ecdsa.generate_keys(curve, secret);
         
-            return _build_address(pair.pub);
+            return prefix + _build_address(pair.pub);
         },
         
-        decode_address: function(address) {
-            var encoded_key = address.replace(new RegExp("^" +  __STEEM_.net.pub_prefix), "");
+        decode_address: function(prefix, address) {
+            var encoded_key = address.replace(new RegExp("^" +  prefix), "");
         
             return crypto.bytes_from_bits(
                 crypto.base58.check.decode(
@@ -73,10 +73,10 @@ var module = (function() {
             );
         },
         
-        sign_message: function(message, keys) {
+        sign_message: function(chain_id, message, keys) {
             var signatures = [];
         
-            message = decode("hex", __STEEM_.net.chain_id).concat(message);
+            message = decode("hex", chain_id).concat(message);
         
             for (var key in keys) {
                 var private_key = _strip_private_key(keys[key]);

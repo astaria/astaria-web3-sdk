@@ -1,50 +1,27 @@
 var module = (function() {
-    const networks = include('./networks.js');
+    const ethereum = require('chains/ethereum');
 
-    global["__BINANCE__"] = global["__BINANCE__"] || {
-        name: "Binance Smart Chain",
-        net: networks.Mainnet
-    };
+    global["__BINANCE__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__BINANCE__"].crypto    = require("crypto");
-    global["__BINANCE__"].utils     = include("./utils/index.js");
-    global["__BINANCE__"].auth      = include("./auth/index.js");
-    global["__BINANCE__"].api       = include("./api/index.js");
-    global["__BINANCE__"].broadcast = include("./broadcast/index.js");
-    global["__BINANCE__"].abi       = include("./abi/index.js");
-    global["__BINANCE__"].bep20     = include("./bep20.js");
-    global["__BINANCE__"].token     = global["__BINANCE__"].bep20;
+    global["__BINANCE__"].networks = include("./networks.js");
+    global["__BINANCE__"].currency = include("./currency.js");
 
-    return Object.assign(global["__BINANCE__"], {
-        select_network: function(name) {
-            __BINANCE__.net = networks[name] || networks.Testnet;
-        },
-        
-        configure_network: function(name, chain_id, rpc_url) {
-            __BINANCE__.net = { 
-                name: name, 
-                chain_id: chain_id, 
-                rpc_url: rpc_url 
-            }
+    return {
+        create: function(network=__BINANCE__.networks.Mainnet) {
+            const binance = Object.assign({}, __BINANCE__);
+
+            binance.network   = network;
+            binance.api       = __BINANCE__.api.create(binance.network);
+            binance.broadcast = __BINANCE__.broadcast.create(binance.api);
+            binance.token     = __BINANCE__.token.create(binance.api, binance.broadcast);
+
+            return binance;
         },
 
-        get_network_name: function() {
-            return __BINANCE__.net.name;
-        },
-
-        get_network_id: function() {
-            return __BINANCE__.net.chain_id;
-        },
-
-        get_native_token() {
-            return {
-                "address": __BINANCE__.utils.get_native_address(),
-                "name": "Binance Coin",
-                "symbol": "BNB",
-                "decimals": 18
-            }
+        get_network_by_name(name) {
+            return __BINANCE__.networks[name];
         }
-    });
+    }
 })();
 
 __MODULE__ = module;
