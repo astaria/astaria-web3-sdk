@@ -7,7 +7,7 @@ var module = (function() {
         },
 
         Baobap: { 
-            name: "Baobap",
+            name: "Baobab",
             chain_id: 1001,
             rpc_url: "https://api.baobab.klaytn.net:8651" 
         },
