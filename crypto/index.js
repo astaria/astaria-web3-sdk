@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     include("./sjcl/sjcl.js");
     include("./sjcl/convenience.js");
     include("./sjcl/bitArray.js");

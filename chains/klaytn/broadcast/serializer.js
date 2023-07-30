@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const encoder = include("./encoder.js");
 
     return {

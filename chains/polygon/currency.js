@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const utils = __POLYGON__.utils;
 
     return {

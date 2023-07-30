@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const crypto = __STEEM__.crypto, 
           signature = include("./signature.js");
 

@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const auth = __ETHEREUM__.auth,
           utils = __ETHEREUM__.utils,
           serializer = include("./serializer.js");

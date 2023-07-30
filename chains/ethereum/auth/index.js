@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const crypto = __ETHEREUM__.crypto,
           utils = __ETHEREUM__.utils,
           signature = include("./signature.js");

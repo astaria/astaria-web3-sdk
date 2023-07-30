@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     var _tx_number = 1;
 
     function _request_rpc(network, method, params) {

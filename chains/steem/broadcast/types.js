@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const auth = __STEEM__.auth, 
           utfx = __STEEM__.utfx, 
           serializer = include("./serializer.js");

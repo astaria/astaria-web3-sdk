@@ -1,6 +1,6 @@
 include("./bignumber.js");
 
-var module = (function() {
+const module = (function() {
     const crypto = __KLAYTN__.crypto;
 
     const _KLAY_ADDRESS = '0x0000000000000000000000000000000000000000'; // Cypress and Baobab
