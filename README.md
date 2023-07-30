@@ -7,9 +7,9 @@
 ### 2. Transactions
 
 ```
-const ethereum = require('chains/ethereum');
-const network = ethereum.get_network_by_name('Mainnet);
-const instance = ethereum.create(network);
+const Ethereum = require('chains/ethereum');
+const network = Ethereum.get_network_by_name('Mainnet);
+const ethereum = Ethereum.create(network);
 
 instance.api.get_balance('0x3E4F')
     .then((balance) => {
