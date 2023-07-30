@@ -11,7 +11,7 @@ const Ethereum = require('chains/ethereum');
 const network = Ethereum.get_network_by_name('Mainnet);
 const ethereum = Ethereum.create(network);
 
-instance.api.get_balance('0x3E4F')
+ethereum.api.get_balance('0x3E4F')
     .then((balance) => {
         console.log(balance);
     })
