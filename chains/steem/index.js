@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     global["__STEEM__"] = {};
     
     global["__STEEM__"].crypto    = require("crypto");

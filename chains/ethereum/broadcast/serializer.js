@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const utils = __ETHEREUM__.utils,
           rlp = include("./rlp.js");
 

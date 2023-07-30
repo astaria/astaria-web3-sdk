@@ -1,6 +1,6 @@
 include("./bignumber.js");
 
-var module = (function() {
+const module = (function() {
     const crypto = __ETHEREUM__.crypto;
 
     const _ETH_ADDRESS = '0x0000000000000000000000000000000000000000'; // Mainnet and Testnet

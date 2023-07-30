@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     global["__ETHEREUM__"] = {};
 
     global["__ETHEREUM__"].crypto    = require("crypto");

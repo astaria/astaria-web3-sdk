@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const broadcast = __STEEM__.broadcast, 
           struct = __STEEM__.struct;
 

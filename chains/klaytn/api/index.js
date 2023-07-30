@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const utils = __KLAYTN__.utils;
 
     var _tx_number = 1;

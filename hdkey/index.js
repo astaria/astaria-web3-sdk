@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const crypto = require('crypto'),
           networks = include('./networks.js');
 

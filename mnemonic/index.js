@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const crypto = require("crypto");
 
     var _words_map = {};

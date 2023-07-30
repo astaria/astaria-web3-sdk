@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     return {
         Cypress: {
             name: "Cypress",

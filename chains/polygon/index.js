@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const ethereum = require('chains/ethereum');
 
     global["__POLYGON__"] = Object.assign({}, __ETHEREUM__);

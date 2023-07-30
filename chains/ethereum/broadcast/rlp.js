@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     function _encode(data) {
         if (data instanceof Array) {
             return _encode_array(data);

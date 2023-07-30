@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const abi = __ETHEREUM__.abi;
 
     return {

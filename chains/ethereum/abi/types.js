@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const _padding_string = "0000000000000000000000000000000000000000000000000000000000000000";
 
     function _value_to_hex(value) {

@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const jspack = include("./jspack.js");
 
     return {

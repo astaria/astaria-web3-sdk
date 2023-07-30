@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const auth = __KLAYTN__.auth,
           utils = __KLAYTN__.utils,
           serializer = include("./serializer.js");

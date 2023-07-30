@@ -1,4 +1,4 @@
-var module = (function() {
+const module = (function() {
     const auth = __STEEM__.auth,
           struct = __STEEM__.struct,
           operations = include("./operations.js"), 
