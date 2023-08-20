@@ -1,13 +1,13 @@
 const module = (function() {
-    const ethereum = require("chains/ethereum");
+    const Ethereum = require("chains/ethereum");
 
     global["__KLAYTN__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__KLAYTN__"].utils    = include("./utils.js");
+    global["__KLAYTN__"].utils     = include("./utils.js");
     global["__KLAYTN__"].api       = include("./api/index.js");
     global["__KLAYTN__"].broadcast = include("./broadcast/index.js");
-    global["__KLAYTN__"].networks = include("./networks.js");
-    global["__KLAYTN__"].currency = include("./currency.js");
+    global["__KLAYTN__"].networks  = include("./networks.js");
+    global["__KLAYTN__"].currency  = include("./currency.js");
 
     return {
         create: function(network=__KLAYTN__.networks.Cypress) {
