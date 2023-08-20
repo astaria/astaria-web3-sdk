@@ -4,8 +4,8 @@ const module = (function() {
     var _tx_number = 1;
 
     function _request_rpc(network, method, params) {
-        var request = _build_request(method, params);
-        var headers = _rpc_headers();
+        const request = _build_request(method, params);
+        const headers = _rpc_headers();
 
         return fetch(network.rpc_url, {
             method: "POST", 
@@ -25,7 +25,7 @@ const module = (function() {
     }
 
     function _build_request(method, params) {
-        var request = {};
+        const request = {};
     
         request["jsonrpc"] = "2.0";
         request["method"]  = method;
@@ -38,7 +38,7 @@ const module = (function() {
     }
     
     function _rpc_headers() {
-        var headers = {};
+        const headers = {};
     
         headers["Content-Type"] = "application/json";
     
@@ -50,8 +50,8 @@ const module = (function() {
             return {
                 get_balance: function(account, block="latest") {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_getBalance";
-                        var params = [ account, block ];
+                        const method = "eth_getBalance";
+                        const params = [ account, block ];
                 
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -69,8 +69,8 @@ const module = (function() {
                 
                 get_transaction_count: function(account, block="latest") {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_getTransactionCount";
-                        var params = [ account, block ];
+                        const method = "eth_getTransactionCount";
+                        const params = [ account, block ];
                 
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -88,8 +88,8 @@ const module = (function() {
         
                 get_transaction_receipt: function(tx_hash) {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_getTransactionReceipt";
-                        var params = [ tx_hash ];
+                        const method = "eth_getTransactionReceipt";
+                        const params = [ tx_hash ];
                 
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -107,8 +107,8 @@ const module = (function() {
         
                 get_gas_price: function() {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_gasPrice";
-                        var params = [];
+                        const method = "eth_gasPrice";
+                        const params = [];
                 
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -126,8 +126,8 @@ const module = (function() {
         
                 estimate_gas: function(from, to, data, value) {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_estimateGas";
-                        var params = [ { from: from, to: to, data: data, value: value } ];
+                        const method = "eth_estimateGas";
+                        const params = [ { from: from, to: to, data: data, value: value } ];
         
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -165,8 +165,8 @@ const module = (function() {
         
                 send_raw_transaction: function(transaction) {
                     return new Promise(function(resolve, reject) {
-                        var method = "eth_sendRawTransaction";
-                        var params = [ transaction ];
+                        const method = "eth_sendRawTransaction";
+                        const params = [ transaction ];
         
                         _request_rpc(network, method, params)
                             .then(function(response) {
@@ -179,13 +179,9 @@ const module = (function() {
                 },
         
                 request: function(method, params) {
-                    //console.log(method)
                     return new Promise(function(resolve, reject) {
                         _request_rpc(network, method, params)
                             .then(function(response) {
-                                //if (method === "eth_estimateGas")
-                                //console.log(JSON.stringify(response))
-                    
                                 resolve(response); // Do not return response["result"]
                             }); 
                     });

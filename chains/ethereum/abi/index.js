@@ -3,14 +3,14 @@ const module = (function () {
           types = include("./types.js");
 
     function _encode_signature(definition) {
-        var bits = crypto.string_to_bits(definition);
-        var hash = crypto.keccak256.digest(bits);
+        const bits = crypto.string_to_bits(definition);
+        const hash = crypto.keccak256.digest(bits);
 
         return crypto.hex_from_bits(crypto.bits_slice(hash, 0, 32));
     }
 
     function _encode_tuple(tuple, values) {
-        var head = "", tail = "";
+        let head = "", tail = "";
 
         tuple.forEach(function(type, i) {
             if (type.endsWith("[]")) {
@@ -25,10 +25,10 @@ const module = (function () {
     }
 
     function _encode_array(type, value) {
-        var string = types["uint256"].encode(value.length);
+        let string = types["uint256"].encode(value.length);
 
         if (type.endsWith("[]") || types[type].is_dynamic()) {
-            for (var i = 0; i < value.length; ++i) {
+            for (let i = 0; i < value.length; ++i) {
                 // TODO
             }    
         } else {
@@ -41,20 +41,21 @@ const module = (function () {
     }
 
     function _decode_tuple(tuple, string) {
-        var values = [], offset = 0, end_offset = 0;
+        const values = [];
+        let offset = 0, end_offset = 0;
 
         tuple.forEach(function(type) {
             if (type.endsWith("[]")) {
-                var tail_offset = types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
-                var [ value, next_offset ] = _decode_array(type.replace(/\[\]$/, ""), string.substring(tail_offset));
+                const tail_offset = types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
+                const [ value, next_offset ] = _decode_array(type.replace(/\[\]$/, ""), string.substring(tail_offset));
                 
                 values.push(value);
 
                 end_offset = offset + next_offset;
             } else {
                 if (types[type].is_dynamic()) {
-                    var tail_offset = types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
-                    var [ value, next_offset ] = types[type].decode(string.substring(tail_offset));
+                    const tail_offset = types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
+                    const [ value, next_offset ] = types[type].decode(string.substring(tail_offset));
 
                     values.push(value);
 
@@ -75,13 +76,14 @@ const module = (function () {
     }
 
     function _decode_array(type, string) {
-        var [ count, offset ] = types["uint256"].decode(string.substring(0, 64));
-        var values = [], end_offset = 0;
+        const [ count, offset ] = types["uint256"].decode(string.substring(0, 64));
+        const values = []
+        let end_offset = 0;
 
         if (type.endsWith("[]")) {
-            for (var i = 0; i < count; ++i) {
-                var tail_offset = 64 + types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
-                var [ value, next_offset ] = _decode_array(type.replace(/\[\]$/, ""), string.substring(tail_offset));
+            for (let i = 0; i < count; ++i) {
+                const tail_offset = 64 + types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
+                const [ value, next_offset ] = _decode_array(type.replace(/\[\]$/, ""), string.substring(tail_offset));
 
                 values.push(value);
 
@@ -90,9 +92,9 @@ const module = (function () {
             }
         } else {
             if (types[type].is_dynamic()) {
-                for (var i = 0; i < count; ++i) {
-                    var tail_offset = 64 + types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
-                    var [ value, next_offset ] = types[type].decode(string.substring(tail_offset));
+                for (let i = 0; i < count; ++i) {
+                    const tail_offset = 64 + types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
+                    const [ value, next_offset ] = types[type].decode(string.substring(tail_offset));
     
                     values.push(value);
     
@@ -100,7 +102,7 @@ const module = (function () {
                     offset += 64;
                 }
             } else {
-                for (var i = 0; i < count; ++i) {
+                for (let i = 0; i < count; ++i) {
                     values.push(types[type].decode(string.substring(offset, offset + 64))[0]);
     
                     offset += 64;
@@ -117,7 +119,7 @@ const module = (function () {
 
     return {
         encode: function(definition, values) {
-            var m = definition.match(/(.*)\((.*)\)/);
+            const m = definition.match(/(.*)\((.*)\)/);
 
             if (m) {
                 return "0x" + [
@@ -128,7 +130,7 @@ const module = (function () {
         },
 
         decode: function(definition, string) {
-            var m = definition.match(/(.*)\((.*)\)/);
+            const m = definition.match(/(.*)\((.*)\)/);
 
             if (m && m[2]) {
                 return _decode_tuple(m[2].split(","), string.replace(/^0x/, ""))[0];

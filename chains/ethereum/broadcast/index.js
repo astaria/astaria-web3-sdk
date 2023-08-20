@@ -8,8 +8,8 @@ const module = (function() {
             .then(function([ transaction, balance ]) {
                 return _get_gas_price(gasPrice)
                     .then(function(gasPrice) {
-                        var value = utils.value_to_bignum(transaction["value"] || "");
-                        var gas = utils.value_to_bignum(gasPrice).times(fee.times(3));
+                        const value = utils.value_to_bignum(transaction["value"] || "");
+                        const gas = utils.value_to_bignum(gasPrice).times(fee.times(3));
                         
                         if (balance.lt(value.plus(gas))) {
                             return Promise.reject({ "reason": "insufficient-funds" });
@@ -39,7 +39,7 @@ const module = (function() {
                     })
             })
             .then(function([ transaction, key ]) {
-                var signature = _sign_transaction(transaction, key);
+                const signature = _sign_transaction(transaction, key);
             
                 transaction["v"] = signature["v"];
                 transaction["r"] = signature["r"];
@@ -69,8 +69,8 @@ const module = (function() {
     }
 
     function _sign_transaction(transaction, key) {
-        var message = serializer.serialize_transaction(transaction, true);
-        var signature = auth.sign_message(message, key);
+        const message = serializer.serialize_transaction(transaction, true);
+        const signature = auth.sign_message(message, key);
 
         signature["v"] += transaction["chainId"] * 2 + 35; // EIP-155
 
@@ -97,11 +97,11 @@ const module = (function() {
     }
 
     function _sign_message(message, password, key) {
-        var prefix = "\x19Ethereum Signed Message:\n" + message.length;
-        var signature = auth.sign_message(prefix + message, key);
-        var r = signature["r"].replace(/^0x/, "");
-        var s = signature["s"].replace(/^0x/, "");
-        var v = ("0" + signature["v"].toString(16)).slice(-2);
+        const prefix = "\x19Ethereum Signed Message:\n" + message.length;
+        const signature = auth.sign_message(prefix + message, key);
+        const r = signature["r"].replace(/^0x/, "");
+        const s = signature["s"].replace(/^0x/, "");
+        const v = ("0" + signature["v"].toString(16)).slice(-2);
 
         return "0x" + r + s + v;
     }
@@ -116,12 +116,12 @@ const module = (function() {
 
     return {
         create: function(network, api) {
-            var _key_offeror;
+            let _key_offeror;
 
             return {
                 transfer: function(from, to, value, gasPrice, key) {
                     return new Promise(function(resolve, reject) {
-                        var transaction = {
+                        const transaction = {
                             "from": from,
                             "to": to,
                             "value": value = utils.value_to_hex(value)
@@ -142,7 +142,7 @@ const module = (function() {
         
                 call: function(from, to, data, value, gasPrice, key) {
                     return new Promise(function(resolve, reject) {
-                        var transaction = {
+                        const transaction = {
                             "from": from,
                             "to": to,
                             "data": data,
@@ -164,7 +164,7 @@ const module = (function() {
         
                 create: function(from, to, data, value, gasPrice, key) {
                     return new Promise(function(resolve, reject) {
-                        var transaction = {
+                        const transaction = {
                             "from": from,
                             "to": to,
                             "data": data,
@@ -186,7 +186,7 @@ const module = (function() {
         
                 send: function(transaction, gasPrice, key) {
                     return new Promise(function(resolve, reject) {
-                        var { from, to, data, value } = transaction;
+                        const { from, to, data, value } = transaction;
         
                         api.estimate_gas(from, to, data, value)
                             .then(function(fee) {

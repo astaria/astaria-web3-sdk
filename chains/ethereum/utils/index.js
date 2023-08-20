@@ -55,13 +55,13 @@ const module = (function() {
     }
 
     function _encode_checksum_address(address, chain_id) {
-        var stripAddress = _strip_address_prefix(address).toLowerCase();
-        var prefix = chain_id ? chain_id.toString() + "0x" : "";
-        var hash = crypto.keccak256.digest(crypto.string_to_bits(prefix + stripAddress));
-        var hexHash = crypto.hex_from_bits(hash);
-        var checksumAddress = "0x";
+        const stripAddress = _strip_address_prefix(address).toLowerCase();
+        const prefix = chain_id ? chain_id.toString() + "0x" : "";
+        const hash = crypto.keccak256.digest(crypto.string_to_bits(prefix + stripAddress));
+        const hexHash = crypto.hex_from_bits(hash);
+        let checksumAddress = "0x";
 
-        for (var i = 0; i < stripAddress.length; ++i) {
+        for (let i = 0; i < stripAddress.length; ++i) {
             checksumAddress += parseInt(hexHash[i], 16) >= 8 ? stripAddress[i].toUpperCase() 
                                                              : stripAddress[i];
         }
@@ -83,14 +83,14 @@ const module = (function() {
         },
 
         value_to_wei: function(value, unit) {
-            var number = _value_to_bignum(value);
-            var value_of_unit = _get_value_of_unit(unit);
+            const number = _value_to_bignum(value);
+            const value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
         },
 
         wei_to_number: function(wei, unit, decimals) {
-            var value_of_unit = _get_value_of_unit(unit);
+            const value_of_unit = _get_value_of_unit(unit);
 
             if (decimals && decimals < 18) {
                 wei = wei.times(_get_value_of_decimals(decimals));

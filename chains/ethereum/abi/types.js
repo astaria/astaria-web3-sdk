@@ -24,13 +24,13 @@ const module = (function() {
     return {
         "uint256": {
             encode: function(value) {
-                var hex = _value_to_hex(value);
+                const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
             decode: function(value) {
-                var hex = value.substring(0, 64).replace(/^0+/, "");
+                const hex = value.substring(0, 64).replace(/^0+/, "");
 
                 return  [ new BigNumber(hex, 16), 64 ];
             },
@@ -42,13 +42,13 @@ const module = (function() {
 
         "uint32": {
             encode: function(value) {
-                var hex = _value_to_hex(value);
+                const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
             decode: function(value) {
-                var hex = value.substring(0, 64).replace(/^0+/, "");
+                const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ new BigNumber(hex, 16), 64 ];
             },
@@ -60,13 +60,13 @@ const module = (function() {
 
         "uint8": {
             encode: function(value) {
-                var hex = _value_to_hex(value);
+                const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
             decode: function(value) {
-                var hex = value.substring(0, 64).replace(/^0+/, "");
+                const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ parseInt(hex, 16), 64 ];
             },
@@ -78,13 +78,13 @@ const module = (function() {
 
         "address": {
             encode: function(value) {
-                var hex = _value_to_hex(value);
+                const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
             decode: function(value) {
-                var address = "0x" + value.substring(24, 64);
+                const address = "0x" + value.substring(24, 64);
                 
                 return [ address, 64 ];
             },
@@ -96,13 +96,13 @@ const module = (function() {
 
         "bool": {
             encode: function(value) {
-                var hex = value ? "1" : "0";
+                const hex = value ? "1" : "0";
 
                 return _prepend_padding(hex, 64);
             },
 
             decode: function(value) {
-                var bool = parseInt(value.substring(63)) ? true : false;
+                const bool = parseInt(value.substring(63)) ? true : false;
 
                 return [ bool, 64 ];
             },
@@ -118,11 +118,11 @@ const module = (function() {
             },
 
             decode: function(value) {
-                var length = parseInt(value.substring(0, 64).replace(/^0+/, ""), 16);
-                var bytes = new Uint8Array(length);
+                const length = parseInt(value.substring(0, 64).replace(/^0+/, ""), 16);
+                const bytes = new Uint8Array(length);
 
-                for (var i = 0; i < length; ++i) {
-                    var hex = value.substring(64 + i * 2, 64 + (i + 1) * 2);
+                for (let i = 0; i < length; ++i) {
+                    const hex = value.substring(64 + i * 2, 64 + (i + 1) * 2);
 
                     bytes[i] = parseInt(hex, 16);
                 }
