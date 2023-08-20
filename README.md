@@ -1,5 +1,9 @@
 # astaria-web3-sdk
 
+## Prerequisite
+You should install the following modules before using Astaria Web3 Wallet module:
+* https://github.com/astaria/astaria-web3-catalog
+
 ## Installation
 In catalogs directory of your jamkit app, run the following command:
 ```
