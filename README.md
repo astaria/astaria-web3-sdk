@@ -1,7 +1,7 @@
 # astaria-web3-sdk
 
 ## Prerequisite
-You should install the following modules before using Astaria Web3 Wallet module:
+You should install the following modules before using astaria-web3-sdk module:
 * https://github.com/astaria/astaria-web3-catalog
 
 ## Installation
