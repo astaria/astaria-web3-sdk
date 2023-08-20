@@ -7,7 +7,7 @@
 ### 2. Transactions
 
 ```
-const Ethereum = require("chains/ethereum");
+const Ethereum = require("astaria-web3-sdk/chains/ethereum");
 const network = Ethereum.get_network_by_name("Mainnet");
 const ethereum = Ethereum.create(network);
 
