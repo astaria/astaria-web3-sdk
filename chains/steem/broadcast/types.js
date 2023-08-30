@@ -6,7 +6,7 @@ const module = (() => {
     return {
         "string": {
             pack: (buffer, value) => {
-                var length = utfx.calculateUTF16asUTF8(serializer.string_source(value))[1];
+                const length = utfx.calculateUTF16asUTF8(serializer.string_source(value))[1];
                 serializer.pack_buffer_varint32(buffer, length);
     
                 utfx.encodeUTF16toUTF8(serializer.string_source(value), (c) => {
@@ -100,12 +100,12 @@ const module = (() => {
     
         "asset": {
             pack: (buffer, value) => {
-                var tokens = value.split(" ");
-                var amount = parseLong(tokens[0].replace(".", "")); // * 1000
-                var dot = tokens[0].indexOf("."); // 0.000
-                var precision = (dot === -1) ? 0: tokens[0].length - dot - 1;
-                var symbol = tokens[1];
-                var amount_high, amount_low;
+                const tokens = value.split(" ");
+                const amount = parseLong(tokens[0].replace(".", "")); // * 1000
+                const dot = tokens[0].indexOf("."); // 0.000
+                const precision = (dot === -1) ? 0: tokens[0].length - dot - 1;
+                const symbol = tokens[1];
+                let amount_high, amount_low;
     
                 amount_low  = amount[1] - amount[0];
                 amount_high = amount[0] - ((amount_low < 0) ? 1: 0);
@@ -114,7 +114,7 @@ const module = (() => {
                 serializer.pack_buffer(buffer, "B", [ precision ]);
                 serializer.pack_buffer(buffer, symbol.length + "s", [ symbol ]);
     
-                for (var i = 0; i < 7 - symbol.length; i++) {
+                for (let i = 0; i < 7 - symbol.length; i++) {
                     serializer.pack_buffer(buffer, "B", [ 0 ]);
                 }
             },

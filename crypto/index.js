@@ -25,7 +25,7 @@ const module = (() => {
         global["__sha3_defined__"] = true;
     }
 
-    var _encrypt_params = {
+    const _encrypt_params = {
         "iv": "tjp81jkAzUpW1bI9gLDDpg==", // iv Base64 encoded
         "v": 1,                           // version
         "iter": 1000,                     // iteration count
@@ -36,7 +36,7 @@ const module = (() => {
         "salt": "lx06UoJDNys=",           // key derivation salt
     }
     
-    var _hash = {
+    const _hash = {
         "sha256": sjcl.hash.sha256,
         "sha512": sjcl.hash.sha512,
         "ripemd160": sjcl.hash.ripemd160

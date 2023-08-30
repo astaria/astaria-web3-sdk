@@ -61,10 +61,10 @@ const module = (() => {
     }
     
     function _build_child_private_key(hdkey, hash) {
-        var IL = crypto.bits_slice(hash, 0, 256);
-        var kpar = crypto.number_from_bits(hdkey.priv);
-        var modulus = _modulus_for_child_key();
-        var sum = crypto.number_from_bits(IL).add(kpar);
+        const IL = crypto.bits_slice(hash, 0, 256);
+        const kpar = crypto.number_from_bits(hdkey.priv);
+        const modulus = _modulus_for_child_key();
+        const sum = crypto.number_from_bits(IL).add(kpar);
     
         if (sum.greaterEquals(modulus)) {
             sum = sum.sub(modulus);
@@ -74,8 +74,8 @@ const module = (() => {
     }
     
     function _build_child_public_key(hdkey, hash) {
-        var IL = crypto.bits_slice(hash, 0, 256);
-        var Kpar = crypto.number_from_bits(hdkey.pub);
+        const IL = crypto.bits_slice(hash, 0, 256);
+        const Kpar = crypto.number_from_bits(hdkey.pub);
 
 
     }

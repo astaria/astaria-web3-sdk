@@ -4,7 +4,7 @@ const module = (() => {
 
     return {
         serialize_transaction: (transaction) => {
-            var buffer = [];
+            const buffer = [];
             
             this.pack_buffer(buffer, "<H", [ transaction["ref_block_num"] ]);
             this.pack_buffer(buffer, "<I", [ transaction["ref_block_prefix"] ]);
@@ -12,13 +12,13 @@ const module = (() => {
         
             this.pack_buffer(buffer, "B", [ transaction["operations"].length ]);
             transaction["operations"].forEach((operation) => {
-                var params = operation[1];
+                const params = operation[1];
         
                 broadcast.find_operation(operation[0], (index, operation) => {
                     this.pack_buffer(buffer, "B", [ index ]);
         
                     operation["params"].forEach((param) => {
-                        var serializer = params[operation.operation][param];
+                        const serializer = params[operation.operation][param];
         
                         if (serializer instanceof Array) {
                             serializer[0].pack(buffer, params[param], serializer[1]);
@@ -55,7 +55,7 @@ const module = (() => {
         },
 
         string_source: (string) => {
-            var i = 0; 
+            let i = 0; 
         
             return () => {
                 return i < string.length ? string.charCodeAt(i++) : null;

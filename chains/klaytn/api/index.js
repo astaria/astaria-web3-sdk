@@ -4,8 +4,8 @@ const module = (() => {
     var _tx_number = 1;
 
     function _request_rpc(network, method, params) {
-        var request = _build_request(method, params);
-        var headers = _rpc_headers();
+        const request = _build_request(method, params);
+        const headers = _rpc_headers();
 
         return fetch(network.rpc_url, {
             method: "POST", 
@@ -25,7 +25,7 @@ const module = (() => {
     }
 
     function _build_request(method, params) {
-        var request = {};
+        const request = {};
     
         request["jsonrpc"] = "2.0";
         request["method"]  = method;
@@ -38,7 +38,7 @@ const module = (() => {
     }
     
     function _rpc_headers() {
-        var headers = {};
+        const headers = {};
     
         headers["Content-Type"] = "application/json-rpc";
     
@@ -50,8 +50,8 @@ const module = (() => {
             return {
                 get_balance: (account, block="latest") => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_getBalance";
-                        var params = [ account, block ];
+                        const method = "klay_getBalance";
+                        const params = [ account, block ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -69,8 +69,8 @@ const module = (() => {
                 
                 get_transaction_count: (account, block="latest") => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_getTransactionCount";
-                        var params = [ account, block ];
+                        const method = "klay_getTransactionCount";
+                        const params = [ account, block ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -88,8 +88,8 @@ const module = (() => {
         
                 get_transaction_receipt: (tx_hash) => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_getTransactionReceipt";
-                        var params = [ tx_hash ];
+                        const method = "klay_getTransactionReceipt";
+                        const params = [ tx_hash ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -107,8 +107,8 @@ const module = (() => {
         
                 get_logs: (filter) => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_getLogs";
-                        var params = [ filter ];
+                        const method = "klay_getLogs";
+                        const params = [ filter ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -126,8 +126,8 @@ const module = (() => {
         
                 get_gas_price: () => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_gasPrice";
-                        var params = [];
+                        const method = "klay_gasPrice";
+                        const params = [];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -145,8 +145,8 @@ const module = (() => {
         
                 estimate_gas: (from, to, data, value) => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_estimateGas";
-                        var params = [ { from: from, to: to, data: data, value: value } ];
+                        const method = "klay_estimateGas";
+                        const params = [ { from: from, to: to, data: data, value: value } ];
         
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -164,8 +164,8 @@ const module = (() => {
                 
                 call: (to, data, block="latest") => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_call";
-                        var params = [ { to: to, data: data }, block ];
+                        const method = "klay_call";
+                        const params = [ { to: to, data: data }, block ];
         
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -183,8 +183,8 @@ const module = (() => {
         
                 send_raw_transaction: (transaction) => {
                     return new Promise((resolve, reject) => {
-                        var method = "klay_sendRawTransaction";
-                        var params = [ transaction ];
+                        const method = "klay_sendRawTransaction";
+                        const params = [ transaction ];
         
                         _request_rpc(network, method, params)
                             .then((response) => {

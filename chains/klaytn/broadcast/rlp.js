@@ -8,7 +8,7 @@ const module = (() => {
     }
     
     function _encode_array(array) {
-        var data = [];
+        const data = [];
     
         array.forEach((item) => {
             data.push(_encode(item));
@@ -27,7 +27,7 @@ const module = (() => {
     
     function _encode_length(length, offset) {
         if (length > 55) {
-            var bl = _to_binary(length);
+            const bl = _to_binary(length);
     
             return String.fromCharCode(bl.length + offset + 55) + bl;
         }

@@ -32,7 +32,7 @@ const module = (() => {
                 // TODO
             }    
         } else {
-            for (var i = 0; i < value.length; ++i) {
+            for (let i = 0; i < value.length; ++i) {
                 string += types[type].encode(value[i]);
             }
         }

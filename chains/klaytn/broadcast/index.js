@@ -8,8 +8,8 @@ const module = (() => {
             .then(([ transaction, balance ]) => {
                 return _get_gas_price(gasPrice)
                     .then((gasPrice) => {
-                        var value = utils.value_to_bignum(transaction["value"] || "");
-                        var gas = utils.value_to_bignum(gasPrice).times(fee.times(3));
+                        const value = utils.value_to_bignum(transaction["value"] || "");
+                        const gas = utils.value_to_bignum(gasPrice).times(fee.times(3));
                         
                         if (balance.lt(value.plus(gas))) {
                             return Promise.reject({ "reason": "insufficient-funds" });
@@ -40,7 +40,7 @@ const module = (() => {
                     });
             })
             .then(([ transaction, key ]) => {
-                var signature = _sign_transaction(transaction, key);
+                const signature = _sign_transaction(transaction, key);
 
                 if (transaction["type"] && transaction["type"] !== "LEGACY") {
                     transaction["signatures"] = [
@@ -80,8 +80,8 @@ const module = (() => {
     }
 
     function _sign_transaction(transaction, key) {
-        var message = serializer.serialize_transaction(transaction, true);
-        var signature = auth.sign_message(message, key);
+        const message = serializer.serialize_transaction(transaction, true);
+        const signature = auth.sign_message(message, key);
 
         signature["v"] += transaction["chainId"] * 2 + 35; // EIP-155
 
@@ -108,11 +108,11 @@ const module = (() => {
     }
 
     function _sign_message(message, password, key) {
-        var prefix = "\x19Klaytn Signed Message:\n" + message.length;
-        var signature = auth.sign_message(prefix + message, key);
-        var r = signature["r"].replace(/^0x/, "");
-        var s = signature["s"].replace(/^0x/, "");
-        var v = ("0" + signature["v"].toString(16)).slice(-2);
+        const prefix = "\x19Klaytn Signed Message:\n" + message.length;
+        const signature = auth.sign_message(prefix + message, key);
+        const r = signature["r"].replace(/^0x/, "");
+        const s = signature["s"].replace(/^0x/, "");
+        const v = ("0" + signature["v"].toString(16)).slice(-2);
 
         return "0x" + r + s + v;
     }
@@ -132,7 +132,7 @@ const module = (() => {
             return {
                 transfer: (from, to, value, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var transaction = {
+                        const transaction = {
                             "type": "VALUE_TRANSFER",
                             "from": from,
                             "to": to,
@@ -154,7 +154,7 @@ const module = (() => {
         
                 call: (from, to, data, value, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var transaction = {
+                        const transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
                             "from": from,
                             "to": to,
@@ -177,7 +177,7 @@ const module = (() => {
         
                 create: (from, to, data, value, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var transaction = {
+                        const transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
                             "from": from,
                             "to": to,
@@ -200,7 +200,7 @@ const module = (() => {
         
                 send: (transaction, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var { from, to, data, value } = transaction;
+                        const { from, to, data, value } = transaction;
         
                         api.estimate_gas(from, to, data, value)
                             .then((fee) => {

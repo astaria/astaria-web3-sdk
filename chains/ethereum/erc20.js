@@ -6,7 +6,7 @@ const module = (() => {
             return {
                 name: (token) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("name()");
+                        const data = abi.encode("name()");
         
                         api.call(token, data)
                             .then((response) => {
@@ -23,7 +23,7 @@ const module = (() => {
         
                 symbol: (token) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("symbol()");
+                        const data = abi.encode("symbol()");
         
                         api.call(token, data)
                             .then((response) => {
@@ -40,7 +40,7 @@ const module = (() => {
         
                 decimals: (token) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("decimals()");
+                        const data = abi.encode("decimals()");
         
                         api.call(token, data)
                             .then((response) => {
@@ -57,7 +57,7 @@ const module = (() => {
         
                 total_supply: (token) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("totalSupply()");
+                        const data = abi.encode("totalSupply()");
         
                         api.call(token, data)
                             .then((response) => {
@@ -74,7 +74,7 @@ const module = (() => {
         
                 balance_of: (token, account) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("balanceOf(address)", [ account ]);
+                        const data = abi.encode("balanceOf(address)", [ account ]);
         
                         api.call(token, data)
                             .then((response) => {
@@ -91,7 +91,7 @@ const module = (() => {
         
                 transfer: (account, token, recipient, amount, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("transfer(address,uint256)", [ recipient, amount ]);
+                        const data = abi.encode("transfer(address,uint256)", [ recipient, amount ]);
                 
                         broadcast.call(account, token, data, 0, gasPrice, key)
                             .then((response) => {
@@ -105,7 +105,7 @@ const module = (() => {
         
                 approve: (account, token, spender, amount, gasPrice, key) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("approve(address,uint256)", [ spender, amount ]);
+                        const data = abi.encode("approve(address,uint256)", [ spender, amount ]);
                 
                         broadcast.call(account, token, data, 0, gasPrice, key)
                             .then((response) => {
@@ -119,7 +119,7 @@ const module = (() => {
         
                 allowance: (token, owner, spender) => {
                     return new Promise((resolve, reject) => {
-                        var data = abi.encode("allowance(address,address)", [ owner, spender ]);
+                        const data = abi.encode("allowance(address,address)", [ owner, spender ]);
         
                         api.call(token, data)
                             .then((response) => {

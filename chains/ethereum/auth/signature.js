@@ -4,7 +4,7 @@ const module = (() => {
     function _message_to_bits(message) {
         const bytes = [];
     
-        for (var i = 0; i < message.length; ++i) {
+        for (let i = 0; i < message.length; ++i) {
             bytes.push(message.charCodeAt(i));
         }
     

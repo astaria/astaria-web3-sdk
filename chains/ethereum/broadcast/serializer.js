@@ -22,12 +22,12 @@ const module = (() => {
     }
     
     function _hex_to_data(hex) {
-        var data = "";
+        let data = "";
     
         hex = ((hex.length % 2) == 1) ? "0" + hex : hex;
     
-        for (var i = 0; i < hex.length; i += 2) {
-            var char = parseInt(hex.charAt(i), 16) * 16 + parseInt(hex.charAt(i + 1), 16);
+        for (let i = 0; i < hex.length; i += 2) {
+            let char = parseInt(hex.charAt(i), 16) * 16 + parseInt(hex.charAt(i + 1), 16);
     
             data += String.fromCharCode(char);
         }
@@ -36,10 +36,10 @@ const module = (() => {
     }
 
     function _data_to_hex(tag, data) {
-        var hex = "";
+        let hex = "";
     
-        for (var i = 0; i < data.length; ++i) {
-            var number = Number(data.charCodeAt(i)).toString(16);
+        for (let i = 0; i < data.length; ++i) {
+            let number = Number(data.charCodeAt(i)).toString(16);
     
             hex += (number.length == 1) ? "0" + number : number;
         }

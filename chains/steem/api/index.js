@@ -2,28 +2,28 @@ const module = (() => {
     var _tx_number = 1;
 
     function _request_rpc(network, method, params) {
-        var request = _build_request(method, params);
-            var headers = _rpc_headers();
+        const request = _build_request(method, params);
+        const headers = _rpc_headers();
     
-            fetch(network.rpc_url, {
-                method: "POST", 
-                headers: headers, 
-                body: JSON.stringify(request)
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        return Promise.reject({ 
-                            status: response.status,
-                            message: response.statusText
-                        });
-                    }
-                });
+        fetch(network.rpc_url, {
+            method: "POST", 
+            headers: headers, 
+            body: JSON.stringify(request)
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return Promise.reject({ 
+                        status: response.status,
+                        message: response.statusText
+                    });
+                }
+            });
     }
     
     function _build_request(method, params) {
-        var request = {};
+        const request = {};
     
         request["jsonrpc"] = "2.0";
         request["method"]  = method;
@@ -36,7 +36,7 @@ const module = (() => {
     }
     
     function _rpc_headers() {
-        var headers = {};
+        const headers = {};
     
         headers["Content-Type"] = "application/json-rpc";
     
@@ -48,8 +48,8 @@ const module = (() => {
             return {
                 get_dynamic_global_properties: () => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_dynamic_global_properties";
-                        var params = [];
+                        const method = "get_dynamic_global_properties";
+                        const params = [];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -63,8 +63,8 @@ const module = (() => {
                 
                 get_discussions_by_created: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_created";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_created";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -78,8 +78,8 @@ const module = (() => {
                 
                 get_discussions_by_trending: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_trending";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_trending";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -93,8 +93,8 @@ const module = (() => {
                 
                 get_discussions_by_hot: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_hot";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_hot";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -108,8 +108,8 @@ const module = (() => {
                 
                 get_discussions_by_feed: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_feed";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_feed";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -123,8 +123,8 @@ const module = (() => {
                 
                 get_discussions_by_blog: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_blog";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_blog";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -138,8 +138,8 @@ const module = (() => {
                 
                 get_discussions_by_comments: (tag, start_author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_comments";
-                        var params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
+                        const method = "get_discussions_by_comments";
+                        const params = [ { tag:tag, start_author:start_author, start_permlink:start_permlink, limit:limit } ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -153,8 +153,8 @@ const module = (() => {
                 
                 get_discussions_by_author_before_date: (author, start_permlink, before_date, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_discussions_by_author_before_date";
-                        var params = [ author, start_permlink, before_date.toISOString().substring(0, 19), limit ];
+                        const method = "get_discussions_by_author_before_date";
+                        const params = [ author, start_permlink, before_date.toISOString().substring(0, 19), limit ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -168,8 +168,8 @@ const module = (() => {
                 
                 get_replies_by_last_update: (author, start_permlink, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_replies_by_last_update";
-                        var params = [ author, start_permlink, limit ];
+                        const method = "get_replies_by_last_update";
+                        const params = [ author, start_permlink, limit ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -183,8 +183,8 @@ const module = (() => {
                 
                 get_content: (author, permlink) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_content";
-                        var params = [ author, permlink ];
+                        const method = "get_content";
+                        const params = [ author, permlink ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -198,8 +198,8 @@ const module = (() => {
                 
                 get_content_replies: (author, permlink) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_content_replies";
-                        var params = [ author, permlink ];
+                        const method = "get_content_replies";
+                        const params = [ author, permlink ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -213,8 +213,8 @@ const module = (() => {
                 
                 get_active_votes: (author, permlink) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_active_votes";
-                        var params = [ author, permlink ];
+                        const method = "get_active_votes";
+                        const params = [ author, permlink ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -228,8 +228,8 @@ const module = (() => {
                 
                 get_accounts: (names) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_accounts";
-                        var params = [ names ];
+                        const method = "get_accounts";
+                        const params = [ names ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -243,8 +243,8 @@ const module = (() => {
                 
                 get_account_history: (account, from, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_account_history";
-                        var params = [ account, from, limit ];
+                        const method = "get_account_history";
+                        const params = [ account, from, limit ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -258,8 +258,8 @@ const module = (() => {
                 
                 get_followers: (following, start_follower, follow_type, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "call";
-                        var params = [ "follow_api", "get_followers", [ following, start_follower, follow_type, limit ] ];
+                        const method = "call";
+                        const params = [ "follow_api", "get_followers", [ following, start_follower, follow_type, limit ] ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -273,8 +273,8 @@ const module = (() => {
                 
                 get_following: (follower, start_following, follow_type, limit) => {
                     return new Promise((resolve, reject) => {
-                        var method = "call";
-                        var params = [ "follow_api", "get_following", [ follower, start_following, follow_type, limit ] ];
+                        const method = "call";
+                        const params = [ "follow_api", "get_following", [ follower, start_following, follow_type, limit ] ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -288,8 +288,8 @@ const module = (() => {
                 
                 get_follow_count: (account) => {
                     return new Promise((resolve, reject) => {
-                        var method = "call";
-                        var params = [ "follow_api", "get_follow_count", [ account ] ];
+                        const method = "call";
+                        const params = [ "follow_api", "get_follow_count", [ account ] ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -303,8 +303,8 @@ const module = (() => {
                 
                 get_state: (path) => {
                     return new Promise((resolve, reject) => {
-                        var method = "call";
-                        var params = [ "database_api", "get_state", [ path ] ];
+                        const method = "call";
+                        const params = [ "database_api", "get_state", [ path ] ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -318,8 +318,8 @@ const module = (() => {
                 
                 get_block: (block) => {
                     return new Promise((resolve, reject) => {
-                        var method = "get_block";
-                        var params = [ block ];
+                        const method = "get_block";
+                        const params = [ block ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -337,8 +337,8 @@ const module = (() => {
                 
                 broadcast_transaction_synchronous: (transaction) => {
                     return new Promise((resolve, reject) => {
-                        var method = "broadcast_transaction_synchronous";
-                        var params = [ transaction ];
+                        const method = "broadcast_transaction_synchronous";
+                        const params = [ transaction ];
                 
                         _request_rpc(network, method, params)
                             .then((response) => {

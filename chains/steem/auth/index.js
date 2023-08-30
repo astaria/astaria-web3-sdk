@@ -3,7 +3,7 @@ const module = (() => {
           signature = include("./signature.js");
 
     function _build_address(key) {
-        var version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
+        const version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;
     
         return crypto.base58.check.encode(
             version, key.get().x, _checksum_for_key
@@ -11,7 +11,7 @@ const module = (() => {
     }
     
     function _build_private_key(key) {
-        var version = 0x80; // version for bitcoin mainnet
+        const version = 0x80; // version for bitcoin mainnet
     
         return crypto.base58.check.encode(
             version, key.get()
@@ -19,8 +19,8 @@ const module = (() => {
     }
     
     function _strip_private_key(key) {
-        var wif = crypto.base58.check.decode(key);
-        var curve = crypto.ecdsa.curve_from_name("k256");
+        const wif = crypto.base58.check.decode(key);
+        const curve = crypto.ecdsa.curve_from_name("k256");
     
         return crypto.ecdsa.secret_key(
             curve, crypto.bits_slice(wif, 8)
@@ -35,18 +35,18 @@ const module = (() => {
     
     return {
         generate_keys: (name, password, roles) => {
-            var keys = {};
+            const keys = {};
             
             roles.forEach((role) => {
-                var seed = name + role + password;
-                var brain_key = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
-                var secret = crypto.number_from_bits(
+                const seed = name + role + password;
+                const brain_key = seed.trim().split(/[\t\n\v\f\r ]+/).join(' ');
+                const secret = crypto.number_from_bits(
                     crypto.sha256.digest(crypto.string_to_bits(brain_key))
                 );
-                var curve = crypto.ecdsa.curve_from_name("k256");
-                var pair = crypto.ecdsa.generate_keys(curve, secret);
-                var public_key  = _build_public_key (pair.pub);
-                var private_key = _build_private_key(pair.sec);
+                const curve = crypto.ecdsa.curve_from_name("k256");
+                const pair = crypto.ecdsa.generate_keys(curve, secret);
+                const public_key  = _build_public_key (pair.pub);
+                const private_key = _build_private_key(pair.sec);
         
                 keys[role] = { pub: public_key, priv: private_key };
             });
@@ -55,16 +55,16 @@ const module = (() => {
         },
         
         generate_address: (prefix, key) => {
-            var private_key = _strip_private_key(key);
-            var curve = crypto.ecdsa.curve_from_name("k256");
-            var secret = crypto.number_from_bits(private_key.get());
-            var pair = crypto.ecdsa.generate_keys(curve, secret);
+            const private_key = _strip_private_key(key);
+            const curve = crypto.ecdsa.curve_from_name("k256");
+            const secret = crypto.number_from_bits(private_key.get());
+            const pair = crypto.ecdsa.generate_keys(curve, secret);
         
             return prefix + _build_address(pair.pub);
         },
         
         decode_address: (prefix, address) => {
-            var encoded_key = address.replace(new RegExp("^" +  prefix), "");
+            const encoded_key = address.replace(new RegExp("^" +  prefix), "");
         
             return crypto.bytes_from_bits(
                 crypto.base58.check.decode(
@@ -74,12 +74,12 @@ const module = (() => {
         },
         
         sign_message: (chain_id, message, keys) => {
-            var signatures = [];
+            const signatures = [];
         
             message = decode("hex", chain_id).concat(message);
         
-            for (var key in keys) {
-                var private_key = _strip_private_key(keys[key]);
+            for (let key in keys) {
+                const private_key = _strip_private_key(keys[key]);
         
                 signatures.push(
                     crypto.hex_from_bits(

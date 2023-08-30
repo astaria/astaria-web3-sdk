@@ -145,8 +145,8 @@ const module = (() => {
                 
                 call: (to, data, block="latest") => {
                     return new Promise((resolve, reject) => {
-                        var method = "eth_call";
-                        var params = [ { to: to, data: data }, block ];
+                        const method = "eth_call";
+                        const params = [ { to: to, data: data }, block ];
         
                         _request_rpc(network, method, params)
                             .then((response) => {
