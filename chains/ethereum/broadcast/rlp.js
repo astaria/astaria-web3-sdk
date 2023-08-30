@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     function _encode(data) {
         if (data instanceof Array) {
             return _encode_array(data);
@@ -10,7 +10,7 @@ const module = (function() {
     function _encode_array(array) {
         var data = [];
     
-        array.forEach(function(item) {
+        array.forEach((item) => {
             data.push(_encode(item));
         });
     
@@ -44,7 +44,7 @@ const module = (function() {
     }
 
     return {
-        encode: function(data) {
+        encode: (data) => {
             return _encode(data);
         },
     }

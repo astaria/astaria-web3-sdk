@@ -1,4 +1,4 @@
-const module = (function () {
+const module = (() => {
     const crypto = __ETHEREUM__.crypto,
           types = include("./types.js");
 
@@ -12,7 +12,7 @@ const module = (function () {
     function _encode_tuple(tuple, values) {
         let head = "", tail = "";
 
-        tuple.forEach(function(type, i) {
+        tuple.forEach((type, i) => {
             if (type.endsWith("[]")) {
                 head += types["uint256"].encode(32 * tuple.length + tail.length / 2);
                 tail += _encode_array(type.replace(/\[\]$/, ""), values[i]);
@@ -44,7 +44,7 @@ const module = (function () {
         const values = [];
         let offset = 0, end_offset = 0;
 
-        tuple.forEach(function(type) {
+        tuple.forEach((type) => {
             if (type.endsWith("[]")) {
                 const tail_offset = types["uint256"].decode(string.substring(offset, offset + 64))[0] * 2;
                 const [ value, next_offset ] = _decode_array(type.replace(/\[\]$/, ""), string.substring(tail_offset));
@@ -118,7 +118,7 @@ const module = (function () {
     }
 
     return {
-        encode: function(definition, values) {
+        encode: (definition, values) => {
             const m = definition.match(/(.*)\((.*)\)/);
 
             if (m) {
@@ -129,7 +129,7 @@ const module = (function () {
             }
         },
 
-        decode: function(definition, string) {
+        decode: (definition, string) => {
             const m = definition.match(/(.*)\((.*)\)/);
 
             if (m && m[2]) {

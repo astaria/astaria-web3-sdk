@@ -1,13 +1,13 @@
-const module = (function() {
+const module = (() => {
     const auth = __KLAYTN__.auth,
           utils = __KLAYTN__.utils,
           serializer = include("./serializer.js");
 
     function _send_transaction(api, from, transaction, createOnly, fee, gasPrice, key_or_offerer) {
         return _prepare_transaction(from, transaction)
-            .then(function([ transaction, balance ]) {
+            .then(([ transaction, balance ]) => {
                 return _get_gas_price(gasPrice)
-                    .then(function(gasPrice) {
+                    .then((gasPrice) => {
                         var value = utils.value_to_bignum(transaction["value"] || "");
                         var gas = utils.value_to_bignum(gasPrice).times(fee.times(3));
                         
@@ -17,7 +17,7 @@ const module = (function() {
 
                         return gasPrice;
                     })
-                    .then(function(gasPrice) {
+                    .then((gasPrice) => {
                         if (key_or_offerer instanceof Function) {
                             return key_or_offerer({
                                 type: "transaction",
@@ -29,7 +29,7 @@ const module = (function() {
                         
                         return Promise.resolve([ key_or_offerer, gasPrice ]);
                     })
-                    .then(function([ key, gasPrice ]) {
+                    .then(([ key, gasPrice ]) => {
                         console.log("gasPrice: " + gasPrice)
                         transaction = Object.assign(transaction, {
                             "gasPrice": gasPrice,
@@ -39,7 +39,7 @@ const module = (function() {
                         return Promise.resolve([ transaction, key ]);
                     });
             })
-            .then(function([ transaction, key ]) {
+            .then(([ transaction, key ]) => {
                 var signature = _sign_transaction(transaction, key);
 
                 if (transaction["type"] && transaction["type"] !== "LEGACY") {
@@ -71,7 +71,7 @@ const module = (function() {
             api.get_transaction_count(from),
             api.get_balance(from)
         ])
-            .then(function([ count, balance ]) {
+            .then(([ count, balance ]) => {
                 transaction["chainId"] = api.get_chain_id();
                 transaction["nonce"]   = utils.value_to_bignum(count);
 
@@ -90,7 +90,7 @@ const module = (function() {
 
     function _request_sign(message, account, password, key) {
         return Promise.resolve()
-            .then(function() {
+            .then(() => {
                 if (key_or_offerer instanceof Function) {
                     return key_or_offerer({
                         type: "sign",
@@ -102,7 +102,7 @@ const module = (function() {
                 
                 return key_or_offerer;
             })
-            .then(function(key) {
+            .then((key) => {
                 return _sign_message(message, password, key);
             });
     }
@@ -126,12 +126,12 @@ const module = (function() {
     }
 
     return {
-        create: function(api) {
+        create: (api) => {
             var _key_offeror;
 
             return {
-                transfer: function(from, to, value, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                transfer: (from, to, value, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var transaction = {
                             "type": "VALUE_TRANSFER",
                             "from": from,
@@ -140,20 +140,20 @@ const module = (function() {
                         };
         
                         api.estimate_gas(from, to, "", value)
-                            .then(function(fee) {
+                            .then((fee) => {
                                 return _send_transaction(from, transaction, false, fee, gasPrice, key || _key_offeror)
                             })
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                call: function(from, to, data, value, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                call: (from, to, data, value, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
                             "from": from,
@@ -163,20 +163,20 @@ const module = (function() {
                         };
         
                         api.estimate_gas(from, to, data, value)
-                            .then(function(fee) {
+                            .then((fee) => {
                                 return _send_transaction(api, from, transaction, false, fee, gasPrice, key || _key_offeror)
                             })
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                create: function(from, to, data, value, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                create: (from, to, data, value, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
                             "from": from,
@@ -186,48 +186,48 @@ const module = (function() {
                         };
         
                         api.estimate_gas(from, to, data, value)
-                            .then(function(fee) {
+                            .then((fee) => {
                                 return _send_transaction(from, transaction, true, fee, gasPrice, key || _key_offeror)
                             })
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                send: function(transaction, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                send: (transaction, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var { from, to, data, value } = transaction;
         
                         api.estimate_gas(from, to, data, value)
-                            .then(function(fee) {
+                            .then((fee) => {
                                 return _send_transaction(from, transaction, false, fee, gasPrice, key || _key_offeror)
                             })
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                sign: function(message, account, password, key) {
-                    return new Promise(function(resolve, reject) {
+                sign: (message, account, password, key) => {
+                    return new Promise((resolve, reject) => {
                         _request_sign(message, account, password, key || _key_offeror)
-                            .then(function(signature) {
+                            .then((signature) => {
                                 resolve(signature);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                set_key_offeror: function(offeror) {
+                set_key_offeror: (offeror) => {
                     _key_offeror = offeror;
                 },
             }

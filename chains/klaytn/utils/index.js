@@ -1,6 +1,6 @@
 include("./bignumber.js");
 
-const module = (function() {
+const module = (() => {
     const crypto = __KLAYTN__.crypto;
 
     const _KLAY_ADDRESS = '0x0000000000000000000000000000000000000000'; // Cypress and Baobab
@@ -59,22 +59,22 @@ const module = (function() {
     }
 
     return {
-        value_to_atom: function(value) {
+        value_to_atom: (value) => {
             return this.value_to_peb(value, "KLAY");
         },
 
-        atom_to_number: function(atom, decimals) {
+        atom_to_number: (atom, decimals) => {
             return this.peb_to_number(atom, "KLAY", decimals);
         },
 
-        value_to_peb: function(value, unit) {
+        value_to_peb: (value, unit) => {
             var number = _value_to_bignum(value);
             var value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
         },
 
-        peb_to_number: function(peb, unit, decimals) {
+        peb_to_number: (peb, unit, decimals) => {
             var value_of_unit = _get_value_of_unit(unit);
 
             if (decimals && decimals < 18) {
@@ -84,15 +84,15 @@ const module = (function() {
             return peb.div(value_of_unit).toNumber();
         },
 
-        value_to_bignum: function(value) {
+        value_to_bignum: (value) => {
             return _value_to_bignum(value);
         },
 
-        value_to_hex: function(value) {
+        value_to_hex: (value) => {
             return "0x" + _value_to_bignum(value).toString(16);
         },
 
-        fold_decimals: function(peb, decimals) {
+        fold_decimals: (peb, decimals) => {
             if (decimals < 18) {
                 return peb.idiv(_get_value_of_decimals(decimals));
             }
@@ -100,7 +100,7 @@ const module = (function() {
             return peb;
         },
 
-        unfold_decimals: function(peb, decimals) {
+        unfold_decimals: (peb, decimals) => {
             if (decimals < 18) {
                 return peb.times(_get_value_of_decimals(decimals));
             }
@@ -108,32 +108,28 @@ const module = (function() {
             return peb;
         },
                 
-        encode_checksum_address: function(address, chain_id) {
+        encode_checksum_address: (address, chain_id) => {
             return _encode_checksum_address(address, chain_id);
         },
 
-        verify_checksum_address: function(address, chain_id) {
+        verify_checksum_address: (address, chain_id) => {
             return address === _encode_checksum_address(address, chain_id);
         },
 
-        get_native_address: function() {
+        get_native_address: () => {
             return _KLAY_ADDRESS;
         },
 
-        is_native_address: function(address) {
+        is_native_address: (address) => {
             return address === _KLAY_ADDRESS;
         },
 
-        is_same_address: function(address1, address2) {
+        is_same_address: (address1, address2) => {
             return address1.toLowerCase() === address2.toLowerCase();
         },
         
-        is_valid_address: function(address) {
-            if (address.match(/^(0x)?[0-9a-fA-F]{40}$/)) {
-                return true;
-            }
-        
-            return false;
+        is_valid_address: (address) => {
+            return address.match(/^(0x)?[0-9a-fA-F]{40}$/) ? true : false;
         }
     }
 })();

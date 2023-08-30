@@ -1,134 +1,134 @@
-const module = (function() {
+const module = (() => {
     const abi = __ETHEREUM__.abi;
 
     return {
-        create: function(api, broadcast) {
+        create: (api, broadcast) => {
             return {
-                name: function(token) {
-                    return new Promise(function(resolve, reject) {
+                name: (token) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("name()");
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                 return abi.decode("(string)", response);
                             })
-                            .then(function([ name ]) {
+                            .then(([ name ]) => {
                                 resolve(name);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                symbol: function(token) {
-                    return new Promise(function(resolve, reject) {
+                symbol: (token) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("symbol()");
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                return abi.decode("(string)", response);
                             })
-                            .then(function([ symbol ]) {
+                            .then(([ symbol ]) => {
                                 resolve(symbol);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                decimals: function(token) {
-                    return new Promise(function(resolve, reject) {
+                decimals: (token) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("decimals()");
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                 return abi.decode("(uint8)", response);
                             })
-                            .then(function([ decimals ]) {
+                            .then(([ decimals ]) => {
                                 resolve(decimals);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                total_supply: function(token) {
-                    return new Promise(function(resolve, reject) {
+                total_supply: (token) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("totalSupply()");
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                 return abi.decode("(uint256)", response);
                             })
-                            .then(function([ supply ]) {
+                            .then(([ supply ]) => {
                                 resolve(supply);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                balance_of: function(token, account) {
-                    return new Promise(function(resolve, reject) {
+                balance_of: (token, account) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("balanceOf(address)", [ account ]);
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                 return abi.decode("(uint256)", response);
                             })
-                            .then(function([ balance ]) {
+                            .then(([ balance ]) => {
                                 resolve(balance);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                transfer: function(account, token, recipient, amount, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                transfer: (account, token, recipient, amount, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("transfer(address,uint256)", [ recipient, amount ]);
                 
                         broadcast.call(account, token, data, 0, gasPrice, key)
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                approve: function(account, token, spender, amount, gasPrice, key) {
-                    return new Promise(function(resolve, reject) {
+                approve: (account, token, spender, amount, gasPrice, key) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("approve(address,uint256)", [ spender, amount ]);
                 
                         broadcast.call(account, token, data, 0, gasPrice, key)
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                allowance: function(token, owner, spender) {
-                    return new Promise(function(resolve, reject) {
+                allowance: (token, owner, spender) => {
+                    return new Promise((resolve, reject) => {
                         var data = abi.encode("allowance(address,address)", [ owner, spender ]);
         
                         api.call(token, data)
-                            .then(function(response) {
+                            .then((response) => {
                                 return abi.decode("(uint256)", response);
                             })
-                            .then(function([ allowance ]) {
+                            .then(([ allowance ]) => {
                                 resolve(allowance);
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });

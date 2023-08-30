@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const _padding_string = "0000000000000000000000000000000000000000000000000000000000000000";
 
     function _value_to_hex(value) {
@@ -23,101 +23,101 @@ const module = (function() {
 
     return {
         "uint256": {
-            encode: function(value) {
+            encode: (value) => {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
 
                 return  [ new BigNumber(hex, 16), 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return false;
             }
         },
 
         "uint32": {
-            encode: function(value) {
+            encode: (value) => {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ new BigNumber(hex, 16), 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return false;
             }
         },
 
         "uint8": {
-            encode: function(value) {
+            encode: (value) => {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ parseInt(hex, 16), 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return false;
             }
         },
 
         "address": {
-            encode: function(value) {
+            encode: (value) => {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const address = "0x" + value.substring(24, 64);
                 
                 return [ address, 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return false;
             }
         },
 
         "bool": {
-            encode: function(value) {
+            encode: (value) => {
                 const hex = value ? "1" : "0";
 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const bool = parseInt(value.substring(63)) ? true : false;
 
                 return [ bool, 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return false;
             }
         },
 
         "string": {
-            encode: function(value) {
+            encode: (value) => {
 
             },
 
-            decode: function(value) {
+            decode: (value) => {
                 const length = parseInt(value.substring(0, 64).replace(/^0+/, ""), 16);
                 const bytes = new Uint8Array(length);
 
@@ -130,21 +130,21 @@ const module = (function() {
                 return [ encode("string", bytes), 64 + Math.ceil(length / 32) * 64 ];
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return true;
             }
         },
 
         "bytes32": {
-            encode: function(value) {
+            encode: (value) => {
 
             },
 
-            decode: function(value) {
+            decode: (value) => {
 
             },
 
-            is_dynamic: function() {
+            is_dynamic: () => {
                 return true;
             }
         },

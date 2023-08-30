@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const utils = __ETHEREUM__.utils;
 
     return {

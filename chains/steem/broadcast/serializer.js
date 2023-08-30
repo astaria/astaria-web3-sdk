@@ -1,9 +1,9 @@
-const module = (function() {
+const module = (() => {
     const broadcast = __STEEM__.broadcast, 
           struct = __STEEM__.struct;
 
     return {
-        serialize_transaction: function(transaction) {
+        serialize_transaction: (transaction) => {
             var buffer = [];
             
             this.pack_buffer(buffer, "<H", [ transaction["ref_block_num"] ]);
@@ -11,13 +11,13 @@ const module = (function() {
             this.pack_buffer(buffer, "<I", [ new Date(transaction["expiration"] + 'Z').getTime() / 1000 ]);
         
             this.pack_buffer(buffer, "B", [ transaction["operations"].length ]);
-            transaction["operations"].forEach(function(operation) {
+            transaction["operations"].forEach((operation) => {
                 var params = operation[1];
         
-                broadcast.find_operation(operation[0], function(index, operation) {
+                broadcast.find_operation(operation[0], (index, operation) => {
                     this.pack_buffer(buffer, "B", [ index ]);
         
-                    operation["params"].forEach(function(param) {
+                    operation["params"].forEach((param) => {
                         var serializer = params[operation.operation][param];
         
                         if (serializer instanceof Array) {
@@ -30,20 +30,20 @@ const module = (function() {
             });
         
             this.pack_buffer(buffer, "B", [ transaction["extensions"].length ]);
-            transaction["extensions"].forEach(function(extension) {
+            transaction["extensions"].forEach((extension) => {
                 // TBD
             });
         
             return buffer;
         },
         
-        pack_buffer: function(buffer, format, values) {
-            struct.pack(format, values).forEach(function(byte) {
+        pack_buffer: (buffer, format, values) => {
+            struct.pack(format, values).forEach((byte) => {
                 buffer.push(byte);
             });
         },
         
-        pack_buffer_varint32: function(buffer, value) {
+        pack_buffer_varint32: (buffer, value) => {
             value >>>= 0;
         
             while (value >= 0x80) {
@@ -54,10 +54,10 @@ const module = (function() {
             this.pack_buffer(buffer, "B", [ value ]);
         },
 
-        string_source: function(string) {
+        string_source: (string) => {
             var i = 0; 
         
-            return function() {
+            return () => {
                 return i < string.length ? string.charCodeAt(i++) : null;
             };
         },

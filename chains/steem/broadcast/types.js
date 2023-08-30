@@ -1,105 +1,105 @@
-const module = (function() {
+const module = (() => {
     const auth = __STEEM__.auth, 
           utfx = __STEEM__.utfx, 
           serializer = include("./serializer.js");
 
     return {
         "string": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 var length = utfx.calculateUTF16asUTF8(serializer.string_source(value))[1];
                 serializer.pack_buffer_varint32(buffer, length);
     
-                utfx.encodeUTF16toUTF8(serializer.string_source(value), function(c) {
+                utfx.encodeUTF16toUTF8(serializer.string_source(value), (c) => {
                     serializer.pack_buffer(buffer, "c", [ String.fromCharCode(c) ]);
                 });
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         }, 
     
         "uint16": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "<H", [ value ]);
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         }, 
     
         "int16": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "<h", [ value ]);
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "unit32": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "<I", [ value ]);
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "int32": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "<i", [ value ]);
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         }, 
     
         "unit64": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
     
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         }, 
     
         "int64": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
     
             },
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "bool": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "B", [ JSON.parse(value) ? 1: 0 ]);
             },
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "public_key": {
-            pack: function(buffer, value) {
-                auth.decode_address(value).forEach(function(byte) {
+            pack: (buffer, value) => {
+                auth.decode_address(value).forEach((byte) => {
                     serializer.pack_buffer(buffer, "B", [ byte ]);
                 });
             },
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "asset": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 var tokens = value.split(" ");
                 var amount = parseLong(tokens[0].replace(".", "")); // * 1000
                 var dot = tokens[0].indexOf("."); // 0.000
@@ -119,60 +119,60 @@ const module = (function() {
                 }
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "authority": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer(buffer, "<I", [ value["weight_threshold"] ]);
     
                 serializer.pack_buffer(buffer, "B", [ value["account_auths"].length ]);
-                value["account_auths"].forEach(function(auth) {
+                value["account_auths"].forEach((auth) => {
                     // TBD
                 });
     
                 serializer.pack_buffer(buffer, "B", [ value["key_auths"].length ]);
-                value["key_auths"].forEach(function(auth) {
-                    auth.decode_address(auth[0]).forEach(function(byte) {
+                value["key_auths"].forEach((auth) => {
+                    auth.decode_address(auth[0]).forEach((byte) => {
                         serializer.pack_buffer(buffer, "B", [ byte ]);
                     });
                     serializer.pack_buffer(buffer, "<H", [ auth[1] ]);
                 });
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "beneficiaries": {
-            pack: function(buffer, value) {
+            pack: (buffer, value) => {
                 serializer.pack_buffer_varint32(buffer, value[0]);
                 serializer.pack_buffer_varint32(buffer, value[1]["beneficiaries"].length);
     
-                value[1]["beneficiaries"].forEach(function(value) {
+                value[1]["beneficiaries"].forEach((value) => {
                     serializer.pack_buffer(buffer, "B", [ value["account"].length ]);
                     serializer.pack_buffer(buffer, value["account"].length + "s", [ value["account"] ]);
                     serializer.pack_buffer(buffer, "<H", [ value["weight"] ]);
                 });
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },
     
         "array": {
-            pack: function(buffer, value, serializer) {
+            pack: (buffer, value, serializer) => {
                 serializer.pack_buffer_varint32(buffer, value.length);
-                value.forEach(function(item) {
+                value.forEach((item) => {
                     serializer.pack(buffer, item);
                 });
             },
     
-            unpack: function(buffer) {
+            unpack: (buffer) => {
     
             }
         },

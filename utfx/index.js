@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     return {
         /**
          * Maximum valid code point.

@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const _ = require("chains/ethereum");
 
     global["__POLYGON__"] = Object.assign({}, __ETHEREUM__);
@@ -7,7 +7,7 @@ const module = (function() {
     global["__POLYGON__"].currency = include("./currency.js");
 
     return {
-        create: function(network=__POLYGON__.networks.Mainnet) {
+        create: (network=__POLYGON__.networks.Mainnet) => {
             const polygon = Object.assign({}, __POLYGON__);
 
             polygon.network   = network;
@@ -18,7 +18,7 @@ const module = (function() {
             return polygon;
         },
 
-        get_network_by_name(name) {
+        get_network_by_name: (name) => {
             return __POLYGON__.networks[name];
         }
     }

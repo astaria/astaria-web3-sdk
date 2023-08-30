@@ -1,6 +1,5 @@
-const module = (function() {
-    const utils = __ETHEREUM__.utils,
-          rlp = include("./rlp.js");
+const module = (() => {
+    const rlp = include("./rlp.js");
 
     function _value_to_data(value) {
         if (value instanceof BigNumber && !value.isZero()) {
@@ -49,7 +48,7 @@ const module = (function() {
     }
 
     return {
-        serialize_transaction: function(transaction, for_signature) {
+        serialize_transaction: (transaction, for_signature) => {
             if (for_signature) {
                 return rlp.encode([
                     _value_to_data(transaction["nonce"]),

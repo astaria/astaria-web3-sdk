@@ -1,6 +1,6 @@
 include("./bignumber.js");
 
-const module = (function() {
+const module = (() => {
     const crypto = __ETHEREUM__.crypto;
 
     const _ETH_ADDRESS = '0x0000000000000000000000000000000000000000'; // Mainnet and Testnet
@@ -74,22 +74,22 @@ const module = (function() {
     }
 
     return {
-        value_to_atom: function(value) {
+        value_to_atom: (value) => {
             return this.value_to_wei(value, "ether");
         },
 
-        atom_to_number: function(atom, decimals) {
+        atom_to_number: (atom, decimals) => {
             return this.wei_to_number(atom, "ether", decimals);
         },
 
-        value_to_wei: function(value, unit) {
+        value_to_wei: (value, unit) => {
             const number = _value_to_bignum(value);
             const value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
         },
 
-        wei_to_number: function(wei, unit, decimals) {
+        wei_to_number: (wei, unit, decimals) => {
             const value_of_unit = _get_value_of_unit(unit);
 
             if (decimals && decimals < 18) {
@@ -99,15 +99,15 @@ const module = (function() {
             return wei.div(value_of_unit).toNumber();
         },
 
-        value_to_bignum: function(value) {
+        value_to_bignum: (value) => {
             return _value_to_bignum(value);
         },
 
-        value_to_hex: function(value) {
+        value_to_hex: (value) => {
             return "0x" + _value_to_bignum(value).toString(16);
         },
 
-        fold_decimals: function(wei, decimals) {
+        fold_decimals: (wei, decimals) => {
             if (decimals < 18) {
                 return wei.idiv(_get_value_of_decimals(decimals));
             }
@@ -115,7 +115,7 @@ const module = (function() {
             return wei;
         },
 
-        unfold_decimals: function(wei, decimals) {
+        unfold_decimals: (wei, decimals) => {
             if (decimals < 18) {
                 return wei.times(_get_value_of_decimals(decimals));
             }
@@ -123,32 +123,28 @@ const module = (function() {
             return wei;
         },
                 
-        encode_checksum_address: function(address, chain_id) {
+        encode_checksum_address: (address, chain_id) => {
             return _encode_checksum_address(address, chain_id);
         },
 
-        verify_checksum_address: function(address, chain_id) {
+        verify_checksum_address: (address, chain_id) => {
             return address === _encode_checksum_address(address, chain_id);
         },
 
-        get_native_address: function() {
+        get_native_address: () => {
             return _ETH_ADDRESS;
         },
 
-        is_native_address: function(address) {
+        is_native_address: (address) => {
             return address === _ETH_ADDRESS;
         },
 
-        is_same_address: function(address1, address2) {
+        is_same_address: (address1, address2) => {
             return address1.toLowerCase() === address2.toLowerCase();
         }, 
         
-        is_valid_address: function(address) {
-            if (address.match(/^(0x)?[0-9a-fA-F]{40}$/)) {
-                return true;
-            }
-        
-            return false;
+        is_valid_address: (address) => {
+            return address.match(/^(0x)?[0-9a-fA-F]{40}$/) ? true : false;
         }
     }
 })();

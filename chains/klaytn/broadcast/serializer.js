@@ -1,8 +1,8 @@
-const module = (function() {
+const module = (() => {
     const encoder = include("./encoder.js");
 
     return {
-        serialize_transaction: function(transaction, for_signature) {
+        serialize_transaction: (transaction, for_signature) => {
             if (transaction["type"] === "ACCOUNT_UPDATE") {
                 return encoder.encode_for_account_update(transaction, for_signature);
             }

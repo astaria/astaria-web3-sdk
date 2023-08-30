@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const crypto = require('crypto'),
           networks = include('./networks.js');
 
@@ -114,15 +114,15 @@ const module = (function() {
     }
 
     return {
-        select_network: function(name) {
+        select_network: (name) => {
             _net = networks[name] || networks.Testnet;
         },
         
-        configure_network: function(private, public) {
+        configure_network: (private, public) => {
             _net = { private: private, public: public }
         },
 
-        from_master_seed: function(seed) {
+        from_master_seed: (seed) => {
             const secret = crypto.string_to_bits("Bitcoin seed");
             const hash = crypto.hmac.digest("sha512", secret, seed);
             const private_key = crypto.bits_slice(hash, 0, 256);
@@ -132,11 +132,11 @@ const module = (function() {
             return { priv: private_key, pub: public_key, chain: chain_code, depth: 0, index: 0 }
         },
 
-        from_extended_key: function(key) {
+        from_extended_key: (key) => {
             return {}
         },
         
-        derive_key_with_path: function(hdkey, path) {
+        derive_key_with_path: (hdkey, path) => {
             const elements = path.split('/');
             const root = elements[0];
             

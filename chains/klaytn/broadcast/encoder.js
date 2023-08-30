@@ -1,10 +1,9 @@
-const module = (function() {
-    const utils = __KLAYTN__.utils,
-          rlp = include("./rlp.js");
+const module = (() => {
+    const rlp = include("./rlp.js");
 
     function _signatures_to_data(signatures) {
-        return signatures.map(function(signature) {
-            return signature.map(function(value) {
+        return signatures.map((signature) => {
+            return signature.map((value) => {
                 return _value_to_data(value);
             });
         });
@@ -57,19 +56,19 @@ const module = (function() {
     }
 
     return {
-        encode_for_account_update: function(transaction, for_signature) {
+        encode_for_account_update: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_account_update: function(transaction, for_signature) {
+        encode_for_fee_delegated_account_update: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_account_update_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_account_update_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_value_transfer: function(transaction, for_signature) {
+        encode_for_value_transfer: (transaction, for_signature) => {
             const VALUE_TRANFSER_TYPE_TAG = "0x08";
 
             if (for_signature) {
@@ -100,39 +99,39 @@ const module = (function() {
             }
         },
     
-        encode_for_value_transfer_memo: function(transaction, for_signature) {
+        encode_for_value_transfer_memo: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_value_transfer: function(transaction, for_signature) {
+        encode_for_fee_delegated_value_transfer: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_value_transfer_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_value_transfer_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_value_transfer_memo: function(transaction, for_signature) {
+        encode_for_fee_delegated_value_transfer_memo: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_value_transfer_memo_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_value_transfer_memo_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_smart_contract_deploy: function(transaction, for_signature) {
+        encode_for_smart_contract_deploy: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_smart_contract_deploy: function(transaction, for_signature) {
+        encode_for_fee_delegated_smart_contract_deploy: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_smart_contract_deploy_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_smart_contract_deploy_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_smart_contract_execution: function(transaction, for_signature) {
+        encode_for_smart_contract_execution: (transaction, for_signature) => {
             const SMART_CONTRACT_EXECUTION_TYPE_TAG = "0x30";
 
             if (for_signature) {
@@ -165,31 +164,31 @@ const module = (function() {
             }
         },
 
-        encode_for_fee_delegated_smart_contract_execution: function(transaction, for_signature) {
+        encode_for_fee_delegated_smart_contract_execution: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_smart_contract_execution_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_smart_contract_execution_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_cancel: function(transaction, for_signature) {
+        encode_for_cancel: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_cancel: function(transaction, for_signature) {
+        encode_for_fee_delegated_cancel: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_fee_delegated_cancel_with_ratio: function(transaction, for_signature) {
+        encode_for_fee_delegated_cancel_with_ratio: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_chain_data_anchoring: function(transaction, for_signature) {
+        encode_for_chain_data_anchoring: (transaction, for_signature) => {
             // TODO
         },
     
-        encode_for_legacy: function(transaction, for_signature) {
+        encode_for_legacy: (transaction, for_signature) => {
             if (for_signature) {
                 return rlp.encode([
                     _value_to_data(transaction["nonce"]),

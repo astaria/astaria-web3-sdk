@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const crypto = require("crypto");
 
     const _words_map = {};
@@ -20,7 +20,7 @@ const module = (function() {
     }
 
     return {
-        generate_words: function(length, lang) {
+        generate_words: (length, lang) => {
             const catalog = controller.catalog("Wallet");
             const entropy = crypto.bytes_to_bits(random((length*11 - length/3)/8));
             const checksum = crypto.bits_slice(crypto.sha256.digest(entropy), 0, length/3);
@@ -38,11 +38,11 @@ const module = (function() {
             return words;
         },
 
-        text_to_words: function(text, seperator, lang) {
+        text_to_words: (text, seperator, lang) => {
             const catalog = controller.catalog("Wallet");
             const words = [];
 
-            text.trim().split(seperator || " ").forEach(function(word) {
+            text.trim().split(seperator || " ").forEach((word) => {
                 const identifier = "S_" + (lang || "en").toUpperCase() + "_" + word.toUpperCase();
                 const value = catalog.value("showcase", "bip39.words", identifier);
                 
@@ -54,34 +54,34 @@ const module = (function() {
             return _is_valid_words(words) ? words : [];
         },
 
-        words_to_text: function(words, seperator) {
+        words_to_text: (words, seperator) => {
             const values = [];
 
-            words.forEach(function(word) {
+            words.forEach((word) => {
                 values.push(word[1]);
             });
 
             return values.join(seperator || " ");
         },
         
-        words_to_list: function(words, seperator) {
+        words_to_list: (words, seperator) => {
             const values = [];
 
-            words.forEach(function(word) {
+            words.forEach((word) => {
                 values.push(word[1]);
             });
 
             return values;
         },
         
-        words_to_seed: function(words, passphrase) {
+        words_to_seed: (words, passphrase) => {
             const password = this.words_to_text(words, " ");
             const salt = "mnemonic" + (passphrase || "");
 
             return crypto.pbkdf2.digest("sha512", password, salt, 2048, 512);
         },
 
-        verify_words: function(words) {
+        verify_words: (words) => {
             if (_is_valid_words(words)) {
                 return true;
             }
@@ -89,13 +89,13 @@ const module = (function() {
             return false;
         },
 
-        find_words: function(keyword, lang) {
+        find_words: (keyword, lang) => {
             const words = _words_map[lang || "en"] = _words_map[lang || "en"] || include(
                 this.__ENV__["dir-path"] + "/words/" + (lang || "en") + ".json"
             );
 
             if (words) {
-                return words.filter(function(word) {
+                return words.filter((word) => {
                     return word.startsWith(keyword);
                 });
             }

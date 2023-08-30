@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const _ = require("chains/ethereum");
 
     global["__CRONOS__"] = Object.assign({}, __ETHEREUM__);
@@ -7,7 +7,7 @@ const module = (function() {
     global["__CRONOS__"].currency = include("./currency.js");
 
     return {
-        create: function(network=__CRONOS__.networks.MainNet) {
+        create: (network=__CRONOS__.networks.MainNet) => {
             const cronos = Object.assign({}, __CRONOS__);
 
             cronos.network   = network;
@@ -18,7 +18,7 @@ const module = (function() {
             return cronos;
         },
 
-        get_network_by_name(name) {
+        get_network_by_name: (name) => {
             return __CRONOS__.networks[name];
         }
     }

@@ -1,4 +1,4 @@
-const module = (function() {
+const module = (() => {
     const utils = __KLAYTN__.utils;
 
     var _tx_number = 1;
@@ -12,7 +12,7 @@ const module = (function() {
             headers: headers, 
             body: JSON.stringify(request)
         })
-            .then(function(response) {
+            .then((response) => {
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -46,167 +46,166 @@ const module = (function() {
     }
 
     return {
-        create: function(network) {
+        create: (network) => {
             return {
-                get_balance: function(account, block="latest") {
-                    return new Promise(function(resolve, reject) {
+                get_balance: (account, block="latest") => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_getBalance";
                         var params = [ account, block ];
                 
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(utils.value_to_bignum(response["result"]));
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
                 
-                get_transaction_count: function(account, block="latest") {
-                    return new Promise(function(resolve, reject) {
+                get_transaction_count: (account, block="latest") => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_getTransactionCount";
                         var params = [ account, block ];
                 
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(response["result"]);
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                get_transaction_receipt: function(tx_hash) {
-                    return new Promise(function(resolve, reject) {
+                get_transaction_receipt: (tx_hash) => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_getTransactionReceipt";
                         var params = [ tx_hash ];
                 
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(response["result"]);
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                get_logs: function(filter) {
-                    return new Promise(function(resolve, reject) {
+                get_logs: (filter) => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_getLogs";
                         var params = [ filter ];
                 
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(response["result"]);
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                get_gas_price: function() {
-                    return new Promise(function(resolve, reject) {
+                get_gas_price: () => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_gasPrice";
                         var params = [];
                 
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(response["result"]);
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                estimate_gas: function(from, to, data, value) {
-                    return new Promise(function(resolve, reject) {
+                estimate_gas: (from, to, data, value) => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_estimateGas";
                         var params = [ { from: from, to: to, data: data, value: value } ];
         
                         _request_rpc(network, method, params)
-                            .then(function(response) {
-                                console.log(JSON.stringify(response))
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(utils.value_to_bignum(response["result"]));
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
                 
-                call: function(to, data, block="latest") {
-                    return new Promise(function(resolve, reject) {
+                call: (to, data, block="latest") => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_call";
                         var params = [ { to: to, data: data }, block ];
         
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 if (response["result"]) {
                                     resolve(response["result"]);
                                 } else {
                                     reject(response["error"]);
                                 }
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                send_raw_transaction: function(transaction) {
-                    return new Promise(function(resolve, reject) {
+                send_raw_transaction: (transaction) => {
+                    return new Promise((resolve, reject) => {
                         var method = "klay_sendRawTransaction";
                         var params = [ transaction ];
         
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response); // Do not return response["result"]
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 reject(error);
                             });
                     });
                 },
         
-                request: function(method, params) {
-                    return new Promise(function(resolve, reject) {
+                request: (method, params) => {
+                    return new Promise((resolve, reject) => {
                         _request_rpc(network, method, params)
-                            .then(function(response) {
+                            .then((response) => {
                                 resolve(response); // Do not return response["result"]
                             }); 
                     });
                 },
 
-                get_chain_id: function() {
+                get_chain_id: () => {
                     return network.chain_id;
                 }
             }
