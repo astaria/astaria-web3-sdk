@@ -18,7 +18,7 @@ const module = (() => {
             return binance;
         },
 
-        get_network_by_nam: (name) => {
+        get_network_by_name: (name) => {
             return __BINANCE__.networks[name];
         }
     }
