@@ -1,7 +1,7 @@
 const module = (() => {
     global["__ETHEREUM__"] = {};
 
-    global["__ETHEREUM__"].crypto    = require("crypto");
+    global["__ETHEREUM__"].crypto    = require("../../crypto");
     global["__ETHEREUM__"].utils     = require("./utils");
     global["__ETHEREUM__"].auth      = require("./auth");
     global["__ETHEREUM__"].abi       = require("./abi");
