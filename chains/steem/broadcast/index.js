@@ -1,8 +1,8 @@
 const module = (() => {
     const auth = __STEEM__.auth,
           struct = __STEEM__.struct,
-          operations = include("./operations.js"), 
-          serializer = include("./serializer.js");
+          operations = require("./operations"), 
+          serializer = require("./serializer");
 
     function _send_transaction(api, operation, keys) {
         return new Promise((resolve, reject) => {

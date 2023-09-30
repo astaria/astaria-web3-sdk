@@ -1,7 +1,7 @@
 const module = (() => {
     const auth = __STEEM__.auth, 
           utfx = __STEEM__.utfx, 
-          serializer = include("./serializer.js");
+          serializer = require("./serializer");
 
     return {
         "string": {

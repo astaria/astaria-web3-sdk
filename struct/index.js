@@ -1,5 +1,5 @@
 const module = (() => {
-    const jspack = include("./jspack.js");
+    const jspack = require("./jspack");
 
     return {
         pack: (format, values) => {

@@ -3,8 +3,8 @@ const module = (() => {
 
     global["__BINANCE__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__BINANCE__"].networks = include("./networks.js");
-    global["__BINANCE__"].currency = include("./currency.js");
+    global["__BINANCE__"].networks = require("./networks");
+    global["__BINANCE__"].currency = require("./currency");
 
     return {
         create: (network=__BINANCE__.networks.Mainnet) => {

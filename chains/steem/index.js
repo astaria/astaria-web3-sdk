@@ -4,11 +4,11 @@ const module = (() => {
     global["__STEEM__"].crypto    = require("crypto");
     global["__STEEM__"].struct    = require("struct");
     global["__STEEM__"].utxf      = require("utfx");
-    global["__STEEM__"].utils     = include("./utils.js");
-    global["__STEEM__"].auth      = include("./auth/index.js");
-    global["__STEEM__"].api       = include("./api/index.js");
-    global["__STEEM__"].broadcast = include("./broadcast/index.js");
-    global["__STEEM__"].networks  = include("./networks.js");
+    global["__STEEM__"].utils     = require("./utils");
+    global["__STEEM__"].auth      = require("./auth");
+    global["__STEEM__"].api       = require("./api");
+    global["__STEEM__"].broadcast = require("./broadcast");
+    global["__STEEM__"].networks  = require("./networks");
 
     return {
         create: (network=__STEEM__.networks.Mainnet) => {

@@ -1,6 +1,6 @@
 const module = (() => {
     const crypto = __ETHEREUM__.crypto,
-          signature = include("./signature.js");
+          signature = require("./signature");
 
     function _build_address(key) {
         const bits = crypto.bits_concat(key.get().x, key.get().y);

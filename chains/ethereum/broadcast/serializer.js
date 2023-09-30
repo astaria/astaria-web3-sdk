@@ -1,5 +1,5 @@
 const module = (() => {
-    const rlp = include("./rlp.js");
+    const rlp = require("./rlp");
 
     function _value_to_data(value) {
         if (value instanceof BigNumber && !value.isZero()) {

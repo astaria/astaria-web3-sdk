@@ -1,6 +1,6 @@
 const module = (() => {
-    const crypto = require('crypto'),
-          networks = include('./networks.js');
+    const crypto = require("crypto"),
+          networks = require("./networks");
 
     var _net = networks.Mainnet;
     var _modulus;

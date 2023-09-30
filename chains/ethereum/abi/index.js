@@ -1,6 +1,6 @@
 const module = (() => {
     const crypto = __ETHEREUM__.crypto,
-          types = include("./types.js");
+          types = require("./types");
 
     function _encode_signature(definition) {
         const bits = crypto.string_to_bits(definition);
