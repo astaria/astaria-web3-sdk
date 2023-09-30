@@ -1,4 +1,4 @@
-const __TYPES__ = include("./types.js");
+const __TYPES__ = require("./types");
 
 __MODULE__ = {
     "vote": {

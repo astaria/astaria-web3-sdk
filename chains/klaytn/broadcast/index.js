@@ -1,7 +1,7 @@
 const module = (() => {
     const auth = __KLAYTN__.auth,
           utils = __KLAYTN__.utils,
-          serializer = include("./serializer.js");
+          serializer = require("./serializer");
 
     function _send_transaction(api, from, transaction, createOnly, fee, gasPrice, key_or_offerer) {
         return _prepare_transaction(from, transaction)

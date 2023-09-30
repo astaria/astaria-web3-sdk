@@ -2,14 +2,14 @@ const module = (() => {
     global["__ETHEREUM__"] = {};
 
     global["__ETHEREUM__"].crypto    = require("crypto");
-    global["__ETHEREUM__"].utils     = include("./utils/index.js");
-    global["__ETHEREUM__"].auth      = include("./auth/index.js");
-    global["__ETHEREUM__"].abi       = include("./abi/index.js");
-    global["__ETHEREUM__"].api       = include("./api/index.js");
-    global["__ETHEREUM__"].broadcast = include("./broadcast/index.js");
-    global["__ETHEREUM__"].networks  = include("./networks.js");
-    global["__ETHEREUM__"].currency  = include("./currency.js");
-    global["__ETHEREUM__"].token     = include("./erc20.js");
+    global["__ETHEREUM__"].utils     = require("./utils");
+    global["__ETHEREUM__"].auth      = require("./auth");
+    global["__ETHEREUM__"].abi       = require("./abi");
+    global["__ETHEREUM__"].api       = require("./api");
+    global["__ETHEREUM__"].broadcast = require("./broadcast");
+    global["__ETHEREUM__"].networks  = require("./networks");
+    global["__ETHEREUM__"].currency  = require("./currency");
+    global["__ETHEREUM__"].token     = require("./erc20");
 
     return {
         create: (network=__ETHEREUM__.networks.Mainnet) => {

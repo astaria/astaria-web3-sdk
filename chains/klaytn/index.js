@@ -3,11 +3,11 @@ const module = (() => {
 
     global["__KLAYTN__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__KLAYTN__"].utils     = include("./utils.js");
-    global["__KLAYTN__"].api       = include("./api/index.js");
-    global["__KLAYTN__"].broadcast = include("./broadcast/index.js");
-    global["__KLAYTN__"].networks  = include("./networks.js");
-    global["__KLAYTN__"].currency  = include("./currency.js");
+    global["__KLAYTN__"].utils     = require("./utils");
+    global["__KLAYTN__"].api       = require("./api");
+    global["__KLAYTN__"].broadcast = require("./broadcast");
+    global["__KLAYTN__"].networks  = require("./networks");
+    global["__KLAYTN__"].currency  = require("./currency");
 
     return {
         create: (network=__KLAYTN__.networks.Cypress) => {

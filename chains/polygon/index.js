@@ -3,8 +3,8 @@ const module = (() => {
 
     global["__POLYGON__"] = Object.assign({}, __ETHEREUM__);
 
-    global["__POLYGON__"].networks = include("./networks.js");
-    global["__POLYGON__"].currency = include("./currency.js");
+    global["__POLYGON__"].networks = require("./networks");
+    global["__POLYGON__"].currency = require("./currency");
 
     return {
         create: (network=__POLYGON__.networks.Mainnet) => {

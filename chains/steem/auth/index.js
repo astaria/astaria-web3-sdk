@@ -1,6 +1,6 @@
 const module = (() => {
     const crypto = __STEEM__.crypto, 
-          signature = include("./signature.js");
+          signature = require("./signature");
 
     function _build_address(key) {
         const version = crypto.is_odd_bits(key.get().y) ? 0x3 : 0x2;

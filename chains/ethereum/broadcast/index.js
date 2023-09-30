@@ -1,7 +1,7 @@
 const module = (() => {
     const auth = __ETHEREUM__.auth,
           utils = __ETHEREUM__.utils,
-          serializer = include("./serializer.js");
+          serializer = require("./serializer");
 
     function _send_transaction(api, from, transaction, createOnly, fee, gasPrice, key_or_offerer) {
         return _prepare_transaction(api, from, transaction)

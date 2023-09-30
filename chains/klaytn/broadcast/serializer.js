@@ -1,5 +1,5 @@
 const module = (() => {
-    const encoder = include("./encoder.js");
+    const encoder = require("./encoder");
 
     return {
         serialize_transaction: (transaction, for_signature) => {

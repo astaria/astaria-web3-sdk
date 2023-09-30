@@ -1,5 +1,5 @@
 const module = (() => {
-    const rlp = include("./rlp.js");
+    const rlp = require("./rlp");
 
     function _signatures_to_data(signatures) {
         return signatures.map((signature) => {
