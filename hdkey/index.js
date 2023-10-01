@@ -1,5 +1,5 @@
 const module = (() => {
-    const crypto = require("crypto"),
+    const crypto   = require("../crypto"),
           networks = require("./networks");
 
     var _net = networks.Mainnet;

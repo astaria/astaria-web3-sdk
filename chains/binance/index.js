@@ -1,5 +1,5 @@
 const module = (() => {
-    const _ = require("chains/ethereum");
+    const _ = require("../ethereum");
 
     global["__BINANCE__"] = Object.assign({}, __ETHEREUM__);
 

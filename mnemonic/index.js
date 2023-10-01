@@ -1,5 +1,5 @@
 const module = (() => {
-    const crypto = require("crypto");
+    const crypto = require("../crypto");
 
     const _vocab_map = {};
 
