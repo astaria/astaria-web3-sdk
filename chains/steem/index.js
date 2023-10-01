@@ -1,9 +1,9 @@
 const module = (() => {
     global["__STEEM__"] = {};
     
-    global["__STEEM__"].crypto    = require("crypto");
-    global["__STEEM__"].struct    = require("struct");
-    global["__STEEM__"].utxf      = require("utfx");
+    global["__STEEM__"].crypto    = require("../../crypto");
+    global["__STEEM__"].struct    = require("../../struct");
+    global["__STEEM__"].utxf      = require("../../utfx");
     global["__STEEM__"].utils     = require("./utils");
     global["__STEEM__"].auth      = require("./auth");
     global["__STEEM__"].api       = require("./api");
