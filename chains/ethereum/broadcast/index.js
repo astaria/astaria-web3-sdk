@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const auth = __ETHEREUM__.auth,
           utils = __ETHEREUM__.utils,
           serializer = require("./serializer");
@@ -115,11 +115,11 @@ const module = (() => {
     }
 
     return {
-        create: (network, api) => {
+        create: function(network, api) {
             let _key_offeror;
 
             return {
-                transfer: (from, to, value, gasPrice, key) => {
+                transfer: function(from, to, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "from": from,
@@ -140,7 +140,7 @@ const module = (() => {
                     });
                 },
         
-                call: (from, to, data, value, gasPrice, key) => {
+                call: function(from, to, data, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "from": from,
@@ -162,7 +162,7 @@ const module = (() => {
                     });
                 },
         
-                create: (from, to, data, value, gasPrice, key) => {
+                create: function(from, to, data, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "from": from,
@@ -184,7 +184,7 @@ const module = (() => {
                     });
                 },
         
-                send: (transaction, gasPrice, key) => {
+                send: function(transaction, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const { from, to, data, value } = transaction;
         
@@ -201,7 +201,7 @@ const module = (() => {
                     });
                 },
         
-                sign: (message, account, password, key) => {
+                sign: function(message, account, password, key) {
                     return new Promise((resolve, reject) => {
                         _request_sign(message, account, password, key || _key_offeror)
                             .then((signature) => {
@@ -213,7 +213,7 @@ const module = (() => {
                     });
                 },
         
-                set_key_offeror: (offeror) => {
+                set_key_offeror: function(offeror) {
                     _key_offeror = offeror;
                 },
             }

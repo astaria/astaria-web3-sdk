@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const crypto = __ETHEREUM__.crypto;
 
     function _message_to_bits(message) {
@@ -12,7 +12,7 @@ const module = (() => {
     }
     
     return {
-        sign_message: (message, key) => {
+        sign_message: function(message, key) {
             const digest = crypto.keccak256.digest(_message_to_bits(message));
             
             while (true) {

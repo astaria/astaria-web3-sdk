@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const _ = require("../ethereum");
 
     global["__KLAYTN__"] = Object.assign({}, __ETHEREUM__);
@@ -10,7 +10,7 @@ const module = (() => {
     global["__KLAYTN__"].currency  = require("./currency");
 
     return {
-        create: (network=__KLAYTN__.networks.Cypress) => {
+        create: function(network=__KLAYTN__.networks.Cypress) {
             const klaytn = Object.assign({}, __KLAYTN__);
 
             klaytn.network   = network;
@@ -21,7 +21,7 @@ const module = (() => {
             return klaytn;
         },
 
-        get_network_by_name: (name) => {
+        get_network_by_name: function(name) {
             return __KLAYTN__.networks[name];
         }
     }

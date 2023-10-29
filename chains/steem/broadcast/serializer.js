@@ -1,9 +1,9 @@
-const module = (() => {
+const module = (function() {
     const broadcast = __STEEM__.broadcast, 
           struct = __STEEM__.struct;
 
     return {
-        serialize_transaction: (transaction) => {
+        serialize_transaction: function(transaction) {
             const buffer = [];
             
             this.pack_buffer(buffer, "<H", [ transaction["ref_block_num"] ]);
@@ -37,13 +37,13 @@ const module = (() => {
             return buffer;
         },
         
-        pack_buffer: (buffer, format, values) => {
+        pack_buffer: function(buffer, format, values) {
             struct.pack(format, values).forEach((byte) => {
                 buffer.push(byte);
             });
         },
         
-        pack_buffer_varint32: (buffer, value) => {
+        pack_buffer_varint32: function(buffer, value) {
             value >>>= 0;
         
             while (value >= 0x80) {
@@ -54,7 +54,7 @@ const module = (() => {
             this.pack_buffer(buffer, "B", [ value ]);
         },
 
-        string_source: (string) => {
+        string_source: function(string) {
             let i = 0; 
         
             return () => {

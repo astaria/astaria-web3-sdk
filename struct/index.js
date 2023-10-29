@@ -1,12 +1,12 @@
-const module = (() => {
+const module = (function() {
     const jspack = require("./jspack");
 
     return {
-        pack: (format, values) => {
+        pack: function(format, values) {
             return jspack.Pack(format, values);
         },
         
-        unpack: (format, bytes, offset) => {
+        unpack: function(format, bytes, offset) {
             return jspack.Unpack(format, bytes, offset);
         },
     }

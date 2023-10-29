@@ -2,7 +2,7 @@ var mobile = (() => {
     const crypto = __STEEM__.crypto;
 
     return {
-        sign_message: (message, key) => {
+        sign_message: function(message, key) {
             const digest = crypto.sha256.digest(crypto.bytes_to_bits(message));
             
             while (true) {

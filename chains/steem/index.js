@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     global["__STEEM__"] = {};
     
     global["__STEEM__"].crypto    = require("../../crypto");
@@ -11,7 +11,7 @@ const module = (() => {
     global["__STEEM__"].networks  = require("./networks");
 
     return {
-        create: (network=__STEEM__.networks.Mainnet) => {
+        create: function(network=__STEEM__.networks.Mainnet) {
             const steem = Object.assign({}, __STEEM__);
 
             steem.network   = network;
@@ -21,7 +21,7 @@ const module = (() => {
             return steem;
         },
 
-        get_network_by_name: (name) => {
+        get_network_by_name: function(name) {
             return __STEEM__.networks[name];
         }
     }

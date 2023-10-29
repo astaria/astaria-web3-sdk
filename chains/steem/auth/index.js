@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const crypto = __STEEM__.crypto, 
           signature = require("./signature");
 
@@ -34,7 +34,7 @@ const module = (() => {
     }
     
     return {
-        generate_keys: (name, password, roles) => {
+        generate_keys: function(name, password, roles) {
             const keys = {};
             
             roles.forEach((role) => {
@@ -54,7 +54,7 @@ const module = (() => {
             return keys;
         },
         
-        generate_address: (prefix, key) => {
+        generate_address: function(prefix, key) {
             const private_key = _strip_private_key(key);
             const curve = crypto.ecdsa.curve_from_name("k256");
             const secret = crypto.number_from_bits(private_key.get());
@@ -63,7 +63,7 @@ const module = (() => {
             return prefix + _build_address(pair.pub);
         },
         
-        decode_address: (prefix, address) => {
+        decode_address: function(prefix, address) {
             const encoded_key = address.replace(new RegExp("^" +  prefix), "");
         
             return crypto.bytes_from_bits(
@@ -73,7 +73,7 @@ const module = (() => {
             );
         },
         
-        sign_message: (chain_id, message, keys) => {
+        sign_message: function(chain_id, message, keys) {
             const signatures = [];
         
             message = decode("hex", chain_id).concat(message);

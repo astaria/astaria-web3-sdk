@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const crypto = __ETHEREUM__.crypto,
           types = require("./types");
 
@@ -118,7 +118,7 @@ const module = (() => {
     }
 
     return {
-        encode: (definition, values) => {
+        encode: function(definition, values) {
             const m = definition.match(/(.*)\((.*)\)/);
 
             if (m) {
@@ -129,7 +129,7 @@ const module = (() => {
             }
         },
 
-        decode: (definition, string) => {
+        decode: function(definition, string) {
             const m = definition.match(/(.*)\((.*)\)/);
 
             if (m && m[2]) {

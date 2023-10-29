@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     return {
     }
 })();

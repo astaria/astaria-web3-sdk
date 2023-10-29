@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     global["__ETHEREUM__"] = {};
 
     global["__ETHEREUM__"].crypto    = require("../../crypto");
@@ -12,7 +12,7 @@ const module = (() => {
     global["__ETHEREUM__"].token     = require("./erc20");
 
     return {
-        create: (network=__ETHEREUM__.networks.Mainnet) => {
+        create: function(network=__ETHEREUM__.networks.Mainnet) {
             const ethereum = Object.assign({}, __ETHEREUM__);
 
             ethereum.network   = network;
@@ -23,7 +23,7 @@ const module = (() => {
             return ethereum;
         },
 
-        get_network_by_name: (name) => {
+        get_network_by_name: function(name) {
             return __ETHEREUM__.networks[name];
         }
     }

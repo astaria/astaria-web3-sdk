@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const utils = __ETHEREUM__.utils;
 
     var _tx_number = 1;
@@ -46,9 +46,9 @@ const module = (() => {
     }
 
     return {
-        create: (network) => {
+        create: function(network) {
             return {
-                get_balance: (account, block="latest") => {
+                get_balance: function(account, block="latest") {
                     return new Promise((resolve, reject) => {
                         const method = "eth_getBalance";
                         const params = [ account, block ];
@@ -67,7 +67,7 @@ const module = (() => {
                     });
                 },
                 
-                get_transaction_count: (account, block="latest") => {
+                get_transaction_count: function(account, block="latest") {
                     return new Promise((resolve, reject) => {
                         const method = "eth_getTransactionCount";
                         const params = [ account, block ];
@@ -86,7 +86,7 @@ const module = (() => {
                     });
                 },
         
-                get_transaction_receipt: (tx_hash) => {
+                get_transaction_receipt: function(tx_hash) {
                     return new Promise((resolve, reject) => {
                         const method = "eth_getTransactionReceipt";
                         const params = [ tx_hash ];
@@ -105,7 +105,7 @@ const module = (() => {
                     });
                 },
         
-                get_gas_price: () => {
+                get_gas_price: function() {
                     return new Promise((resolve, reject) => {
                         const method = "eth_gasPrice";
                         const params = [];
@@ -124,7 +124,7 @@ const module = (() => {
                     });
                 },
         
-                estimate_gas: (from, to, data, value) => {
+                estimate_gas: function(from, to, data, value) {
                     return new Promise((resolve, reject) => {
                         const method = "eth_estimateGas";
                         const params = [ { from: from, to: to, data: data, value: value } ];
@@ -143,7 +143,7 @@ const module = (() => {
                     });
                 },
                 
-                call: (to, data, block="latest") => {
+                call: function(to, data, block="latest") {
                     return new Promise((resolve, reject) => {
                         const method = "eth_call";
                         const params = [ { to: to, data: data }, block ];
@@ -162,7 +162,7 @@ const module = (() => {
                     });
                 },
         
-                send_raw_transaction: (transaction) => {
+                send_raw_transaction: function(transaction) {
                     return new Promise((resolve, reject) => {
                         const method = "eth_sendRawTransaction";
                         const params = [ transaction ];
@@ -177,7 +177,7 @@ const module = (() => {
                     });
                 },
         
-                request: (method, params) => {
+                request: function(method, params) {
                     return new Promise((resolve, reject) => {
                         _request_rpc(network, method, params)
                             .then((response) => {
@@ -186,7 +186,7 @@ const module = (() => {
                     });
                 },
 
-                get_chain_id: () => {
+                get_chain_id: function() {
                     return network.chain_id;
                 }
             }

@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const auth = __KLAYTN__.auth,
           utils = __KLAYTN__.utils,
           serializer = require("./serializer");
@@ -126,11 +126,11 @@ const module = (() => {
     }
 
     return {
-        create: (api) => {
+        create: function(api) {
             var _key_offeror;
 
             return {
-                transfer: (from, to, value, gasPrice, key) => {
+                transfer: function(from, to, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "type": "VALUE_TRANSFER",
@@ -152,7 +152,7 @@ const module = (() => {
                     });
                 },
         
-                call: (from, to, data, value, gasPrice, key) => {
+                call: function(from, to, data, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
@@ -175,7 +175,7 @@ const module = (() => {
                     });
                 },
         
-                create: (from, to, data, value, gasPrice, key) => {
+                create: function(from, to, data, value, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const transaction = {
                             "type": "SMART_CONTRACT_EXECUTION",
@@ -198,7 +198,7 @@ const module = (() => {
                     });
                 },
         
-                send: (transaction, gasPrice, key) => {
+                send: function(transaction, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const { from, to, data, value } = transaction;
         
@@ -215,7 +215,7 @@ const module = (() => {
                     });
                 },
         
-                sign: (message, account, password, key) => {
+                sign: function(message, account, password, key) {
                     return new Promise((resolve, reject) => {
                         _request_sign(message, account, password, key || _key_offeror)
                             .then((signature) => {
@@ -227,7 +227,7 @@ const module = (() => {
                     });
                 },
         
-                set_key_offeror: (offeror) => {
+                set_key_offeror: function(offeror) {
                     _key_offeror = offeror;
                 },
             }

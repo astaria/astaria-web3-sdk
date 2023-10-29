@@ -1,10 +1,10 @@
-const module = (() => {
+const module = (function() {
     const abi = __ETHEREUM__.abi;
 
     return {
-        create: (api, broadcast) => {
+        create: function(api, broadcast) {
             return {
-                name: (token) => {
+                name: function(token) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("name()");
         
@@ -21,7 +21,7 @@ const module = (() => {
                     });
                 },
         
-                symbol: (token) => {
+                symbol: function(token) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("symbol()");
         
@@ -38,7 +38,7 @@ const module = (() => {
                     });
                 },
         
-                decimals: (token) => {
+                decimals: function(token) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("decimals()");
         
@@ -55,7 +55,7 @@ const module = (() => {
                     });
                 },
         
-                total_supply: (token) => {
+                total_supply: function(token) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("totalSupply()");
         
@@ -72,7 +72,7 @@ const module = (() => {
                     });
                 },
         
-                balance_of: (token, account) => {
+                balance_of: function(token, account) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("balanceOf(address)", [ account ]);
         
@@ -89,7 +89,7 @@ const module = (() => {
                     });
                 },
         
-                transfer: (account, token, recipient, amount, gasPrice, key) => {
+                transfer: function(account, token, recipient, amount, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("transfer(address,uint256)", [ recipient, amount ]);
                 
@@ -103,7 +103,7 @@ const module = (() => {
                     });
                 },
         
-                approve: (account, token, spender, amount, gasPrice, key) => {
+                approve: function(account, token, spender, amount, gasPrice, key) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("approve(address,uint256)", [ spender, amount ]);
                 
@@ -117,7 +117,7 @@ const module = (() => {
                     });
                 },
         
-                allowance: (token, owner, spender) => {
+                allowance: function(token, owner, spender) {
                     return new Promise((resolve, reject) => {
                         const data = abi.encode("allowance(address,address)", [ owner, spender ]);
         

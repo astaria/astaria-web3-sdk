@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const crypto = require("../crypto");
 
     const _vocab_map = {};
@@ -33,7 +33,7 @@ const module = (() => {
     }
 
     return {
-        generate_words: (length, lang) => {
+        generate_words: function(length, lang) {
             const entropy = crypto.bytes_to_bits(random((length * 11 - length / 3) / 8));
             const checksum = crypto.bits_slice(crypto.sha256.digest(entropy), 0, length / 3);
             const vocab = _get_bip39_vocab(lang);
@@ -50,7 +50,7 @@ const module = (() => {
             return words;
         },
 
-        text_to_words: (text, seperator, lang) => {
+        text_to_words: function(text, seperator, lang) {
             const vocab = _get_bip39_vocab(lang);
             const words = [];
 
@@ -65,7 +65,7 @@ const module = (() => {
             return _is_valid_words(words) ? words : [];
         },
 
-        words_to_text: (words, seperator) => {
+        words_to_text: function(words, seperator) {
             const values = [];
 
             words.forEach(([ _, word ]) => {
@@ -75,7 +75,7 @@ const module = (() => {
             return values.join(seperator || " ");
         },
         
-        words_to_list: (words) => {
+        words_to_list: function(words) {
             const values = [];
 
             words.forEach(([ _, word ]) => {
@@ -85,14 +85,14 @@ const module = (() => {
             return values;
         },
         
-        words_to_seed: (words, passphrase) => {
+        words_to_seed: function(words, passphrase) {
             const password = this.words_to_text(words, " ");
             const salt = "mnemonic" + (passphrase || "");
 
             return crypto.pbkdf2.digest("sha512", password, salt, 2048, 512);
         },
 
-        verify_words: (words) => {
+        verify_words: function(words) {
             if (_is_valid_words(words)) {
                 return true;
             }
@@ -100,7 +100,7 @@ const module = (() => {
             return false;
         },
 
-        search_words: (keyword, lang) => {
+        search_words: function(keyword, lang) {
             const vocab = _get_bip39_vocab(lang);
             
             return vocab.filter((word) => {

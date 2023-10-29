@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const auth = __STEEM__.auth,
           struct = __STEEM__.struct,
           operations = require("./operations"), 
@@ -61,9 +61,9 @@ const module = (() => {
     }
 
     return {
-        create: (api) => {
+        create: function(api) {
             return {
-                vote: (voter, author, permlink, weight, keys) => {
+                vote: function(voter, author, permlink, weight, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "vote", { 
                             voter:voter, author:author, permlink:permlink, weight:weight
@@ -79,7 +79,7 @@ const module = (() => {
                     });
                 },
                 
-                comment: (parent_author, parent_permlink, author, permlink, title, body, json_metadata, keys) => {
+                comment: function(parent_author, parent_permlink, author, permlink, title, body, json_metadata, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "comment", { 
                             parent_author:parent_author, parent_permlink:parent_permlink,
@@ -96,7 +96,7 @@ const module = (() => {
                     });
                 },
                 
-                transfer: (from, to, amount, memo, keys) => {
+                transfer: function(from, to, amount, memo, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "transfer", { 
                             from:from, to:to, amount:amount, memo:memo
@@ -112,7 +112,7 @@ const module = (() => {
                     });
                 },
                 
-                transfer_to_vesting: (from, to, amount, keys) => {
+                transfer_to_vesting: function(from, to, amount, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "transfer_to_vesting", { 
                             from:from, to:to, amount:amount
@@ -128,7 +128,7 @@ const module = (() => {
                     });
                 },
                 
-                withdraw_vesting: (account, vesting_shares, keys) => {
+                withdraw_vesting: function(account, vesting_shares, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "withdraw_vesting", { 
                             account:account, vesting_shares:vesting_shares
@@ -144,7 +144,7 @@ const module = (() => {
                     });
                 },
                 
-                account_create: (fee, creator, new_account_name, owner, active, posting, memo_key, json_metadata, keys) => {
+                account_create: function(fee, creator, new_account_name, owner, active, posting, memo_key, json_metadata, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "account_create", { 
                             fee:fee, creator:creator, new_account_name:new_account_name, 
@@ -162,7 +162,7 @@ const module = (() => {
                     });
                 },
                 
-                account_witness_vote: (account, witness, approve, keys) => {
+                account_witness_vote: function(account, witness, approve, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "account_witness_vote", { 
                             account:account, witness:witness, approve:approve
@@ -178,7 +178,7 @@ const module = (() => {
                     });
                 },
                 
-                account_witness_proxy: (account, proxy, keys) => {
+                account_witness_proxy: function(account, proxy, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "account_witness_proxy", { 
                             account:account, proxy:proxy
@@ -194,7 +194,7 @@ const module = (() => {
                     });
                 },
                 
-                delete_comment: (author, permlink, keys) => {
+                delete_comment: function(author, permlink, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "delete_comment", { 
                             author:author, permlink:permlink
@@ -210,7 +210,7 @@ const module = (() => {
                     });
                 },
                 
-                custom_json: (required_auths, required_posting_auths, id, json, keys) => {
+                custom_json: function(required_auths, required_posting_auths, id, json, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "custom_json", { 
                             required_auths:required_auths, required_posting_auths:required_posting_auths, id:id, json:json
@@ -226,7 +226,7 @@ const module = (() => {
                     });
                 },
                 
-                comment_options: (author, permlink, max_accepted_payout, percent_steem_dollars, allow_votes, allow_curation_rewards, extensions, keys) => {
+                comment_options: function(author, permlink, max_accepted_payout, percent_steem_dollars, allow_votes, allow_curation_rewards, extensions, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "comment_options", { 
                             author:author, permlink:permlink, max_accepted_payout:max_accepted_payout, 
@@ -244,7 +244,7 @@ const module = (() => {
                     });
                 },
                 
-                delegate_vesting_shares: (delegator, delegatee, vesting_shares, keys) => {
+                delegate_vesting_shares: function(delegator, delegatee, vesting_shares, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "delegate_vesting_shares", { 
                             delegator:delegator, delegatee:delegatee, vesting_shares:vesting_shares
@@ -260,7 +260,7 @@ const module = (() => {
                     });
                 },
                 
-                escrow_transfer: (from, to, agent, escrow_id, sbd_amount, steem_amount, fee, ratification_deadline, escrow_expiration, json_meta, keys) => {
+                escrow_transfer: function(from, to, agent, escrow_id, sbd_amount, steem_amount, fee, ratification_deadline, escrow_expiration, json_meta, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "escrow_transfer", { 
                             from:from, to:to, agent:agent, escrow_id:escrow_id, sbd_amount:sbd_amount, steem_amount:steem_amount, fee:fee,
@@ -277,7 +277,7 @@ const module = (() => {
                     });
                 },
                 
-                escrow_dispute: (from, to, agent, who, escrow_id, keys) => {
+                escrow_dispute: function(from, to, agent, who, escrow_id, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "escrow_dispute", { 
                             from:from, to:to, agent:agent, who:who, escrow_id:escrow_id
@@ -293,7 +293,7 @@ const module = (() => {
                     });
                 },
                 
-                escrow_release: (from, to, agent, who, receiver, escrow_id, sbd_amount, steem_amount, keys) => {
+                escrow_release: function(from, to, agent, who, receiver, escrow_id, sbd_amount, steem_amount, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "escrow_release", { 
                             from:from, to:to, agent:agent, who:who, receiver:receiver, escrow_id:escrow_id,
@@ -310,7 +310,7 @@ const module = (() => {
                     });
                 },
                 
-                escrow_approve: (from, to, agent, who, escrow_id, approve, keys) => {
+                escrow_approve: function(from, to, agent, who, escrow_id, approve, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "escrow_approve", { 
                             from:from, to:to, agent:agent, who:who, escrow_id:escrow_id, approve:approve
@@ -326,7 +326,7 @@ const module = (() => {
                     });
                 },
                 
-                claim_reward_balance: (account, reward_steem, reward_sbd, reward_vests, keys) => {
+                claim_reward_balance: function(account, reward_steem, reward_sbd, reward_vests, keys) {
                     return new Promise((resolve, reject) => {
                         const operation = [ "claim_reward_balance", { 
                             account:account, reward_steem:reward_steem, reward_sbd:reward_sbd, reward_vests:reward_vests
@@ -342,7 +342,7 @@ const module = (() => {
                     });
                 },
                 
-                find_operation: (name, handler) => {
+                find_operation: function(name, handler) {
                     for (let index = 0; index < operations.length; index++) {
                         const operation = operations[index];
             

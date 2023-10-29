@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const utils = __KLAYTN__.utils;
 
     return {

@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const _padding_string = "0000000000000000000000000000000000000000000000000000000000000000";
 
     function _value_to_hex(value) {
@@ -23,101 +23,101 @@ const module = (() => {
 
     return {
         "uint256": {
-            encode: (value) => {
+            encode: function(value) {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
 
                 return  [ new BigNumber(hex, 16), 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return false;
             }
         },
 
         "uint32": {
-            encode: (value) => {
+            encode: function(value) {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ new BigNumber(hex, 16), 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return false;
             }
         },
 
         "uint8": {
-            encode: (value) => {
+            encode: function(value) {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const hex = value.substring(0, 64).replace(/^0+/, "");
                 
                 return [ parseInt(hex, 16), 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return false;
             }
         },
 
         "address": {
-            encode: (value) => {
+            encode: function(value) {
                 const hex = _value_to_hex(value);
                 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const address = "0x" + value.substring(24, 64);
                 
                 return [ address, 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return false;
             }
         },
 
         "bool": {
-            encode: (value) => {
+            encode: function(value) {
                 const hex = value ? "1" : "0";
 
                 return _prepend_padding(hex, 64);
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const bool = parseInt(value.substring(63)) ? true : false;
 
                 return [ bool, 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return false;
             }
         },
 
         "string": {
-            encode: (value) => {
+            encode: function(value) {
 
             },
 
-            decode: (value) => {
+            decode: function(value) {
                 const length = parseInt(value.substring(0, 64).replace(/^0+/, ""), 16);
                 const bytes = new Uint8Array(length);
 
@@ -130,21 +130,21 @@ const module = (() => {
                 return [ encode("string", bytes), 64 + Math.ceil(length / 32) * 64 ];
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return true;
             }
         },
 
         "bytes32": {
-            encode: (value) => {
+            encode: function(value) {
 
             },
 
-            decode: (value) => {
+            decode: function(value) {
 
             },
 
-            is_dynamic: () => {
+            is_dynamic: function() {
                 return true;
             }
         },

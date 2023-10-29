@@ -1,6 +1,6 @@
 include("./bignumber.js");
 
-const module = (() => {
+const module = (function() {
     const crypto = __KLAYTN__.crypto;
 
     const _KLAY_ADDRESS = '0x0000000000000000000000000000000000000000'; // Cypress and Baobab
@@ -59,22 +59,22 @@ const module = (() => {
     }
 
     return {
-        value_to_atom: (value) => {
+        value_to_atom: function(value) {
             return this.value_to_peb(value, "KLAY");
         },
 
-        atom_to_number: (atom, decimals) => {
+        atom_to_number: function(atom, decimals) {
             return this.peb_to_number(atom, "KLAY", decimals);
         },
 
-        value_to_peb: (value, unit) => {
+        value_to_peb: function(value, unit) {
             const number = _value_to_bignum(value);
             const value_of_unit = _get_value_of_unit(unit);
         
             return number.times(value_of_unit);
         },
 
-        peb_to_number: (peb, unit, decimals) => {
+        peb_to_number: function(peb, unit, decimals) {
             const value_of_unit = _get_value_of_unit(unit);
 
             if (decimals && decimals < 18) {
@@ -84,15 +84,15 @@ const module = (() => {
             return peb.div(value_of_unit).toNumber();
         },
 
-        value_to_bignum: (value) => {
+        value_to_bignum: function(value) {
             return _value_to_bignum(value);
         },
 
-        value_to_hex: (value) => {
+        value_to_hex: function(value) {
             return "0x" + _value_to_bignum(value).toString(16);
         },
 
-        fold_decimals: (peb, decimals) => {
+        fold_decimals: function(peb, decimals) {
             if (decimals < 18) {
                 return peb.idiv(_get_value_of_decimals(decimals));
             }
@@ -100,7 +100,7 @@ const module = (() => {
             return peb;
         },
 
-        unfold_decimals: (peb, decimals) => {
+        unfold_decimals: function(peb, decimals) {
             if (decimals < 18) {
                 return peb.times(_get_value_of_decimals(decimals));
             }
@@ -108,27 +108,27 @@ const module = (() => {
             return peb;
         },
                 
-        encode_checksum_address: (address, chain_id) => {
+        encode_checksum_address: function(address, chain_id) {
             return _encode_checksum_address(address, chain_id);
         },
 
-        verify_checksum_address: (address, chain_id) => {
+        verify_checksum_address: function(address, chain_id) {
             return address === _encode_checksum_address(address, chain_id);
         },
 
-        get_native_address: () => {
+        get_native_address: function() {
             return _KLAY_ADDRESS;
         },
 
-        is_native_address: (address) => {
+        is_native_address: function(address) {
             return address === _KLAY_ADDRESS;
         },
 
-        is_same_address: (address1, address2) => {
+        is_same_address: function(address1, address2) {
             return address1.toLowerCase() === address2.toLowerCase();
         },
         
-        is_valid_address: (address) => {
+        is_valid_address: function(address) {
             return address.match(/^(0x)?[0-9a-fA-F]{40}$/) ? true : false;
         }
     }

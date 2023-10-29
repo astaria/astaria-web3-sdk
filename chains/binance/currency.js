@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const utils = __BINANCE__.utils;
 
     return {

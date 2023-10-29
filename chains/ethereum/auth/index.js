@@ -1,4 +1,4 @@
-const module = (() => {
+const module = (function() {
     const crypto = __ETHEREUM__.crypto,
           signature = require("./signature");
 
@@ -17,7 +17,7 @@ const module = (() => {
     }
 
     return {
-        generate_address: (key) => {
+        generate_address: function(key) {
             const private_key = _strip_private_key(key);
             const curve = crypto.ecdsa.curve_from_name("k256");
             const secret = crypto.number_from_bits(private_key.get());
@@ -26,7 +26,7 @@ const module = (() => {
             return _build_address(pair.pub);
         },
 
-        sign_message: (message, key) => {
+        sign_message: function(message, key) {
             const private_key = _strip_private_key(key);
             const [ r, s, v ] = signature.sign_message(message, private_key);
 

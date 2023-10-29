@@ -1,11 +1,11 @@
-const module = (() => {
+const module = (function() {
     const auth = __STEEM__.auth, 
           utfx = __STEEM__.utfx, 
           serializer = require("./serializer");
 
     return {
         "string": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 const length = utfx.calculateUTF16asUTF8(serializer.string_source(value))[1];
                 serializer.pack_buffer_varint32(buffer, length);
     
@@ -14,92 +14,94 @@ const module = (() => {
                 });
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         }, 
     
         "uint16": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "<H", [ value ]);
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         }, 
     
         "int16": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "<h", [ value ]);
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "unit32": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "<I", [ value ]);
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "int32": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "<i", [ value ]);
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         }, 
     
         "unit64": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
     
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         }, 
     
         "int64": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
     
             },
-            unpack: (buffer) => {
+            
+            unpack: function(buffer) {
     
             }
         },
     
         "bool": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "B", [ JSON.parse(value) ? 1: 0 ]);
             },
-            unpack: (buffer) => {
+
+            unpack: function(buffer) {
     
             }
         },
     
         "public_key": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 auth.decode_address(value).forEach((byte) => {
                     serializer.pack_buffer(buffer, "B", [ byte ]);
                 });
             },
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "asset": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 const tokens = value.split(" ");
                 const amount = parseLong(tokens[0].replace(".", "")); // * 1000
                 const dot = tokens[0].indexOf("."); // 0.000
@@ -119,13 +121,13 @@ const module = (() => {
                 }
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "authority": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer(buffer, "<I", [ value["weight_threshold"] ]);
     
                 serializer.pack_buffer(buffer, "B", [ value["account_auths"].length ]);
@@ -142,13 +144,13 @@ const module = (() => {
                 });
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "beneficiaries": {
-            pack: (buffer, value) => {
+            pack: function(buffer, value) {
                 serializer.pack_buffer_varint32(buffer, value[0]);
                 serializer.pack_buffer_varint32(buffer, value[1]["beneficiaries"].length);
     
@@ -159,20 +161,20 @@ const module = (() => {
                 });
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
     
         "array": {
-            pack: (buffer, value, serializer) => {
+            pack: function(buffer, value, serializer) {
                 serializer.pack_buffer_varint32(buffer, value.length);
                 value.forEach((item) => {
                     serializer.pack(buffer, item);
                 });
             },
     
-            unpack: (buffer) => {
+            unpack: function(buffer) {
     
             }
         },
