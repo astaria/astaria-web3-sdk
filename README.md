@@ -3,7 +3,7 @@
 ## Installation
 In catalogs directory of your jamkit app, run the following command:
 ```
-git submodule add https://github.com/astaria/astaria-web3-sdk.git MainApp/Scripts/astaria-web3-sdk
+git submodule add https://github.com/astaria/astaria-web3-sdk.git catalogs/MainApp/Scripts/astaria-web3-sdk
 ```
 
 ## How to use
